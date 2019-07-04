@@ -1,5 +1,6 @@
 
 # Created by https://www.gitignore.io/api/tex,c++,osx,xcode,latex,linux,python,opencv,windows,pycharm
+#
 # Edit at https://www.gitignore.io/?templates=tex,c++,osx,xcode,latex,linux,python,opencv,windows,pycharm
 
 ### C++ ###
@@ -360,6 +361,8 @@ Temporary Items
 ### PyCharm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+.idea
+.idea/*
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -745,3 +748,6 @@ DerivedData/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.gitignore.io/api/tex,c++,osx,xcode,latex,linux,python,opencv,windows,pycharm
+
+experiments
+experiments/*
