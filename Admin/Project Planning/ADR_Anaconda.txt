@@ -1,0 +1,25 @@
+ADR: Python Environment managment
+
+CONTEXT:
+Using a python environment requires the management of the environement that the
+program is run in as well as to replicate this enviroment accross multiple
+systems easily.
+OPTIONS:
+Miniconda- Uses the conda package manager, is minimal and easy to install, light
+weight. Creates a virtual environment
+Anaconda- Convient,uses the conda package manager with many packages pre-installed requiring less time meeting dependancies, creates a virtual enviroment. 
+virutalenv- Requires sudo access, and requires the use of the pip package manager.
+DECISION:
+We will use anaconda due to the ease of use and preinstalled packages
+STATUS: 
+Accepted, with an option to move to miniconda.
+
+CONSEQUENCES:
+Pros:
+	- Easy install
+	- Extensive documentation
+	- Fewer dependency problems 
+	- Vitual environment
+	- Can easily change to miniconda for remote excecution
+Cons:
+	- Large install size(~3.5G) on each installation
