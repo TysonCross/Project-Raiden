@@ -11,11 +11,12 @@ BLUR_SIZE = 3
 
 start = time.time()
 
+
 def count_diff(img1, img2):
     small1 = cv2.resize(img1, (0,0), fx=SCALE, fy=SCALE)
     small2 = cv2.resize(img2, (0,0), fx=SCALE, fy=SCALE)
-    #cv2.imshow('frame', small2)
-    #cv2.waitKey(1)
+    # cv2.imshow('frame', small2)
+    # cv2.waitKey(1)
     diff = cv2.absdiff(small1, small2)
     diff = cv2.cvtColor(diff, cv2.COLOR_RGB2GRAY)
     frame_delta1 = cv2.threshold(diff, NOISE_CUTOFF, 255, 3)[1]
@@ -24,9 +25,9 @@ def count_diff(img1, img2):
 
     return delta_count1
 
+
 filename = sys.argv[1]
 video = cv2.VideoCapture(filename)
-video =
 
 nframes = (int)(video.get(cv2.CAP_PROP_FRAME_COUNT))
 width = (int)(video.get(cv2.CAP_PROP_FRAME_WIDTH))
