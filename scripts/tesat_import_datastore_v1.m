@@ -1,3 +1,0 @@
-path = '/mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_010/';
-imds = imageDatastore(fullfile(path),...
-'IncludeSubfolders',true,'FileExtensions','.tif')
