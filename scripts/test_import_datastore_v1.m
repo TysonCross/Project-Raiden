@@ -6,41 +6,10 @@ results = coder.checkGpuInstall('full')
 
 %% TEMP
 % % load pretrained networks
-% tempdir='~/Documents/MATLAB/temp';
-% pretrainedURL = 'https://www.mathworks.com/supportfiles/vision/data/deeplabv3plusResnet18CamVid.mat';
-% pretrainedFolder = fullfile(tempdir,'pretrainedNetwork');
-% pretrainedNetwork = fullfile(pretrainedFolder,'deeplabv3plusResnet18CamVid.mat'); 
-% if ~exist(pretrainedFolder,'dir')
-%     mkdir(pretrainedFolder);
-%     disp('Downloading pretrained network (58 MB)...');
-%     websave(pretrainedNetwork,pretrainedURL);
-% end
-% 
-% imageURL = 'http://web4.cs.ucl.ac.uk/staff/g.brostow/MotionSegRecData/files/701_StillsRaw_full.zip';
-% labelURL = 'http://web4.cs.ucl.ac.uk/staff/g.brostow/MotionSegRecData/data/LabeledApproved_full.zip';
-% outputFolder = fullfile(tempdir,'CamVid'); 
-% 
-% if ~exist(outputFolder, 'dir')
-%    
-%     mkdir(outputFolder)
-%     labelsZip = fullfile(outputFolder,'labels.zip');
-%     imagesZip = fullfile(outputFolder,'images.zip');   
-%     
-%     disp('Downloading 16 MB CamVid dataset labels...'); 
-%     websave(labelsZip, labelURL);
-%     unzip(labelsZip, fullfile(outputFolder,'labels'));
-%     
-%     disp('Downloading 557 MB CamVid dataset images...');  
-%     websave(imagesZip, imageURL);       
-%     unzip(imagesZip, fullfile(outputFolder,'images'));    
-% end
-% 
-imgDir = fullfile(outputFolder,'images');
-imds_test = imageDatastore(imgDir);
-
-T = readimage(imds_test,1);
-T = histeq(T);
-imshow(T)
+tempdir='~/Documents/MATLAB/temp';
+% pretrainedURL = 'https://www.mathworks.com/supportfiles/gpucoder/cnn_models/fcn/FCN8sCamVid.mat';
+pretrainedFolder = fullfile(tempdir,'pretrainedNetwork');
+pretrainedNetwork = fullfile(pretrainedFolder,'FCN8sCamVid.mat'); 
 
 %% DATA
 disp("Setting up Data...")
@@ -140,9 +109,11 @@ sequences = {...
 %     };
 
 path = '/mnt/Shield/Raiden/data/sequences';
-imds = imageDatastore(fullfile(path,sequences,'/tif/'),...
+imageFolders = fullfile(path,sequences,'tif',filesep);
+imds = imageDatastore(imageFolders,...
     'FileExtensions','.tif');
-pxds = pixelLabelDatastore(fullfile(path,sequences,'/mask/'),...
+maskFolders = fullfile(path,sequences,'mask',filesep);
+pxds = pixelLabelDatastore(maskFolders,...
     classNames,labelIDs,'FileExtensions','.tif');
 
 % Overlay colors
@@ -159,9 +130,8 @@ cmap = [
 cmap = cmap ./ 255;
 
 % View Overlay
-I = readimage(imds,1);
+I = readimage(imds,100);
 I = histeq(I);
-imshow(I)
 C = readimage(pxds,100);
 cmap = jet(numel(classNames));
 B = labeloverlay(I,C,'Colormap',cmap);
@@ -169,10 +139,29 @@ figure
 imshow(B)
 pixelLabelColorbar(cmap,classNames);
 
+% Specify the class weights 
+% ToDo: This is slow!
+tbl = countEachLabel(pxds);
+
+% Visualize pixel frequency of labels
+frequency = tbl.PixelCount/sum(tbl.PixelCount);
+bar(1:numel(classNames),frequency)
+xticks(1:numel(classNames)) 
+xticklabels(tbl.Name)
+xtickangle(45)
+ylabel('Frequency')
+
+% Converting to Categorical data
+% outputFolder = "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/data"
+% imageFolder = fullfile(outputFolder,'imagesResized',filesep);
+% imds = resizeImages(imds,imageFolder);
+labelFolders = fullfile(path,sequences,'labels',filesep);
+% pxds = resizePixelLabels(pxds,labelFolder);
+pxds = convertCategorical(pxds);
 
 % Split into training and test 
 % ToDo: Partition Method non random (sequential/split)
-[imdsTrain, imdsVal, imdsTest, pxdsTrain, pxdsVal, pxdsTest] = partitionCamVidData(imds,pxds);
+[imdsTrain, imdsVal, imdsTest, pxdsTrain, pxdsVal, pxdsTest] = partitionData(imds,pxds);
 
 numTrainingImages = numel(imdsTrain.Files)
 numValidationImages = numel(imdsVal.Files)
@@ -181,62 +170,48 @@ numTestingImages = numel(imdsTest.Files)
 
 %% NETWORK
 disp("Setting up Network...")
-% imageSize = [720 960 3];
-imageSize = [512 256 3];
+imageSize = [360 480];
+% imageSize = [512 256]
 numClasses = numel(classNames);
-lgraph = helperDeeplabv3PlusResnet18(imageSize, numClasses);    % Create DeepLab v3+.
+lgraph = fcnLayers(imageSize, numClasses);    % Create vgg16
 
-% Specify the class weights 
-tbl = countEachLabel(pxds);
 imageFreq = tbl.PixelCount ./ tbl.ImagePixelCount;
-    % % Visualize pixel frequency of labels
-    % frequency = tbl.PixelCount/sum(tbl.PixelCount);
-    % bar(1:numel(classNames),frequency)
-    % xticks(1:numel(classNames)) 
-    % xticklabels(tbl.Name)
-    % xtickangle(45)
-    % ylabel('Frequency')
 classWeights = median(imageFreq) ./ imageFreq;
+
 pxLayer = pixelClassificationLayer('Name','labels','Classes',tbl.Name,'ClassWeights',classWeights);
-lgraph = replaceLayer(lgraph,"classification",pxLayer);
+lgraph = removeLayers(lgraph,'pixelLabels');
+lgraph = addLayers(lgraph, pxLayer);
+lgraph = connectLayers(lgraph,'softmax','labels');
 
 %% TRAINING
 disp("Setting up Training...")
+
 % Define validation data.
 pximdsVal = pixelLabelImageDatastore(imdsVal,pxdsVal,...
     'DispatchInBackground',true);
 
-% % Define training data
-% This causes label2cat to fail due to RGB vs scalar label values
-% augmenter = imageDataAugmenter('RandXReflection',true,...
-%     'RandXTranslation',[-10 10],'RandYTranslation',[-10 10],...
-%     'FillValue',[0 0 0]);
-pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain, ...
-    'DataAugmentation',augmenter);
-
-pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
-    'DispatchInBackground',true, 'ColorPreprocessing','none');
-
 % Define training options. 
-options = trainingOptions('sgdm', ...
-    'LearnRateSchedule','piecewise',...
-    'LearnRateDropPeriod',10,...
-    'LearnRateDropFactor',0.3,...
-    'Momentum',0.9, ...
+options = trainingOptions('adam', ...
     'InitialLearnRate',1e-3, ...
-    'L2Regularization',0.005, ...
-    'ValidationData',pximdsVal,...
-    'MaxEpochs',30, ...  
-    'MiniBatchSize',8, ...
+    'MaxEpochs',100, ...  
+    'MiniBatchSize',4, ...
     'Shuffle','every-epoch', ...
     'CheckpointPath', tempdir, ...
-    'VerboseFrequency',2,...
     'Plots','training-progress',...
-    'ValidationPatience', 4);
-    
+    'VerboseFrequency',2);
+
+
+% Define training data
+augmenter = imageDataAugmenter('RandXReflection',true,...
+    'RandXTranslation',[-10 10],'RandYTranslation',[-10 10]);
+
+pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
+    'DispatchInBackground',true, 'DataAugmentation',augmenter);
+
 doTraining = false;
 if doTraining    
     [net, info] = trainNetwork(pximds,lgraph,options);
+    save('FCN8sCamVid_new.mat','net');
 else
     data = load(pretrainedNetwork); 
     net = data.net;
