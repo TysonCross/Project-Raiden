@@ -330,7 +330,7 @@ if (saveNet)
             fig_name = regexprep(fig_name, '[ .,''!?():]', '');
             fn = sprintf('%s/%s.pdf',foldername,fig_name);
             export_fig(fn,figHandle(1));
-            fprintf("%d figures exported to %s\n",length(figHandle),foldername)
+            fprintf("%d figures exported to %s\n",length(figHandle),foldername);
             close all;
         end
    else
@@ -349,7 +349,6 @@ figure(1)
 for i = 1:2
     subplot(2,2,i)
     [I,info] = readimage(imdsTest,imIdx(i));
-    info.Filename
     C = semanticseg(I, net);
     B = labeloverlay(I,C,'Colormap',cmap,'Transparency',0.4);
     imshow(B)
@@ -359,10 +358,12 @@ for i = 1:2
 end
 for i = 3:4
     subplot(2,2,i)
+    [I,info] = readimage(imdsTest,imIdx(i-2));
+    C = semanticseg(I, net);
     expectedResult = readimage(pxdsTest,imIdx(i-2));
     actual = uint8(C);
     expected = uint8(expectedResult);
-    imshowpair(actual, expected)
+    imshowpair(actual, expected, 'diff')
     title('Actual vs Expected');
 end
 
