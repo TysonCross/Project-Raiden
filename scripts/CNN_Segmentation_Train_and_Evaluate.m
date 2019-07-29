@@ -110,18 +110,12 @@ pxLayer = pixelClassificationLayer('Name','labels','Classes',...
 numClasses = numel(classNames);
 
 switch network
-    case 'fcn8s' % fully connected CNN, based on vgg16
+    case 'fcn8s' % fully connected CNN, based on vgg16 weighting
         sz = [227 227];
         lgraph = fcnLayers(sz, numClasses);   
         lgraph = removeLayers(lgraph,'pixelLabels');
         lgraph = addLayers(lgraph, pxLayer);
         lgraph = connectLayers(lgraph,'softmax','labels');
-        
-%         % freeze pretrained network
-%         layers = lgraph.Layers;
-%         connections = lgraph.Connections;
-%         layers(1:end-3) = freezeWeights(layers(1:end-3));
-%         lgraph = createLgraphUsingConnections(layers,connections);
         
     case 'alexnet'
         sz = [227 227];
@@ -133,7 +127,6 @@ switch network
         weights = layers(idx).Weights';
         weights = reshape(weights, 6, 6, 256, 4096);
         bias = reshape(layers(idx).Bias, 1, 1, []);
-
         layers(idx) = convolution2dLayer(6, 4096, 'NumChannels', 256, 'Name', 'fc6');
         layers(idx).Weights = weights;
         layers(idx).Bias = bias;
@@ -143,7 +136,6 @@ switch network
         weights = layers(idx).Weights';
         weights = reshape(weights, 1, 1, 4096, 4096);
         bias = reshape(layers(idx).Bias, 1, 1, []);
-
         layers(idx) = convolution2dLayer(1, 4096, 'NumChannels', 4096, 'Name', 'fc7');
         layers(idx).Weights = weights;
         layers(idx).Bias = bias;
