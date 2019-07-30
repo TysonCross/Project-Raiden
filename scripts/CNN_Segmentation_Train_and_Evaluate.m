@@ -24,11 +24,15 @@ Network choices are:
  Description, pros, const
 %}
 network = 'alexnet';
+ % -nojvm
 
 % Percent of data to train with (0-1)
-percentage = 0.3;
+percentage = 0.8;
 
 % Per-stage options
+loadNetwork = false;
+doTraining = true;
+balanceLabels = true;
 showPixelFrequency = false;
 showTestImage = false;
 saveNet = true;
@@ -37,7 +41,7 @@ saveImages = true;
 % global setup
 setupColors;
 
-
+    
 %% DATA
 disp("Setting up Data...")
 
@@ -68,20 +72,24 @@ pxds = pixelLabelDatastore(labelFiles, classNames, labelIDs);
 
 % Specify the class weights 
 % ToDo: This is slow! Can be made parallel?
-disp("Counting per-label pixel distribution...")
-labelTable = pxds.countEachLabel
-
-if showPixelFrequency
-    % Visualize pixel frequency of labels
-    frequency = labelTable.PixelCount/sum(labelTable.PixelCount);
-    bar(1:numel(classNames),frequency)
-    xticks(1:numel(classNames)) 
-    xticklabels(labelTable.Name)
-    xtickangle(45)
-    ylabel('Frequency')
-    clear frequency
-else
-    disp(labelTable);
+if balanceLabels
+    disp("Counting per-label pixel distribution...")
+    labelTable = pxds.countEachLabel
+    imageFreq = labelTable.PixelCount ./ labelTable.ImagePixelCount;
+    classWeights = median(imageFreq) ./ imageFreq;
+    
+    if showPixelFrequency
+        % Visualize pixel frequency of labels
+        frequency = labelTable.PixelCount/sum(labelTable.PixelCount);
+        bar(1:numel(classNames),frequency)
+        xticks(1:numel(classNames)) 
+        xticklabels(labelTable.Name)
+        xtickangle(45)
+        ylabel('Frequency')
+        clear frequency
+    else
+        disp(labelTable);
+    end
 end
     
 if showTestImage
@@ -100,142 +108,156 @@ end
 clear percentage N idx
 
 %% Network setup
-disp("Setting up Network...")
+%% Load Cached Network
+if loadNetwork
+    [file,path] = uigetfile('*.mat',...
+                          'Select the Cached Network File to load',fullfile(rootPath,'networks'));
+    load(fullfile(path,file));
+    if ~exist('net','var')
+        disp('Error: No cached network in file');
+        return
+    end
+    sz = net.Layers(1).InputSize(1:2);
+else
+    disp("Setting up Network...")
 
-% Balance class weightings
-imageFreq = labelTable.PixelCount ./ labelTable.ImagePixelCount;
-classWeights = median(imageFreq) ./ imageFreq;
-pxLayer = pixelClassificationLayer('Name','labels','Classes',...
-    labelTable.Name,'ClassWeights',classWeights);
-numClasses = numel(classNames);
+    % Balance class weightings
+    if balanceLabels
+        pxLayer = pixelClassificationLayer('Name','labels','Classes',...
+            labelTable.Name,'ClassWeights',classWeights);
+    else
+        pxLayer = pixelClassificationLayer('Name','labels');
+    end
+    numClasses = numel(classNames);
 
-switch network
-    case 'fcn8s' % fully connected CNN, based on vgg16 weighting
-        sz = [227 227];
-        lgraph = fcnLayers(sz, numClasses);   
-        lgraph = removeLayers(lgraph,'pixelLabels');
-        lgraph = addLayers(lgraph, pxLayer);
-        lgraph = connectLayers(lgraph,'softmax','labels');
-        
-    case 'alexnet'
-        sz = [227 227];
-        net = alexnet;
-        layers = net.Layers;
-        
-        % fc6 is layers 17
-        idx = 17;
-        weights = layers(idx).Weights';
-        weights = reshape(weights, 6, 6, 256, 4096);
-        bias = reshape(layers(idx).Bias, 1, 1, []);
-        layers(idx) = convolution2dLayer(6, 4096, 'NumChannels', 256, 'Name', 'fc6');
-        layers(idx).Weights = weights;
-        layers(idx).Bias = bias;
+    switch network
+        case 'fcn8s' % fully connected CNN, based on vgg16 weighting
+            sz = [227 227];
+            lgraph = fcnLayers(sz, numClasses);   
+            lgraph = removeLayers(lgraph,'pixelLabels');
+            lgraph = addLayers(lgraph, pxLayer);
+            lgraph = connectLayers(lgraph,'softmax','labels');
 
-        % fc7 is layers 20
-        idx = 20;
-        weights = layers(idx).Weights';
-        weights = reshape(weights, 1, 1, 4096, 4096);
-        bias = reshape(layers(idx).Bias, 1, 1, []);
-        layers(idx) = convolution2dLayer(1, 4096, 'NumChannels', 4096, 'Name', 'fc7');
-        layers(idx).Weights = weights;
-        layers(idx).Bias = bias;
-        
-        conv1 = layers(2);
-        conv1New = convolution2dLayer(conv1.FilterSize, conv1.NumFilters, ...
-            'Stride', conv1.Stride, ...
-            'Padding', [100 100], ...
-            'NumChannels', conv1.NumChannels, ...
-            'WeightLearnRateFactor', conv1.WeightLearnRateFactor, ...
-            'WeightL2Factor', conv1.WeightL2Factor, ...
-            'BiasLearnRateFactor', conv1.BiasLearnRateFactor, ...
-            'BiasL2Factor', conv1.BiasL2Factor, ...
-            'Name', conv1.Name);
-        conv1New.Weights = conv1.Weights;
-        conv1New.Bias = conv1.Bias;
+        case 'alexnet'
+            sz = [227 227];
+            net = alexnet;
+            layers = net.Layers;
 
-        layers(2) = conv1New;
-        layers(end-2:end) = [];
+            % fc6 is layers 17
+            idx = 17;
+            weights = layers(idx).Weights';
+            weights = reshape(weights, 6, 6, 256, 4096);
+            bias = reshape(layers(idx).Bias, 1, 1, []);
+            layers(idx) = convolution2dLayer(6, 4096, 'NumChannels', 256, 'Name', 'fc6');
+            layers(idx).Weights = weights;
+            layers(idx).Bias = bias;
 
-        upscore = transposedConv2dLayer(64, numClasses, ...
-            'NumChannels', numClasses,...
-            'Stride', 32,...
-            'Name', 'upscore');
-        
-        layers = [
-                layers
-                convolution2dLayer(1, numClasses, 'Name', 'score_fr');
-                upscore
-                crop2dLayer('centercrop', 'Name', 'score')
-                softmaxLayer('Name', 'softmax')
-                pxLayer
-                ];
+            % fc7 is layers 20
+            idx = 20;
+            weights = layers(idx).Weights';
+            weights = reshape(weights, 1, 1, 4096, 4096);
+            bias = reshape(layers(idx).Bias, 1, 1, []);
+            layers(idx) = convolution2dLayer(1, 4096, 'NumChannels', 4096, 'Name', 'fc7');
+            layers(idx).Weights = weights;
+            layers(idx).Bias = bias;
 
-        lgraph = layerGraph(layers);
-        lgraph = connectLayers(lgraph, 'data', 'score/ref');
-      
-        clear layers upscore
-        
-    case 'vgg16'
-        sz = [224 224];
-        net = vgg16;
-        layersTransfer = net.Layers(1:end-3);
-        lgraph = [
-            layersTransfer
-            fullyConnectedLayer(numClasses, ...
+            conv1 = layers(2);
+            conv1New = convolution2dLayer(conv1.FilterSize, conv1.NumFilters, ...
+                'Stride', conv1.Stride, ...
+                'Padding', [100 100], ...
+                'NumChannels', conv1.NumChannels, ...
+                'WeightLearnRateFactor', conv1.WeightLearnRateFactor, ...
+                'WeightL2Factor', conv1.WeightL2Factor, ...
+                'BiasLearnRateFactor', conv1.BiasLearnRateFactor, ...
+                'BiasL2Factor', conv1.BiasL2Factor, ...
+                'Name', conv1.Name);
+            conv1New.Weights = conv1.Weights;
+            conv1New.Bias = conv1.Bias;
+
+            layers(2) = conv1New;
+            layers(end-2:end) = [];
+
+            upscore = transposedConv2dLayer(64, numClasses, ...
+                'NumChannels', numClasses,...
+                'Stride', 32,...
+                'Name', 'upscore');
+
+            layers = [
+                    layers
+                    convolution2dLayer(1, numClasses, 'Name', 'score_fr');
+                    upscore
+                    crop2dLayer('centercrop', 'Name', 'score')
+                    softmaxLayer('Name', 'softmax')
+                    pxLayer
+                    ];
+
+            lgraph = layerGraph(layers);
+            lgraph = connectLayers(lgraph, 'data', 'score/ref');
+
+            clear layers upscore
+
+        case 'vgg16'
+            sz = [224 224];
+            net = vgg16;
+            layersTransfer = net.Layers(1:end-3);
+            lgraph = [
+                layersTransfer
+                fullyConnectedLayer(numClasses, ...
+                    'Name','fc_new', ...
+                    'WeightLearnRateFactor',20,...
+                    'BiasLearnRateFactor',20)
+                softmaxLayer('Name','prob')
+                pxLayer ];
+            clear layersTransfer
+
+        case 'googlenet'
+            sz = [224 224];
+            net = googlenet;
+            lgraph = layerGraph(net);
+            newLayer = fullyConnectedLayer(numClasses, ...
                 'Name','fc_new', ...
-                'WeightLearnRateFactor',20,...
-                'BiasLearnRateFactor',20)
-            softmaxLayer('Name','prob')
-            pxLayer ];
-        clear layersTransfer
+                'WeightLearnRateFactor',10, ...
+                'BiasLearnRateFactor',10);       
+            lgraph = replaceLayer(lgraph,'loss3-classifier',newLayer);
+            lgraph = replaceLayer(lgraph,'output',pxLayer);
+            clear newLayer
 
-    case 'googlenet'
-        sz = [224 224];
-        net = googlenet;
-        lgraph = layerGraph(net);
-        newLayer = fullyConnectedLayer(numClasses, ...
-            'Name','fc_new', ...
-            'WeightLearnRateFactor',10, ...
-            'BiasLearnRateFactor',10);       
-        lgraph = replaceLayer(lgraph,'loss3-classifier',newLayer);
-        lgraph = replaceLayer(lgraph,'output',pxLayer);
-        clear newLayer
-        
-        % freeze early network
-        layers = lgraph.Layers;
-        connections = lgraph.Connections;
-        layers(1:10) = freezeWeights(layers(1:10));
-        lgraph = createLgraphUsingConnections(layers,connections);
-        clear layers connections
+            % freeze early network
+            layers = lgraph.Layers;
+            connections = lgraph.Connections;
+            layers(1:10) = freezeWeights(layers(1:10));
+            lgraph = createLgraphUsingConnections(layers,connections);
+            clear layers connections
 
-    case 'inceptionresnetv2'
-        sz = [299 299];
-        net = inceptionresnetv2;
-        lgraph = layerGraph(net);
-        newLayer = fullyConnectedLayer(numClasses, ...
-            'Name','fc_new', ...
-            'WeightLearnRateFactor',10, ...
-            'BiasLearnRateFactor',10);       
-        lgraph = replaceLayer(lgraph,'predictions',newLayer);
-        lgraph = replaceLayer(lgraph,'ClassificationLayer_predictions',pxLayer);
-        clear newLayer
-        
-        % freeze pretrained network
-        layers = lgraph.Layers;
-        connections = lgraph.Connections;
-        layers(1:end-3) = freezeWeights(layers(1:end-3));
-        lgraph = createLgraphUsingConnections(layers,connections);
-        clear layers connections
-    
-    otherwise
-        disp('No network specified! Script stopped.')
-    return
+        case 'inceptionresnetv2'
+            sz = [299 299];
+            net = inceptionresnetv2;
+            lgraph = layerGraph(net);
+            newLayer = fullyConnectedLayer(numClasses, ...
+                'Name','fc_new', ...
+                'WeightLearnRateFactor',10, ...
+                'BiasLearnRateFactor',10);       
+            lgraph = replaceLayer(lgraph,'predictions',newLayer);
+            lgraph = replaceLayer(lgraph,'ClassificationLayer_predictions',pxLayer);
+            clear newLayer
+
+            % freeze pretrained network
+            layers = lgraph.Layers;
+            connections = lgraph.Connections;
+            layers(1:end-3) = freezeWeights(layers(1:end-3));
+            lgraph = createLgraphUsingConnections(layers,connections);
+            clear layers connections
+
+        otherwise
+            disp('No network specified! Script stopped.')
+        return
+    end
+
+    clear pxLayer
+    % analyzeNetwork(net)
+    % analyzeNetwork(lgraph)
+
 end
-
-clear pxLayer
-% analyzeNetwork(net)
-% analyzeNetwork(lgraph)
-
 %% Image Processing
 imageSize = sz;
 imagePath = fullfile(rootPath,'data');
@@ -243,6 +265,7 @@ imagePath = fullfile(rootPath,'data');
 disp("Resizing images and labels, converting to categorical label form...")
 imds = resizeImages(imds, sz, imagePath);
 pxds = resizePixelLabels(pxds, sz, imagePath);
+
 
 %% Training
 disp("Setting up Training...")
@@ -271,7 +294,7 @@ options = trainingOptions('sgdm', ...
     'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
     'ValidationData',pximdsVal, ...
     'MaxEpochs',30, ...  
-    'MiniBatchSize',20, ...
+    'MiniBatchSize',28, ...
     'Shuffle','never', ...
     'CheckpointPath', tempdir, ...
     'VerboseFrequency',10,...
@@ -297,9 +320,10 @@ clear imds pxds imdsTrain pxdsTrain imdsVal pxdsVal
 clear numClasses numTestingImages numTrainingImages numValidationImages
 clear imageFreq classWeights inputLayer
 
-doTraining = true;
 if doTraining    
     [net, info] = trainNetwork(pximds,lgraph,options);
+else
+    disp("Warning: Training skipped by user request")
 end
 
 %% SAVE network. images, and matlab script
@@ -308,10 +332,10 @@ if (saveNet)
    disp('Copying data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
    if exist(currentFileName,'file')
-        str = strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', '');
+        str = strcat(network,'_', strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
         foldername = fullfile(rootPath,"networks","cache",str);
         mkdir(foldername);
-        save(fullfile(foldername,strcat(network,'_',str,'.mat')),'net');
+        save(fullfile(foldername,strcat(str,'.mat')),'net');
         copyfile(currentFileName, foldername);
 
         if saveImages
@@ -342,9 +366,9 @@ for i = 1:2
     [I,info] = readimage(imdsTest,imIdx(i));
     C = semanticseg(I, net);
     B = labeloverlay(I,C,'Colormap',cmap,'Transparency',0.4);
-    imshow(B)
+    imshow(B);
     pixelLabelColorbar(cmap, classNames);
-    [~, filename, ext] = fileparts(info.Filename)
+    [~, filename, ext] = fileparts(info.Filename);
     title(filename,'Interpreter','none','FontSize',6);
 end
 for i = 3:4
@@ -370,4 +394,20 @@ metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest,'Verbose',false);
 metrics.DataSetMetrics
 metrics.ClassMetrics
 
+return % end script
 
+%% Visualize activations
+im = readimage(imdsTest,randi(length(imdsTest.Files)));
+
+act1 = activations(net,im,'conv3');
+sz1 = size(act1);
+act1 = reshape(act1,[sz1(1) sz1(2) 1 sz1(3)]);
+I = imtile(mat2gray(act1),'GridSize',[8 12]);
+imshow(I)
+
+act1ch32 = act1(:,:,:,32);
+act1ch32 = mat2gray(act1ch32);
+act1ch32 = imresize(act1ch32,sz);
+
+I = imtile({im,act1ch32});
+imshow(I)
