@@ -23,8 +23,7 @@ Network choices are:
 'inceptionresnetv2' SLOW to setup, TBD (output layers not correct dimensions)
  Description, pros, const
 %}
-network = 'alexnet';
- % -nojvm
+network = 'fcn8s';
 
 % Percent of data to train with (0-1)
 percentage = 0.8;
@@ -86,7 +85,14 @@ if balanceLabels
         xticklabels(labelTable.Name)
         xtickangle(45)
         ylabel('Frequency')
-        clear frequency
+        clear frequency [file,path] = uigetfile('*.mat',...
+                          'Select the Cached Network File to load',fullfile(rootPath,'networks'));
+    load(fullfile(path,file));
+    if ~exist('net','var')
+        disp('Error: No cached network in file');
+        return
+    end
+    sz = net.Layers(1).InputSize(1:2);
     else
         disp(labelTable);
     end
@@ -315,6 +321,8 @@ augmenter = imageDataAugmenter( ...
 pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
     'DataAugmentation',augmenter);
 
+% ToDo: Save out Data cache
+
 % Clear memory
 clear imds pxds imdsTrain pxdsTrain imdsVal pxdsVal
 clear numClasses numTestingImages numTrainingImages numValidationImages
@@ -326,6 +334,18 @@ else
     disp("Warning: Training skipped by user request")
 end
 
+%% EVALUATION
+tempdir = '~/Documents/MATLAB/temp';
+
+pxdsResults = semanticseg(imdsTest,net, ...
+    'MiniBatchSize',8, ...
+    'WriteLocation',tempdir, ...
+    'Verbose',false);
+
+metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest,'Verbose',false);
+metrics.DataSetMetrics
+metrics.ClassMetrics
+
 %% SAVE network. images, and matlab script
 
 if (saveNet)
@@ -335,6 +355,7 @@ if (saveNet)
         str = strcat(network,'_', strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
         foldername = fullfile(rootPath,"networks","cache",str);
         mkdir(foldername);
+        save(fullfile(foldername,strcat(str,'_data','.mat')),'');
         save(fullfile(foldername,strcat(str,'.mat')),'net');
         copyfile(currentFileName, foldername);
 
@@ -355,6 +376,10 @@ if (saveNet)
 else
     disp("WARNING: trained network not archived")
 end
+
+
+return % end script
+% ToDo:  Cleanup and format below
 
 %% SINGLE IMAGES TEST
 
@@ -381,20 +406,6 @@ for i = 3:4
     imshowpair(actual, expected, 'diff')
     title('Actual vs Expected');
 end
-
-%% EVALUATION
-tempdir = '~/Documents/MATLAB/temp';
-
-pxdsResults = semanticseg(imdsTest,net, ...
-    'MiniBatchSize',8, ...
-    'WriteLocation',tempdir, ...
-    'Verbose',false);
-
-metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest,'Verbose',false);
-metrics.DataSetMetrics
-metrics.ClassMetrics
-
-return % end script
 
 %% Visualize activations
 im = readimage(imdsTest,randi(length(imdsTest.Files)));
