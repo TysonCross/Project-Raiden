@@ -1,0 +1,2257 @@
+#! /usr/local/Nuke11.3v4/libnuke-11.3.4.so -nx
+#write_info Write1 file:"/mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_010/mask/2017-02-10_163357_010_mask.%08d.tif" format:"512 256 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"74 387" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 11.3 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="85" y="31" w="2229" h="910" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="835" stretch="1"/>
+            <splitter orientation="2">
+                <split size="864"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+            </splitter>
+            <split size="1346"/>
+            <dock id="" activePageId="DAG.1" focus="true">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/2017-02-10_163357/2017-02-10_163357_010_mask_v2.nk"
+ frame 279
+ first_frame 74
+ last_frame 387
+ lock_range true
+ fps 60
+ format "512 256 0 0 512 256 1 "
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+BackdropNode {
+ inputs 0
+ name BG_Denoise
+ label Denoise
+ note_font "Roboto Medium"
+ note_font_size 20
+ xpos -425
+ ypos -748
+ bdwidth 298
+ bdheight 184
+}
+BackdropNode {
+ inputs 0
+ name BG_Lightning
+ gl_color 0xcc2b10ff
+ label Lightning
+ note_font "Roboto Medium"
+ note_font_size 20
+ xpos -518
+ ypos -461
+ bdwidth 522
+ bdheight 1374
+}
+BackdropNode {
+ inputs 0
+ name BG_Mattes
+ label "BG Mattes"
+ note_font "Roboto Medium"
+ note_font_size 20
+ xpos 797
+ ypos -231
+ bdwidth 849
+ bdheight 891
+}
+BackdropNode {
+ inputs 0
+ name BG_Mattes1
+ label "Flash Frame (Helper matte)"
+ note_font "Roboto Medium"
+ note_font_size 20
+ xpos 1922
+ ypos -267
+ bdwidth 530
+ bdheight 470
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_010/tif/2017-02-10_163357_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 74
+ last 387
+ origfirst 74
+ origlast 387
+ origset true
+ name Read1
+ xpos -352
+ ypos -923
+}
+Dot {
+ name Dot3
+ xpos -318
+ ypos -813
+}
+set N615a3b0 [stack 0]
+ViewMetaData {
+ name ViewMetaData1
+ xpos -219
+ ypos -816
+}
+Reformat {
+ inputs 0
+ format "299 299 0 0 299 299 1 InceptionResnetv2_size"
+ resize distort
+ center false
+ name Reformat1
+ xpos -21
+ ypos 2461
+}
+push $N615a3b0
+Dot {
+ name Dot2
+ xpos -318
+ ypos -708
+}
+set N614e0d0 [stack 0]
+Dot {
+ name Dot29
+ xpos -219
+ ypos -708
+}
+set N613db50 [stack 0]
+FrameHold {
+ name FrameHold2
+ xpos -253
+ ypos -661
+ disable true
+}
+push $N613db50
+push $N614e0d0
+Denoise2 {
+ inputs 2
+ type Film
+ lift_blacks true
+ profile Automatic
+ amount 0.86
+ rolloff 2.16
+ smoothness 100
+ lumablend 1
+ preserve_edges true
+ "Noise Analysis" 1
+ analysisRegion {217.5 63.5 509.375 158.5}
+ analysisFrame 0
+ "Tune Frequencies" 1
+ highAmount 1.45
+ mediumAmount 1.05
+ lowAmount 1.05
+ processVeryLow true
+ veryLowAmount 9
+ "Tune Channels" 1
+ needsAnalyzing false
+ needsProfile false
+ profileExists true
+ profileCurve {profile {curve x0.1000000015 0.4851427674 x0.1333521456 0.1113550961 x0.1778279394 0.08694409579 x0.2371373773 0.09168355912 x0.3162277639 0.1105897874 x0.4216965139 0.1399774104 x0.5623413324 0.2357042283 x0.7498942018 0.6895344257 x1 1}}
+ profileFrame 0
+ serializeKnob "1.530588865e+00 5.000003576e-01 5.000000000e-01
+4.000271205e-03 8.836863685e-08 4.418431843e-08
+4.000271205e-03 8.836863685e-08 4.418431843e-08
+5.456101149e-03 4.969659173e-08 2.468927462e-08
+0.000000000e+00 0.000000000e+00 0.000000000e+00
+1.266499283e-03 2.651059106e-07 4.418431843e-08
+1.266499283e-03 2.651059106e-07 4.418431843e-08
+5.277633900e-04 1.269537222e-07 3.590217545e-08
+0.000000000e+00 0.000000000e+00 0.000000000e+00
+5.533643998e-04 1.767372737e-07 4.418431843e-08
+5.533643998e-04 1.767372737e-07 4.418431843e-08
+3.387797915e-05 2.210653882e-08 1.656911941e-08
+0.000000000e+00 0.000000000e+00 0.000000000e+00
+1.848671818e-04 2.209215921e-08 1.380759951e-08
+1.848671818e-04 2.209215921e-08 1.380759951e-08
+5.523039803e-08 2.209215921e-08 1.104607961e-08
+1.000000000e+00 6.895344257e-01 2.357042283e-01 1.399774104e-01 1.105897874e-01 9.168355912e-02 8.694409579e-02 1.113550961e-01 4.851427674e-01 
+15452452807665387418"
+ name Denoise1
+ xpos -352
+ ypos -631
+}
+Dot {
+ name Dot11
+ xpos -318
+ ypos -519
+}
+set Naccae30 [stack 0]
+Dot {
+ name Dot10
+ xpos -318
+ ypos -422
+}
+set Nacf17d0 [stack 0]
+Blur {
+ size 2.2
+ filter triangle
+ quality 25
+ name Blur5
+ xpos -352
+ ypos -374
+}
+set N1e64eed0 [stack 0]
+Grade {
+ whitepoint 0.3
+ multiply 2
+ add -0.01
+ gamma 2.4
+ black_clamp false
+ maskChannelInput -rgba.alpha
+ enable_mix_luminance false
+ mix_luminance 1
+ name Grade_bigger_edges
+ tile_color 0xe840f7ff
+ xpos -242
+ ypos -370
+}
+Dot {
+ name Dot7
+ xpos -208
+ ypos -321
+}
+push $N1e64eed0
+Dissolve {
+ inputs 2
+ channels rgba
+ which 1
+ mergerange true
+ name Brighter_Edges_Dissolve
+ xpos -352
+ ypos -324
+}
+Dot {
+ name Dot4
+ xpos -318
+ ypos -231
+}
+set Nad47310 [stack 0]
+EdgeDetectWrapper {
+ channels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ threshold 0.01
+ blursize 1
+ name EdgeDetect1
+ xpos -235
+ ypos -240
+ disable true
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Flash Frame"
+ note_font "Roboto Medium"
+ note_font_size 40
+ xpos 2117
+ ypos -199
+}
+StickyNote {
+ inputs 0
+ name StickyNote2
+ label "Approximate\nStrike Position"
+ note_font "Roboto Medium"
+ note_font_size 40
+ xpos -797
+ ypos 172
+}
+StickyNote {
+ inputs 0
+ name StickyNote3
+ label "Lightning Type"
+ note_font "Roboto Medium"
+ note_font_size 40
+ xpos -788
+ ypos 731
+}
+Constant {
+ inputs 0
+ channels rgb
+ name Constant1
+ xpos 1083
+ ypos -97
+}
+Dot {
+ name Dot13
+ xpos 1117
+ ypos 29
+}
+set Nad74190 [stack 0]
+Ramp {
+ premult alpha
+ p0 {100 19.5}
+ p1 {100 12.5}
+ name Ramp4
+ xpos 1243
+ ypos 110
+}
+push $Nad74190
+Ramp {
+ premult alpha
+ p0 {100 34.5}
+ p1 {100 15.5}
+ name Ramp2
+ xpos 1238
+ ypos -17
+}
+push $Naccae30
+Dot {
+ name Dot30
+ xpos 1148
+ ypos -519
+}
+set Nd0e6890 [stack 0]
+Dot {
+ name Dot22
+ xpos 1148
+ ypos -218
+}
+set Nad92810 [stack 0]
+FrameHold {
+ name FrameHold3
+ xpos 1114
+ ypos -181
+}
+Dot {
+ name Dot15
+ xpos 1148
+ ypos -117
+}
+set Nad9fbe0 [stack 0]
+Dot {
+ name Dot17
+ xpos 1440
+ ypos -117
+}
+EdgeDetectWrapper {
+ blursize 1
+ name EdgeDetect2
+ xpos 1406
+ ypos -53
+}
+Merge2 {
+ inputs 2
+ operation in
+ name Merge5
+ xpos 1406
+ ypos -17
+}
+Grade {
+ blackpoint 0.011
+ whitepoint 0.005
+ name Grade3
+ xpos 1406
+ ypos 7
+}
+Invert {
+ name Invert4
+ xpos 1406
+ ypos 31
+}
+Clamp {
+ name Clamp3
+ xpos 1406
+ ypos 74
+}
+Merge2 {
+ inputs 2
+ name Merge6
+ xpos 1406
+ ypos 110
+}
+FilterErode {
+ channels rgba
+ size 3
+ name FilterErode1
+ xpos 1406
+ ypos 140
+}
+Constant {
+ inputs 0
+ channels rgb
+ name Constant7
+ xpos 2276
+ ypos -83
+}
+set Nae0fe90 [stack 0]
+Roto {
+ output alpha
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x43800000 x43000000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {px x43c70000
+        {{{xbf000000 -}}
+      {{0 -}}}
+        {{{x43c34000 -}}
+      {{x428c0002 -}}}
+        {{{x3f000000 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x43d03fff -}}
+      {{x42870002 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x43d30001 -}}
+      {{x4207ffff -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x4402a000 -}}
+      {{x4203ffff -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x4400e000 -}}
+      {{xc09ffff0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{xc1280008 -}}
+      {{xc0bffff8 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{xc1600000 -}}
+      {{x41bc0006 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x42820001 -}}
+      {{x41d00002 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x4294ffff -}}
+      {{x423c0005 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x42cb0000 -}}
+      {{x420e0003 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{x434dffff -}}
+      {{x4217fffd -}}}
+        {{{0 -}}
+      {{0 -}}}
+        {{{xbf000000 -}}
+      {{0 -}}}
+        {{{x43c17fff -}}
+      {{x4221fffe -}}}
+        {{{x3f000000 -}}
+      {{0 -}}}}}     idem}
+     {tx x43710000 x437a5d17 x4222e8ba}
+     {a ro 1 go 1 bo 1 ao 1 osw x41200000 osf 0 str 1 spx x43800000 spy x43000000 sb 1 ltn x43710000 ltm x43710000 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { addPoints str 1 ssx 1 ssy 1 sf 1 }
+  { removePoints str 1 ssx 1 ssy 1 sf 1 }
+  { cuspPoints str 1 ssx 1 ssy 1 sf 1 }
+  { curvePoints str 1 ssx 1 ssy 1 sf 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {256 128}
+ colorOverlay {1 1 1 1}
+ lifetime_type "all frames"
+ lifetime_start 241
+ lifetime_end 241
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name Roto1
+ xpos 2156
+ ypos -120
+}
+set Nae18b20 [stack 0]
+push $Nae0fe90
+Invert {
+ name Invert3
+ xpos 2156
+ ypos -1
+}
+push $Nae18b20
+push $Nd0e6890
+Dot {
+ name Dot33
+ xpos 2069
+ ypos -519
+}
+Dot {
+ name Dot9
+ xpos 2069
+ ypos -218
+}
+FrameHold {
+ first_frame 279
+ name FrameHold4
+ xpos 2035
+ ypos -125
+}
+Group {
+ inputs 2
+ name PxF_Bandpass
+ help "Extract detail from an image by subtracting the original image from a blur of itself.\nUseful to enhance an image for easier tracking."
+ tile_color 0x733520ff
+ xpos 2035
+ ypos -49
+ addUserKnob {20 User}
+ addUserKnob {41 colorspace_out l Colorspace t "Pixel values will be converted from linear to this colorspace before processing." T Colorspace1.colorspace_out}
+ addUserKnob {41 blur_1 l blurAmount1 T Blur1.size}
+ addUserKnob {41 blur_2 l blurAmount2 T Blur2.size}
+ addUserKnob {7 brightness l Gain t "Overall gain applied after bandpass filter." R 0 20}
+ brightness 20
+ addUserKnob {41 saturation t "Overall saturation after bandpass and gain." T Saturation1.saturation}
+ addUserKnob {7 offset l offsetDarks t "Constant added after bandpass."}
+ offset 1
+ addUserKnob {6 bc l "black clamp" t "Clamp values < 0 to 0." +STARTLINE}
+ bc true
+ addUserKnob {6 wc l "white clamp" t "Clamp values > 1 to 1." -STARTLINE}
+ wc true
+ addUserKnob {26 ""}
+ addUserKnob {26 t l "" t "Applies a bandpass filter to the image to isolate certain spacial frequencies. Useful to enhance detail to make footage easier to track. Used to add detail to an image " -STARTLINE T "PxF_Bandpass 2.0.3 - (c) 2012 - Xavier Bourque - www.pixelfudger.com"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 359
+  ypos 157
+  number 1
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 171
+  ypos -273
+ }
+set Naeda4e0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 405
+  ypos 31
+ }
+set Naedeb90 [stack 0]
+push $Naedeb90
+push $Naeda4e0
+ Colorspace {
+  colorspace_out Cineon
+  name Colorspace1
+  xpos 171
+  ypos -163
+ }
+set Naee42b0 [stack 0]
+ Blur {
+  name Blur1
+  xpos 132
+  ypos -126
+ }
+push $Naee42b0
+ Blur {
+  size 60
+  name Blur2
+  xpos 227
+  ypos -127
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos 180
+  ypos -71
+ }
+ Grade {
+  white {{brightness i}}
+  add {{offset i}}
+  black_clamp {{bc i}}
+  white_clamp {{wc i}}
+  name Grade1
+  xpos 180
+  ypos 4
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos 180
+  ypos 47
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 180
+  ypos 163
+ }
+ Keymix {
+  inputs 3
+  invertMask true
+  bbox B
+  name Keymix1
+  selected true
+  xpos 180
+  ypos 229
+  disable {{"\[exists parent.input1] ? 0 : 1" i x1 0}}
+ }
+ Output {
+  name Output1
+  xpos 180
+  ypos 296
+ }
+end_group
+Merge2 {
+ inputs 2+1
+ invert_mask true
+ name Merge11
+ xpos 2035
+ ypos 5
+}
+Invert {
+ name Invert2
+ xpos 2035
+ ypos 34
+}
+Dot {
+ name Dot24
+ xpos 2069
+ ypos 172
+}
+Merge2 {
+ inputs 2
+ operation max
+ name Merge10
+ xpos 1406
+ ypos 169
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ xpos 1406
+ ypos 193
+}
+Grade {
+ blackpoint 0.024
+ whitepoint 0.39
+ name Grade4
+ xpos 1406
+ ypos 217
+}
+Group {
+ name BinaryAlpha1
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos 1406
+ ypos 241
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
+push $Nad74190
+Ramp {
+ premult alpha
+ p0 {100 89}
+ p1 {100 157.5}
+ name Ramp1
+ xpos 977
+ ypos 26
+}
+push $Nad9fbe0
+Dot {
+ name Dot18
+ xpos 889
+ ypos -117
+}
+Keyer {
+ operation "luminance key"
+ range {0.007733390571 1 1 1}
+ name Keyer1
+ xpos 855
+ ypos -10
+}
+Merge2 {
+ inputs 2
+ operation in
+ name Merge3
+ xpos 855
+ ypos 26
+}
+Grade {
+ blackpoint 0.0025
+ whitepoint 0.0025
+ name Grade1
+ xpos 855
+ ypos 50
+}
+Clamp {
+ name Clamp2
+ xpos 855
+ ypos 74
+}
+Group {
+ name BinaryAlpha2
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos 855
+ ypos 131
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/helper_frames/2017-02-10_163553/2017-02-10_163553_ground_010.tif
+ format "512 256 0 0 512 256 1 "
+ origset true
+ name Read4
+ xpos 1537
+ ypos 199
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle13
+ xpos 1537
+ ypos 299
+}
+Dot {
+ name Dot21
+ xpos 1440
+ ypos 302
+}
+set Nb0aced0 [stack 0]
+Dot {
+ name Dot14
+ label Ground
+ note_font "Roboto Medium"
+ note_font_size 20
+ xpos 1440
+ ypos 387
+}
+set Nb0b1940 [stack 0]
+Constant {
+ inputs 0
+ color {0 1 0 1}
+ color_panelDropped true
+ name Constant6
+ xpos 1516
+ ypos 525
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy5
+ xpos 1406
+ ypos 549
+}
+Premult {
+ name Premult4
+ xpos 1406
+ ypos 587
+}
+Shuffle {
+ alpha black
+ name Shuffle11
+ xpos 1406
+ ypos 611
+}
+push $Nb0aced0
+Constant {
+ inputs 0
+ channels rgb
+ color {1 1 1 0}
+ name Constant10
+ xpos 381
+ ypos -120
+}
+Roto {
+ output alpha
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097664}
+    {t x43800000 x43000000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {p
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 xc10aaa80}}
+      {{x438b8000 x42c20c31}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 x43571e7a}}
+      {{x438b8000 x42ba3cf0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 x3f000000}}}
+        {{{x438b8000 x43c127a1}}
+      {{x438b8000 x42be618c}}}
+        {{{x438b8000 0}}
+      {{x438b8000 xbf000000}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 x440193cf}}
+      {{x438b8000 x42d2555a}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 x44008000}}
+      {{x438b8000 xc0f00000}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 xc0a00000}}
+      {{x438b8000 xc0d00000}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}}}
+      {cc
+       {f 8192}
+       {p
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 x3f000000}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 xbf000000}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}
+        {{{x438b8000 0}}
+      {{x438b8000 0}}}}}}
+     {tx x45b3f800 x438daaab x41d55555}
+     {a osw x41200000 osf 0 str 1 spx x43800000 spy x43000000 sb 1 ltn x45b3f800 ltm x45b3f800 tt x40800000 fx x40f00000 fy x40f00000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {256 128}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ lifetime_start 5759
+ lifetime_end 5759
+ motionblur_shutter_offset_type centred
+ feather 7.5
+ source_black_outside true
+ name Roto3
+ xpos 381
+ ypos -48
+}
+Premult {
+ name Premult6
+ xpos 381
+ ypos -12
+}
+Constant {
+ inputs 0
+ channels rgb
+ name Constant11
+ xpos 662
+ ypos -174
+}
+Roto {
+ output alpha
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097664}
+    {t x43800000 x43000000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {px
+        {x438b8000 x461a6400}
+        {{0}
+      {0}}
+        {{xc0900000 xc1180000}
+      {x42d76db8 x42f40000}}
+        {{0}
+      {0}}
+        {{xc163a2a8}
+      {xbf8f3d00}}
+        {{{x42324c18 -}
+       {x425770a8 -}}
+      {{x42d904b2 -}
+       {x4307a6ea -}}}
+        {{x4306c893}
+      {x41293570}}
+        {{0}
+      {0}}
+        {{{x4402f879 -}
+       {x4401b879 -}}
+      {{x42e91135 -}
+       {x430fad2c -}}}
+        {{0}
+      {0}}
+        {{xbf000000}
+      {0}}
+        {{x4401c000}
+      {x43840000}}
+        {{x3f000000}
+      {0}}
+        {{0}
+      {0}}
+        {{xc0c00000}
+      {x43850000}}
+        {{0}
+      {0}}}}     idem}
+     {tx x43280000 x43801000 x4344e000}
+     {a osw x41200000 osf 0 str 1 spx x43800000 spy x43000000 sb 1 ltn x43280000 ltm x43280000 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { addPoints str 1 ssx 1 ssy 1 sf 1 }
+  { removePoints str 1 ssx 1 ssy 1 sf 1 }
+  { cuspPoints str 1 ssx 1 ssy 1 sf 1 }
+  { curvePoints str 1 ssx 1 ssy 1 sf 1 }
+  { removeFeather str 1 ssx 1 ssy 1 sf 1 }
+  { closeCurve str 1 ssx 1 ssy 1 sf 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {256 128}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ lifetime_start 168
+ lifetime_end 168
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name Roto2
+ xpos 662
+ ypos -86
+}
+Premult {
+ name Premult5
+ xpos 662
+ ypos -50
+}
+push $Nad92810
+FrameHold {
+ first_frame {{FrameHold4.knob.first_frame}}
+ name FrameHold6
+ xpos 530
+ ypos -227
+ cached true
+}
+Group {
+ name PxF_Bandpass2
+ help "Extract detail from an image by subtracting the original image from a blur of itself.\nUseful to enhance an image for easier tracking."
+ tile_color 0x733520ff
+ xpos 530
+ ypos -87
+ addUserKnob {20 User}
+ addUserKnob {41 colorspace_out l Colorspace t "Pixel values will be converted from linear to this colorspace before processing." T Colorspace1.colorspace_out}
+ addUserKnob {41 blur_1 l blurAmount1 T Blur1.size}
+ addUserKnob {41 blur_2 l blurAmount2 T Blur2.size}
+ addUserKnob {7 brightness l Gain t "Overall gain applied after bandpass filter." R 0 20}
+ brightness 20
+ addUserKnob {41 saturation t "Overall saturation after bandpass and gain." T Saturation1.saturation}
+ addUserKnob {7 offset l offsetDarks t "Constant added after bandpass."}
+ offset 0.03
+ addUserKnob {6 bc l "black clamp" t "Clamp values < 0 to 0." +STARTLINE}
+ bc true
+ addUserKnob {6 wc l "white clamp" t "Clamp values > 1 to 1." -STARTLINE}
+ wc true
+ addUserKnob {26 ""}
+ addUserKnob {26 t l "" t "Applies a bandpass filter to the image to isolate certain spacial frequencies. Useful to enhance detail to make footage easier to track. Used to add detail to an image " -STARTLINE T "PxF_Bandpass 2.0.3 - (c) 2012 - Xavier Bourque - www.pixelfudger.com"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 359
+  ypos 157
+  number 1
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 171
+  ypos -273
+ }
+set N353fcd90 [stack 0]
+ Dot {
+  name Dot1
+  xpos 405
+  ypos 31
+ }
+set N3aef1620 [stack 0]
+push $N3aef1620
+push $N353fcd90
+ Colorspace {
+  colorspace_out Cineon
+  name Colorspace1
+  xpos 171
+  ypos -163
+ }
+set N3aef61e0 [stack 0]
+ Blur {
+  name Blur1
+  xpos 132
+  ypos -126
+ }
+push $N3aef61e0
+ Blur {
+  size 74
+  name Blur2
+  xpos 227
+  ypos -127
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos 180
+  ypos -71
+ }
+ Grade {
+  white {{brightness i}}
+  add {{offset i}}
+  black_clamp {{bc i}}
+  white_clamp {{wc i}}
+  name Grade1
+  xpos 180
+  ypos 4
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos 180
+  ypos 47
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 180
+  ypos 163
+ }
+ Keymix {
+  inputs 3
+  invertMask true
+  bbox B
+  name Keymix1
+  selected true
+  xpos 180
+  ypos 229
+  disable {{"\[exists parent.input1] ? 0 : 1" i x1 0}}
+ }
+ Output {
+  name Output1
+  xpos 180
+  ypos 296
+ }
+end_group
+Merge2 {
+ inputs 2
+ name Merge16
+ xpos 530
+ ypos -50
+}
+Merge2 {
+ inputs 2
+ name Merge20
+ xpos 530
+ ypos -12
+}
+Shuffle {
+ alpha black
+ name Shuffle15
+ xpos 530
+ ypos 35
+}
+Grade {
+ blackpoint 0.038
+ name Grade13
+ xpos 530
+ ypos 59
+}
+Crop {
+ box {0 0 512 256}
+ crop false
+ name Crop1
+ xpos 530
+ ypos 92
+}
+Group {
+ name BinaryAlpha4
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos 530
+ ypos 135
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ an rgba
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
+Invert {
+ name Invert5
+ xpos 530
+ ypos 183
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle12
+ xpos 855
+ ypos 264
+}
+Dot {
+ name Dot20
+ xpos 889
+ ypos 302
+}
+set Nb113610 [stack 0]
+Merge2 {
+ inputs 2
+ name Merge7
+ xpos 1121
+ ypos 299
+}
+Invert {
+ name Invert1
+ xpos 1119
+ ypos 323
+}
+Dot {
+ name Dot19
+ label Sky
+ note_font "Roboto Medium"
+ note_font_size 20
+ note_font_color 0xff
+ xpos 1153
+ ypos 397
+}
+set Nb1658e0 [stack 0]
+Constant {
+ inputs 0
+ color {0 0 0 1}
+ color_panelDropped true
+ name Constant2
+ xpos -488
+ ypos 81
+}
+set Nb0669e0 [stack 0]
+Radial {
+ premult rgba
+ area {{curve x276 81.5 74 1 x281 82 x283 100.5} {curve x276 -1.75 -1.75 -1.75 x281 6 x283 9.5} {curve x276 205 200.5 281 x281 191 x283 184.5} {curve x276 139.75 139.75 139.75 x281 115.5 x283 114}}
+ softness 0.165
+ name Radial1
+ xpos -488
+ ypos 181
+}
+Blur {
+ size {{curve x276 50 200 x283 50}}
+ name Blur4
+ xpos -488
+ ypos 205
+}
+set N10c610e0 [stack 0]
+push $N10c610e0
+push $N10c610e0
+push $Nb0669e0
+push $Nb0b1940
+Dot {
+ name Dot12
+ label Ground
+ note_font "Roboto Medium"
+ note_font_size 20
+ xpos -91
+ ypos -35
+ hide_input true
+}
+Dilate {
+ size -2.6
+ name Dilate2
+ xpos -125
+ ypos 2
+ disable true
+}
+Erode {
+ channels rgba
+ size -0.9
+ blur 0.074
+ name Erode1
+ xpos -125
+ ypos 48
+ disable true
+}
+Shuffle {
+ red black
+ green black
+ blue black
+ alpha red
+ name Shuffle5
+ xpos -125
+ ypos 143
+}
+set Nb0d3190 [stack 0]
+push $Nb0669e0
+push $Nb113610
+Dot {
+ name Dot16
+ label Clouds
+ note_font "Roboto Medium"
+ note_font_size 20
+ note_font_color 0xff
+ xpos 889
+ ypos 380
+}
+set Nb118290 [stack 0]
+Dot {
+ name Dot23
+ label Clouds
+ note_font "Roboto Medium"
+ note_font_size 20
+ note_font_color 0xff
+ xpos -193
+ ypos -35
+ hide_input true
+}
+Dilate {
+ size -3
+ name Dilate1
+ xpos -227
+ disable true
+}
+Erode {
+ channels rgba
+ size 0
+ name Erode2
+ xpos -227
+ ypos 36
+ disable true
+}
+Shuffle {
+ red black
+ green black
+ blue black
+ alpha red
+ name Shuffle3
+ xpos -227
+ ypos 105
+}
+set Nb139520 [stack 0]
+push $Nb0669e0
+push $Nb1658e0
+Dot {
+ name Dot26
+ label Sky
+ note_font "Roboto Medium"
+ note_font_size 20
+ note_font_color 0xff
+ xpos -101
+ ypos -112
+ hide_input true
+}
+push $Nacf17d0
+Dot {
+ name Dot25
+ xpos -85
+ ypos -422
+}
+Keyer {
+ operation "luminance key"
+ range {0.8830332567 1 1 1}
+ name Keyer2
+ xpos -119
+ ypos -201
+}
+Dot {
+ inputs 0
+ name Dot8
+ xpos -217
+ ypos -166
+}
+push $Nad47310
+Laplacian {
+ inputs 1+1
+ size 8
+ quality 20
+ maskChannelInput -rgba.alpha
+ inject true
+ invert_mask true
+ name Laplacian1
+ xpos -352
+ ypos -175
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle6
+ xpos -352
+ ypos -139
+}
+Merge2 {
+ inputs 2+1
+ name Merge13
+ xpos -352
+ ypos -115
+}
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle4
+ xpos -352
+ ypos -80
+}
+Dot {
+ name Dot6
+ xpos -318
+ ypos -42
+}
+set Nb1c1c30 [stack 0]
+push $Nb1c1c30
+FrameHold {
+ name FrameHold1
+ xpos -486
+ ypos -52
+}
+Dot {
+ name Dot1
+ xpos -452
+ ypos 3
+}
+Merge2 {
+ inputs 2
+ operation minus
+ name Merge1
+ xpos -352
+}
+Clamp {
+ name Clamp1
+ xpos -352
+ ypos 42
+}
+Merge2 {
+ inputs 2+1
+ name Merge4
+ xpos -352
+ ypos 105
+}
+Merge2 {
+ inputs 2+1
+ name Merge8
+ xpos -352
+ ypos 143
+}
+Merge2 {
+ inputs 2+1
+ invert_mask true
+ name Merge14
+ xpos -352
+ ypos 181
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle7
+ xpos -352
+ ypos 205
+}
+Grade {
+ inputs 1+1
+ channels rgba
+ multiply 0
+ invert_mask true
+ enable_mix_luminance false
+ name Grade11
+ xpos -352
+ ypos 244
+}
+set Nb233ca0 [stack 0]
+Keyer {
+ operation "luminance key"
+ range {0.01335824852 1 1 1}
+ name Keyer4
+ xpos -315
+ ypos 278
+}
+push $Nb233ca0
+Keyer {
+ operation "luminance key"
+ range {{curve x266 0.001171432079 x276 0.001960403246 x277 0.003827201626 0.0125699161 x281 0.01372195831 x282 0.01146837767 0.009416812121 x312 0.009416812121 x321 0.002932047093 x333 0.001159257984} 0.6833223908 1 1}
+ name Keyer5
+ xpos -409
+ ypos 276
+}
+Merge2 {
+ inputs 2
+ operation plus
+ Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ name Merge15
+ xpos -352
+ ypos 325
+}
+push $Nb139520
+Group {
+ name PxF_Erode
+ help "Erode the edges of an RGBA image by blurring the alpha, applying a gamma to it and doing a \"min\" with the original alpha."
+ tile_color 0x733520ff
+ selected true
+ xpos -227
+ ypos 208
+ addUserKnob {20 User}
+ addUserKnob {7 amount t "Amount of alpha erode. Positive values erode the alpha, negative values expand the alpha." R -100 100}
+ amount -2.5
+ addUserKnob {7 gamma t "Controls the feather of the erode. Smaller values create a harder edge."}
+ gamma 0.5
+ addUserKnob {4 dSel l divide t "Auto: Unpremult the RGB by the alpha only if amount > 0. \n\nOn: Always unpremult RGB by the alpha.\n\nOff: Never unpremult the RGB by the alpha." M {auto on off "" ""}}
+ addUserKnob {4 mSel l multiply t "Auto: Premult the RGB by the alpha after the erode only if amount > 0. \n\nOn: Always premult the RGB by the alpha after the erode.\n\nOff: Never premult the RGB by the alpha after the erode." M {auto on off "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {26 t l "" -STARTLINE T "PxF_Erode 2.1 - (c) 2015 - Xavier Bourque - www.pixelfudger.com"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 675
+  ypos 423
+  number 1
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 501
+  ypos -28
+ }
+set Nbdfd650 [stack 0]
+ Dot {
+  name Dot1
+  xpos 735
+  ypos 245
+ }
+push $Nbdfd650
+ Unpremult {
+  name Unpremult1
+  xpos 501
+  ypos 49
+  disable {{"parent.dSel == 0 ? parent.amount < 0 ? 1 : 0 : parent.dSel == 1 ? 0 : 1"}}
+ }
+set Nc0cf600 [stack 0]
+push $Nc0cf600
+ Invert {
+  name Invert1
+  xpos 374
+  ypos 45
+  disable {{"amount < 0 ? 0 : 1"}}
+ }
+ Blur {
+  channels alpha
+  size {{abs(parent.amount)}}
+  name Blur1
+  xpos 381
+  ypos 93
+ }
+ Gamma {
+  channels alpha
+  value {{parent.gamma}}
+  name Gamma1
+  xpos 381
+  ypos 153
+ }
+ Invert {
+  name Invert2
+  xpos 371
+  ypos 208
+  disable {{"amount < 0 ? 0 : 1"}}
+ }
+set N2370cfd0 [stack 0]
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 459
+  ypos 294
+ }
+set N303ffca0 [stack 0]
+push $Nc0cf600
+push $Nc0cf600
+push $N2370cfd0
+ Merge2 {
+  inputs 2
+  operation mask
+  name In
+  xpos 325
+  ypos 286
+ }
+ Switch {
+  inputs 2
+  which {{"parent.amount == 0"}}
+  name Switch2
+  xpos 330
+  ypos 322
+ }
+ Switch {
+  inputs 2
+  which {{"parent.amount < 0 ? 1 : 0"}}
+  name Switch1
+  xpos 393
+  ypos 359
+ }
+push $Nc0cf600
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 510
+  ypos 355
+ }
+ Premult {
+  name Premult1
+  xpos 510
+  ypos 399
+  disable {{"parent.mSel == 0 ? parent.amount < 0 ? 1 : 0 : parent.mSel == 1 ? 0 : 1"}}
+ }
+ Keymix {
+  inputs 3
+  invertMask true
+  bbox B
+  name Keymix1
+  xpos 508
+  ypos 477
+  disable {{"\[exists parent.input1] ? 0 : 1" i x1 0}}
+ }
+ Output {
+  name Output1
+  xpos 510
+  ypos 546
+ }
+push $N303ffca0
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos 501
+  ypos 129
+ }
+end_group
+push $Nb0d3190
+Group {
+ name PxF_Erode1
+ help "Erode the edges of an RGBA image by blurring the alpha, applying a gamma to it and doing a \"min\" with the original alpha."
+ tile_color 0x733520ff
+ xpos -125
+ ypos 207
+ addUserKnob {20 User}
+ addUserKnob {7 amount t "Amount of alpha erode. Positive values erode the alpha, negative values expand the alpha." R -100 100}
+ amount {{curve x212 -8 x244 -7 x275 -2 x281 -11 x286 -6}}
+ addUserKnob {7 gamma t "Controls the feather of the erode. Smaller values create a harder edge."}
+ gamma 0.5
+ addUserKnob {4 dSel l divide t "Auto: Unpremult the RGB by the alpha only if amount > 0. \n\nOn: Always unpremult RGB by the alpha.\n\nOff: Never unpremult the RGB by the alpha." M {auto on off "" ""}}
+ addUserKnob {4 mSel l multiply t "Auto: Premult the RGB by the alpha after the erode only if amount > 0. \n\nOn: Always premult the RGB by the alpha after the erode.\n\nOff: Never premult the RGB by the alpha after the erode." M {auto on off "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {26 t l "" -STARTLINE T "PxF_Erode 2.1 - (c) 2015 - Xavier Bourque - www.pixelfudger.com"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 675
+  ypos 423
+  number 1
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 501
+  ypos -28
+ }
+set N304833c0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 735
+  ypos 245
+ }
+push $N304833c0
+ Unpremult {
+  name Unpremult1
+  xpos 501
+  ypos 49
+  disable {{"parent.dSel == 0 ? parent.amount < 0 ? 1 : 0 : parent.dSel == 1 ? 0 : 1"}}
+ }
+set N3048c9c0 [stack 0]
+push $N3048c9c0
+ Invert {
+  name Invert1
+  xpos 374
+  ypos 45
+  disable {{"amount < 0 ? 0 : 1"}}
+ }
+ Blur {
+  channels alpha
+  size {{abs(parent.amount)}}
+  name Blur1
+  xpos 381
+  ypos 93
+ }
+ Gamma {
+  channels alpha
+  value {{parent.gamma}}
+  name Gamma1
+  xpos 381
+  ypos 153
+ }
+ Invert {
+  name Invert2
+  xpos 371
+  ypos 208
+  disable {{"amount < 0 ? 0 : 1"}}
+ }
+set N304b9b50 [stack 0]
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 459
+  ypos 294
+ }
+set N304c55b0 [stack 0]
+push $N3048c9c0
+push $N3048c9c0
+push $N304b9b50
+ Merge2 {
+  inputs 2
+  operation mask
+  name In
+  xpos 325
+  ypos 286
+ }
+ Switch {
+  inputs 2
+  which {{"parent.amount == 0"}}
+  name Switch2
+  xpos 330
+  ypos 322
+ }
+ Switch {
+  inputs 2
+  which {{"parent.amount < 0 ? 1 : 0"}}
+  name Switch1
+  xpos 393
+  ypos 359
+ }
+push $N3048c9c0
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos 510
+  ypos 355
+ }
+ Premult {
+  name Premult1
+  xpos 510
+  ypos 399
+  disable {{"parent.mSel == 0 ? parent.amount < 0 ? 1 : 0 : parent.mSel == 1 ? 0 : 1"}}
+ }
+ Keymix {
+  inputs 3
+  invertMask true
+  bbox B
+  name Keymix1
+  xpos 508
+  ypos 477
+  disable {{"\[exists parent.input1] ? 0 : 1" i x1 0}}
+ }
+ Output {
+  name Output1
+  xpos 510
+  ypos 546
+ }
+push $N304c55b0
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos 501
+  ypos 129
+ }
+end_group
+Merge2 {
+ inputs 2
+ name Merge19
+ xpos -155
+ ypos 262
+}
+Merge2 {
+ inputs 2
+ operation minus
+ name Merge18
+ xpos -155
+ ypos 331
+}
+Dot {
+ name Dot5
+ xpos -121
+ ypos 382
+}
+Grade {
+ channels alpha
+ blackpoint 0.0002
+ gamma 1.46
+ name Grade12
+ xpos -352
+ ypos 373
+}
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle2
+ xpos -352
+ ypos 409
+}
+Dot {
+ name Dot31
+ xpos -318
+ ypos 446
+}
+set Nb24e8c0 [stack 0]
+Grade {
+ inputs 1+1
+ blackpoint 0.007
+ whitepoint 2
+ white 50
+ multiply 4
+ add -0.001
+ gamma 5
+ name Grade5
+ xpos -488
+ ypos 443
+}
+Blur {
+ size 9
+ name Blur1
+ xpos -488
+ ypos 467
+}
+Grade {
+ white 4
+ multiply 4
+ gamma 0.85
+ name Grade9
+ xpos -488
+ ypos 503
+}
+push $Nb24e8c0
+Grade {
+ channels rgba
+ blackpoint 0.003
+ black -0.004
+ white 100
+ multiply 5
+ gamma 5
+ white_clamp true
+ maskChannelMask -rgba.alpha
+ enable_mix_luminance false
+ name Grade6
+ xpos -352
+ ypos 516
+}
+FilterErode {
+ inputs 1+1
+ channels rgba
+ size -7.5
+ filter gaussian
+ name FilterErode2
+ xpos -352
+ ypos 540
+}
+Blur {
+ size 7.6
+ name Blur2
+ xpos -352
+ ypos 574
+}
+Grade {
+ white 4
+ multiply 4
+ gamma 0.57
+ name Grade8
+ xpos -352
+ ypos 610
+}
+push $Nb24e8c0
+Dot {
+ name Dot32
+ xpos -181
+ ypos 446
+}
+Grade {
+ inputs 1+1
+ multiply 0
+ gamma 4.7
+ white_clamp true
+ invert_mask true
+ name Grade7
+ xpos -215
+ ypos 610
+}
+Grade {
+ blackpoint 0.0002
+ gamma 5
+ name Grade10
+ xpos -215
+ ypos 649
+}
+Group {
+ name BinaryAlpha3
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos -352
+ ypos 642
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
+Dot {
+ name Dot27
+ label Lightning
+ note_font "Roboto Medium"
+ note_font_size 20
+ note_font_color 0xff
+ xpos -318
+ ypos 724
+}
+set Nb345870 [stack 0]
+Dot {
+ name Dot28
+ label Lightning
+ note_font "Roboto Medium"
+ note_font_size 20
+ note_font_color 0xff
+ xpos 1023
+ ypos 387
+ hide_input true
+}
+Merge2 {
+ inputs 2
+ operation minus
+ name Merge12
+ xpos 1119
+ ypos 459
+}
+Constant {
+ inputs 0
+ color {0 0 1 1}
+ color_panelDropped true
+ name Constant5
+ xpos 1229
+ ypos 517
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy4
+ xpos 1119
+ ypos 541
+}
+Premult {
+ name Premult3
+ xpos 1119
+ ypos 579
+}
+Shuffle {
+ alpha black
+ name Shuffle10
+ xpos 1119
+ ypos 603
+}
+push 0
+push $Nb118290
+Constant {
+ inputs 0
+ color {0 1 1 1}
+ color_panelDropped true
+ name Constant4
+ xpos 965
+ ypos 516
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy3
+ xpos 855
+ ypos 540
+}
+Premult {
+ name Premult2
+ xpos 855
+ ypos 578
+}
+Shuffle {
+ alpha black
+ name Shuffle9
+ xpos 855
+ ypos 602
+}
+push $Nb345870
+Constant {
+ inputs 0
+ color {1 1 0 1}
+ color_panelDropped true
+ name Constant8
+ xpos -104
+ ypos 753
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy6
+ xpos -104
+ ypos 837
+}
+push $Nb345870
+Constant {
+ inputs 0
+ color {1 1 1 1}
+ color_panelDropped true
+ name Constant9
+ xpos -295
+ ypos 754
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy7
+ xpos -352
+ ypos 831
+}
+push $Nb345870
+Constant {
+ inputs 0
+ color {1 0 0 1}
+ color_panelDropped true
+ name Constant3
+ xpos -494
+ ypos 725
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy2
+ xpos -494
+ ypos 834
+}
+Switch {
+ inputs 3
+ which {{curve K 0 x277 1 x284 0}}
+ name Switch1
+ xpos -352
+ ypos 878
+}
+Premult {
+ name Premult1
+ xpos -352
+ ypos 932
+}
+Shuffle {
+ alpha red
+ name Shuffle8
+ xpos -352
+ ypos 956
+}
+Merge2 {
+ inputs 4+1
+ operation plus
+ name Merge9
+ xpos 1119
+ ypos 956
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_010/mask/2017-02-10_163357_010_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ checkHashOnRead false
+ version 3
+ name Write1
+ xpos 1119
+ ypos 996
+}
+push $N615a3b0
+Merge2 {
+ inputs 2
+ mix 0.03
+ name Merge2
+ xpos -1246
+ ypos 1002
+}
+Viewer {
+ frame 279
+ frame_range 74-387
+ fps 23000
+ colour_sample_bbox {1.20703125 -0.6875 1.2109375 -0.68359375}
+ samplepoints {{1.20703125 -0.6875}
+   }
+ name Viewer1
+ xpos 294
+ ypos 1958
+}
