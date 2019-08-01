@@ -748,13 +748,13 @@ DerivedData/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.gitignore.io/api/tex,c++,osx,xcode,latex,linux,python,opencv,windows,pycharm
+# nuke
+*.nk.autosave
 
 # MATLAB
 pathdef.m
 
-experiments
-experiments/*
-
-data/*
-
-networks/*
+experiments/**
+data/**
+networks/**
+matlab/cache/**

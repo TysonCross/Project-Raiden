@@ -1,43 +1,19 @@
-% classNames = [
-%     "leader" , ...
-%     "stroke" , ...
-%     "channel", ...  
-%     "cloud"    , ...
-%     "sky"  , ...
-%     "ground"
-%     ];
 
-% labelIDs = [... 
-%     255 000 000;...    % leader
-%     255 255 255;...    % stroke
-%     255 255 000;...    % channel
-%     000 255 255;...    % cloud
-%     000 000 255;...    % sky
-%     000 255 000;...    % ground
-%     ];
+labelIDs = [... 
+    255 000 000;...    % leader
+    255 255 255;...    % stroke
+    000 255 255;...    % cloud
+    000 000 255;...    % sky
+    000 255 000;...    % ground
+    ];
 
-classNames = [
+labelNames = [
     "lightning" , ...
     "stroke"    , ...
     "cloud"     , ...
     "sky"       , ...
     "ground"
     ];
-
-
-labelIDs = {... 
-    
-    % Lightning
-    [ 
-    255 000 000;...    % leader
-    255 255 000;...    % channel
-    ]
-
-    [255 255 255]   	% stroke
-    [000 255 255]    	% cloud
-    [000 000 255]   	% sky
-    [000 255 000]      % ground
-    };
 
 sequences = {...
     '/2017-02-10_162903/2017-02-10_162903_010';...
@@ -92,4 +68,4 @@ sequencesPath = '/mnt/Shield/Raiden/data/sequences';
 imageFolders = fullfile(sequencesPath,sequences,'tif',filesep);
 maskFolders = fullfile(sequencesPath,sequences,'mask',filesep);
 
-clear sequences
+clear sequences sequencesPath
