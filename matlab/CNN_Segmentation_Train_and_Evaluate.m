@@ -19,8 +19,8 @@ network = 'alexnet';
 percentage = 1.0;
 
 % Phases to run
-useCachedData       = 1         % if false, load and resize/process new data
-useCachedNet        = 1         % if false, generate new neural network
+useCachedData       = 0         % if false, load and resize/process new data
+useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
 archiveNet          = 1         % archive NN, data and figures to subfolder
@@ -31,9 +31,9 @@ rootPath = '/home/tyson/Raiden/';
 scriptPath = fullfile(rootPath,'matlab');
 setupColors;
 
-cacheFolder = fullfile(scriptPath,'cache');
-if ~exist(cacheFolder,'dir')
-    mkdir(cacheFolder);
+cachePath = fullfile(scriptPath,'cache');
+if ~exist(cachePath,'dir')
+    mkdir(cachePath);
 end
 checkpointPath = fullfile(rootPath,'networks','checkpoints');
 if ~exist(checkpointPath,'dir')
@@ -44,8 +44,8 @@ end
 disp("Setting up Data...")
 
 % Check to see if cache exists
-if useCachedData && ~exist(fullfile(cacheFolder,strcat('data','.mat')),'file')
-    warning(['No data cache found at: ',fullfile(cacheFolder,'data'),newline, '(Data will be reloaded)'])
+if useCachedData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
+    warning(['No data cache found at: ',fullfile(cachePath,'data'),newline, '(Data will be reloaded)'])
     useCachedData=0;
 end
 
@@ -121,12 +121,12 @@ if (useCachedData==false)
     
     dataStatus.categoricalLabels = 0;
 
-    save(fullfile(cacheFolder,'data'),...
+    save(fullfile(cachePath,'data'),...
         'imds','pxds','dataStatus',...
         'labelNames', 'labelIDs','labelWeights');
     disp("Data cached") 
 else
-    load(fullfile(cacheFolder,'data'));
+    load(fullfile(cachePath,'data'));
     clear percentage filename
     disp('Loaded Data from cache...')
 end
@@ -145,7 +145,7 @@ if recoverCheckpoint
     clear filename
 else
     if useCachedNet
-        if ~exist(fullfile(cacheFolder,strcat('network','.mat')),'file')
+        if ~exist(fullfile(cachePath,strcat('network','.mat')),'file')
            msg = 'No Network Cache found. What would you like to do?';
            title = 'Create New Network?';
            btn1 = 'Make new network';
@@ -158,7 +158,7 @@ else
                     useCachedNet=0;
                 case btn2
                     clear q msg title btn1 btn2
-                    error(['Error: No network cache found at: ',fullfile(cacheFolder,'network')])
+                    error(['Error: No network cache found at: ',fullfile(cachePath,'network')])
             end
             clear q msg title btn1 btn2
         end
@@ -300,13 +300,14 @@ else
 
         clear pxLayer numClasses useCachedNet
 
+        % ToDo: lgraph -> net
         networkStatus.trained = 0;
-        save(fullfile(cacheFolder,'network'),...
+        save(fullfile(cachePath,'network'),...
         'net','lgraph','networkStatus','imageSize');
         disp("Network created") 
 
     else
-        load(fullfile(cacheFolder,'network'));
+        load(fullfile(cachePath,'network'));
         disp('Loaded Network from cache...')
     end
 end
@@ -323,12 +324,13 @@ if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
     
     dataStatus.categoricalLabels = 1;
 
-    save(fullfile(cacheFolder,'data'),...
+    % ToDo: overwrite images?
+    save(fullfile(cachePath,'data'),...
         'imds','pxds','dataStatus',...
         'labelNames', 'labelIDs','labelWeights');
     disp("Data cached") 
 else
-    load(fullfile(cacheFolder,'data'));
+    load(fullfile(cachePath,'data'));
     disp('Loaded Data from cache...')
 end
 
@@ -339,9 +341,9 @@ if (doTraining==true)
 
     % Split into training and test 
     % ToDo: Partition Method non-random (sequential/split)
+    % ToDo: Maove this stage into the the intial setupData script
     [imdsTrain, imdsVal, imdsTest, pxdsTrain, pxdsVal, pxdsTest] ...
         = partitionData(imds,pxds);
-
     numTrainingImages = numel(imdsTrain.Files)
     numValidationImages = numel(imdsVal.Files)
     numTestingImages = numel(imdsTest.Files)
@@ -351,7 +353,8 @@ if (doTraining==true)
 
     checkpointsFolder = fullfile(rootPath,'networks','checkpoints');
 
-    % Define training options. 
+    % Define training options.
+    % ToDo: trainingDefaults? With individual overrides?
     options = trainingOptions('sgdm', ...
         'LearnRateSchedule','piecewise',...
         'LearnRateDropPeriod',10,...
@@ -369,7 +372,7 @@ if (doTraining==true)
         'ValidationFrequency', 100,...
         'ValidationPatience', 6);
 
-    % Define training data
+    % Define augmenting methods
     pixelRange = [-20 20];
     scaleRange = [0.9 1.1];
     augmenter = imageDataAugmenter( ...
@@ -380,7 +383,7 @@ if (doTraining==true)
         'RandYScale',scaleRange);
 
     pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
-        'DataAugmentation',augmenter);
+        'DataAugmentation', augmenter);
 
     % Clear memory
     clear imds pxds imdsTrain pxdsTrain imdsVal pxdsVal
@@ -392,15 +395,32 @@ if (doTraining==true)
     [net, networkStatus.info] = trainNetwork(pximds, lgraph, options);
     networkStatus.trainingTime = toc;
     
-    % remove any checkpoints
-    
-    
-    networkStatus.trained = 1;
-    save(fullfile(cacheFolder,'network'),...
+    networkStatus.trained = networkStatus.trained + 1;
+    save(fullfile(cachePath,'network'),...
     'net','lgraph','networkStatus','imageSize');
     disp("Network created") 
+    
+    if sendNotification
+        % Send notification when done:
+        apiKey = 'o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5';
+        p = Pushbullet(apiKey);
+        str = strcat(strrep(strrep(datestr(datetime('now'),31),...
+            ' ', '_'), ':', ''),'_',network);
+        [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
+        msg = strcat('Training for', {' '} , network, ...
+            {' has completed at '}, ...
+            datestr(datetime('now'),31), {' after '}, ...
+            string(hours), {' hours'}, ...
+            string(minutes), {' minutes '}, ...
+            string(seconds), {' seconds'});
+        p.pushNote([],title,msg)
+    end
+    
+    % clear out checkpoints
+    delete(fullfile(checkpointPath,'net_checkpoint_*.mat'));
+
 else
-    disp("Warning: Training skipped by user request")
+    warning("Training skipped by user request")
 end
 
 %% EVALUATION
@@ -418,7 +438,7 @@ if networkStatus.trained
     metrics.DataSetMetrics
     metrics.ClassMetrics
     
-    save(fullfile(cacheFolder,'network'),...
+    save(fullfile(cachePath,'network'),...
     'net','lgraph','networkStatus','metrics');
     disp("Network created") 
 end
@@ -433,8 +453,8 @@ if (archiveNet)
         foldername = fullfile(rootPath,"networks","cache",str);
         mkdir(foldername);
         copyfile(currentFileName, foldername);
-        copyfile(fullfile(cacheFolder,'data.mat'),foldername);
-        copyfile(fullfile(cacheFolder,'network.mat'),foldername);
+        copyfile(fullfile(cachePath,'data.mat'),foldername);
+        copyfile(fullfile(cachePath,'network.mat'),foldername);
 
         if saveImages
             figHandle = findall(groot, 'Type', 'Figure');
@@ -447,11 +467,11 @@ if (archiveNet)
             close all;
         end
    else
-       fprintf('WARNING: %s does not exist!\n',currentFileName);
-       disp("WARNING: trained network not archived")
+       warning(strcat(currentFileName, {' does not exist!'}));
+       warning('Trained network not archived');
    end
 else
-    disp("WARNING: trained network not archived")
+    warning('Trained network not archived');
 end
 
 return % end script
@@ -499,15 +519,5 @@ act1ch32 = imresize(act1ch32,imageSize);
 I = imtile({im,act1ch32});
 imshow(I)
 
-% Send notification when done:
-p = Pushbullet('o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5');
-str = strcat(strrep(strrep(datestr(datetime('now'),31),...
-    ' ', '_'), ':', ''),'_',network);
-msg = strcat('Training for', {' '} , network, {' has completed at '}, ...
-    datestr(datetime('now'),31), {' after '}, ...
-    string(networkStatus.trainingTime/60), {' minutes'})
-p.pushNote([],title,msg)
-
-
 % clear GPU
-% reset(gpuDevice(1));
+reset(gpuDevice(1));
