@@ -1,5 +1,5 @@
-function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionValidationData(imds, pxds)
-% Partition  data by randomly selecting 60% of the data for training.
+function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, pxds)
+% Partition  data by randomly selecting 80% of the data for training.
 % 20% used for validation, and the rest is used for testing.
     
 % Set initial random state for example reproducibility.

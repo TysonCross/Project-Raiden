@@ -59,83 +59,106 @@ if (useCachedData==false)
     
     % Phase options
     showPixelFrequency = false;
-    showTestImage = false;
 
-    setupDataPaths;
+    loadLabels;
+    loadSequences;
+    
+    [trainIndex, testIndex] = splitData(imageFolders, 0.25);
 
-    imds = imageDatastore(imageFolders,...
+    % Split off test data
+    imds = imageDatastore(imageFolders(trainIndex),...
         'FileExtensions','.tif');
-    pxds = pixelLabelDatastore(maskFolders,...
+    pxds = pixelLabelDatastore(maskFolders(trainIndex),...
+        labelNames,labelIDs,'FileExtensions','.tif');
+    
+    imdsTest = imageDatastore(imageFolders(testIndex),...
+        'FileExtensions','.tif');
+    pxdsTest = pixelLabelDatastore(maskFolders(testIndex),...
         labelNames,labelIDs,'FileExtensions','.tif');
 
-    if (percentage<1)
-        % Set initial random state
-        rng(now); 
-        numFiles = numel(imds.Files);
-        shuffledIndices = randperm(numFiles);
+    % Split training ang validation
+    [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
+        partitionTrainingData(imds, pxds);
 
-        % Use smaller percentage of the images
-        fileLimits = [3000 30000];
-        numFiles = round(percentage * numFiles);
-        numFiles = min(max(numFiles, min(fileLimits)),max(fileLimits));
-        idx = shuffledIndices(1:numFiles);
-
-        % Create reduced datastores
-        imageFiles = imds.Files(idx);
-        labelFiles = pxds.Files(idx);
-        clear imds pxds
-        imds = imageDatastore(imageFiles);
-        pxds = pixelLabelDatastore(labelFiles, labelNames, labelIDs);
-    end
-
-    % Specify the class weights 
-    % ToDo: This is slow! Can be made parallel?
-    disp("Counting per-label pixel distribution...")
-    labelTable = pxds.countEachLabel;
-    imageFreq = labelTable.PixelCount ./ labelTable.ImagePixelCount;
-    labelWeights = median(imageFreq) ./ imageFreq;
-    dataStatus.weightLabels = 1;
-
-    if showPixelFrequency
-        % Visualize pixel frequency of labels
-        frequency = labelTable.PixelCount/sum(labelTable.PixelCount); %#ok<*UNRCH>
-        bar(1:numel(labelNames),frequency);
-        xticks(1:numel(labelNames));
-        xticklabels(labelTable.Name);
-        xtickangle(45);
-        ylabel('Frequency');
-        clear frequency
-        imageSize = net.Layers(1).InputSize(1:2);
-    else
-        disp(labelTable);
-    end
-
-    if showTestImage
-        % View Overlay
-        I = readimage(imds,100);
-        I = histeq(I);
-        C = readimage(pxds,100);
-        cmap = jet(numel(labelNames));
-        B = labeloverlay(I,C,'Colormap',cmap);
-        figure(1)
-        imshow(B)
-        pixelLabelColorbar(cmap,labelNames);
-        clear I B C
-    end
-
-    clear percentage numFiles idx fileLimits imageFiles labelFiles
+    assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
+    assert(numel(imdsVal.Files)==numel(pxdsVal.Files));
+    assert(numel(imdsTest.Files)==numel(pxdsTest.Files));
+    
+    fprintf('Training images: %d \n', numel(imdsTrain.Files));
+    fprintf('Validation images: %d \n', numel(imdsVal.Files));
+    fprintf('Testing images: %d \n', numel(imdsTest.Files));
+    
+    clear trainIndex testIndex imds pxds
+    clear percentage idx imageFolders maskFolders sequencesPath
     clear showTestImage showPixelFrequency shuffledIndices
     clear imagesFolders maskFolders labelTable
     
     dataStatus.categoricalLabels = 0;
 
-    save(fullfile(cachePath,'data'),...
-        'imds','pxds','dataStatus',...
-        'labelNames', 'labelIDs','labelWeights');
+    save(fullfile(cachePath,'data'), ...
+        'imdsTrain', 'imdsVal', 'imdsTest', ...
+        'pxdsTrain', 'pxdsVal', 'pxdsTest', ...
+        'dataStatus', 'labelNames', 'labelIDs');
     disp("Data cached") 
 else
     load(fullfile(cachePath,'data'));
     clear percentage filename
+    disp('Loaded Data from cache...')
+end
+
+%% Image Processing
+if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
+    
+    switch network
+        case 'fcn8s'
+            imageSize = [227 227];
+
+        case 'alexnet'
+            imageSize = [227 227];
+
+        case 'vgg16'
+            imageSize = [224 224];
+
+        case 'googlenet'
+            imageSize = [224 224];
+
+        case 'inceptionresnetv2'
+            imageSize = [299 299];
+
+        otherwise
+            error('Error: Invalid network: unable to determine input size')
+    end
+    
+    imagePath = fullfile(rootPath,'data');
+    
+    disp("Resizing images and labels, converting to categorical label form...")
+
+	imdsTrain = resizeImages(imdsTrain, imageSize, imagePath);    
+    imdsVal = resizeImages(imdsVal, imageSize, imagePath);
+    imdsTest = resizeImages(imdsTest, imageSize, imagePath);
+
+    pxdsTrain = resizePixelLabels(pxdsTrain, imageSize, imagePath);
+    pxdsVal = resizePixelLabels(pxdsVal, imageSize, imagePath);
+    pxdsTest = resizePixelLabels(pxdsTest, imageSize, imagePath);
+
+    dataStatus.categoricalLabels = 1;
+    
+    % Specify the class weights 
+    disp("Counting per-label pixel distribution...")  % ToDo: This is slow!
+    labelTable = pxdsTrain.countEachLabel;
+    imageFreq = labelTable.PixelCount ./ labelTable.ImagePixelCount;
+    labelWeights = median(imageFreq) ./ imageFreq;
+    disp(labelTable);
+
+   clear numFiles imagePath imageFreq labelTable
+        
+    save(fullfile(cachePath,'data'), ...
+        'imdsTrain', 'imdsVal', 'imdsTest', ...
+        'pxdsTrain', 'pxdsVal', 'pxdsTest', ...
+        'dataStatus', 'labelNames', 'labelIDs','labelWeights');
+    disp("Data cached") 
+else
+    load(fullfile(cachePath,'data'));
     disp('Loaded Data from cache...')
 end
 
@@ -175,11 +198,12 @@ else
     if (useCachedNet==false)
 
         % Balance class weightings
-        if (dataStatus.weightLabels==1)
+        if (exist('labelWeights','var'))
             pxLayer = pixelClassificationLayer('Name','labels',...
                 'Classes',labelNames,'ClassWeights',labelWeights);
         else
-            pxLayer = pixelClassificationLayer('Name','labels');
+            pxLayer = pixelClassificationLayer('Name','labels',...
+                'Classes',labelNames);
         end
 
         numClasses = numel(labelNames);
@@ -331,46 +355,11 @@ else
         disp('Loaded Network from cache...')
     end
 end
- 
-%% Image Processing
-if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
-    imagePath = fullfile(rootPath,'data');
-
-    disp("Resizing images and labels, converting to categorical label form...")
-    imds = resizeImages(imds, imageSize, imagePath);
-    pxds = resizePixelLabels(pxds, imageSize, imagePath);
-        
-    clear percentage numFiles imagePath
-    
-    dataStatus.categoricalLabels = 1;
-
-    % ToDo: overwrite images?
-    save(fullfile(cachePath,'data'),...
-        'imds','pxds','dataStatus',...
-        'labelNames', 'labelIDs','labelWeights');
-    disp("Data cached") 
-else
-    load(fullfile(cachePath,'data'));
-    disp('Loaded Data from cache...')
-end
-
 
 %% Training
 if (doTraining==true)
     disp("Setting up Training...")
-
-    % Split into training and test 
-    % ToDo: Partition Method non-random (sequential/split)
-    % ToDo: Maove this stage into the the intial setupData script
-    [imdsTrain, imdsVal, imdsTest, pxdsTrain, pxdsVal, pxdsTest] ...
-        = partitionData(imds,pxds);
-    numTrainingImages = numel(imdsTrain.Files) %#ok<NOPTS,NASGU>
-    numValidationImages = numel(imdsVal.Files) %#ok<NOPTS,NASGU>
-    numTestingImages = numel(imdsTest.Files) %#ok<NOPTS,NASGU>
-
-    % Define validation data.
-    pximdsVal = pixelLabelImageDatastore(imdsVal,pxdsVal);
-
+    
     checkpointsFolder = fullfile(rootPath,'networks','checkpoints');
 
     % Define training options.
@@ -382,7 +371,7 @@ if (doTraining==true)
         'Momentum',0.9, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
         'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
-        'ValidationData',pximdsVal, ...
+        'ValidationData',pxdsVal, ...
         'MaxEpochs',40, ...  
         'MiniBatchSize',100, ...
         'Shuffle','every-epoch', ...
@@ -406,9 +395,8 @@ if (doTraining==true)
         'DataAugmentation', augmenter);
 
     % Clear memory
-    clear imds pxds imdsTrain pxdsTrain imdsVal pxdsVal
     clear numClasses numTestingImages numTrainingImages numValidationImages
-    clear imageFreq classWeights inputLayer
+    clear inputLayer
     
     disp("Beginning training...")
     tic;

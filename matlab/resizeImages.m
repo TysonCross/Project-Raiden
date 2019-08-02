@@ -13,17 +13,17 @@ function imds = resizeImages(imds, sz, imagePath)
 
     reset(imds)
     N = length(imds.Files);
-    r = 1;
     imageList = string(zeros(1,N));
     
     str = char(strcat('Resizing images to ',{' '},rez));
     progressbar(str)
-    
-    while hasdata(imds)
-        [Im16,info] = read(imds);
-        [~, filename, ext] = fileparts(info.Filename);
+
+    for r = 1:numel(imds.Files)
+        [~, filename, ext] = fileparts(imds.Files{r});
         
         if ~exist(fullfile(imagePath,strcat(filename,ext)), 'file')
+            Im16 = imds.readimage(r);
+
             % Convert to 8-bit
             I = uint8(Im16/256);
             
@@ -36,7 +36,6 @@ function imds = resizeImages(imds, sz, imagePath)
         
         imageList(r) = fullfile(imagePath,strcat(filename,ext));
         progressbar(r/N);
-        r = r + 1;
     end
 
     progressbar(1);
