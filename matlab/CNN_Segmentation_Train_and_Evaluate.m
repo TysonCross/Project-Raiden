@@ -1,4 +1,4 @@
-clear all; clc; close all;
+clear all; clc; close all; %#ok<CLALL>
 
 setenv('NVIDIA_CUDNN', '/usr/local/cuda');
 setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
@@ -25,11 +25,14 @@ doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
 archiveNet          = 1         % archive NN, data and figures to subfolder
 saveImages          = 1         % generate performance figures
+sendNotification    = 1         % send PushBullet notification on completion
 
 % global setup
 rootPath = '/home/tyson/Raiden/';
 scriptPath = fullfile(rootPath,'matlab');
 setupColors;
+
+networkStatus.name = strcat(network,'_',strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
 
 cachePath = fullfile(scriptPath,'cache');
 if ~exist(cachePath,'dir')
@@ -39,7 +42,10 @@ checkpointPath = fullfile(rootPath,'networks','checkpoints');
 if ~exist(checkpointPath,'dir')
     mkdir(checkpointPath);
 end
-    
+
+logFile = fullfile(rootPath,'logs',strcat(networkStatus.name,'.log'))
+diary(logFile)
+
 %% DATA SETUP PHASE
 disp("Setting up Data...")
 
@@ -62,23 +68,25 @@ if (useCachedData==false)
     pxds = pixelLabelDatastore(maskFolders,...
         labelNames,labelIDs,'FileExtensions','.tif');
 
-    % Set initial random state
-    rng(now); 
-    numFiles = numel(imds.Files);
-    shuffledIndices = randperm(numFiles);
+    if (percentage<1)
+        % Set initial random state
+        rng(now); 
+        numFiles = numel(imds.Files);
+        shuffledIndices = randperm(numFiles);
 
-    % Use smaller percentage of the images
-    fileLimits = [2000 20000];
-    numFiles = round(percentage * numFiles);
-    numFiles = min(max(numFiles, min(fileLimits)),max(fileLimits));
-    idx = shuffledIndices(1:numFiles);
+        % Use smaller percentage of the images
+        fileLimits = [3000 30000];
+        numFiles = round(percentage * numFiles);
+        numFiles = min(max(numFiles, min(fileLimits)),max(fileLimits));
+        idx = shuffledIndices(1:numFiles);
 
-    % Create reduced datastores
-    imageFiles = imds.Files(idx);
-    labelFiles = pxds.Files(idx);
-    clear imds pxds
-    imds = imageDatastore(imageFiles);
-    pxds = pixelLabelDatastore(labelFiles, labelNames, labelIDs);
+        % Create reduced datastores
+        imageFiles = imds.Files(idx);
+        labelFiles = pxds.Files(idx);
+        clear imds pxds
+        imds = imageDatastore(imageFiles);
+        pxds = pixelLabelDatastore(labelFiles, labelNames, labelIDs);
+    end
 
     % Specify the class weights 
     % ToDo: This is slow! Can be made parallel?
@@ -90,7 +98,7 @@ if (useCachedData==false)
 
     if showPixelFrequency
         % Visualize pixel frequency of labels
-        frequency = labelTable.PixelCount/sum(labelTable.PixelCount);
+        frequency = labelTable.PixelCount/sum(labelTable.PixelCount); %#ok<*UNRCH>
         bar(1:numel(labelNames),frequency);
         xticks(1:numel(labelNames));
         xticklabels(labelTable.Name);
@@ -183,6 +191,9 @@ else
                 lgraph = removeLayers(lgraph,'pixelLabels');
                 lgraph = addLayers(lgraph, pxLayer);
                 lgraph = connectLayers(lgraph,'softmax','labels');
+                net = lgraph;
+                
+                clear lgraph
 
             case 'alexnet'
                 imageSize = [227 227];
@@ -239,8 +250,10 @@ else
 
                 lgraph = layerGraph(layers);
                 lgraph = connectLayers(lgraph, 'data', 'score/ref');
-
-                clear idx layers upscore bias weights upscore conv1New conv1
+                net = lgraph;
+                
+                clear idx layers upscore bias weights upscore conv1New\
+                clear conv1 lgraph
 
             case 'vgg16'
                 imageSize = [224 224];
@@ -254,7 +267,9 @@ else
                         'BiasLearnRateFactor',20)
                     softmaxLayer('Name','prob')
                     pxLayer ];
-                clear layersTransfer
+                net = lgraph;
+                
+                clear layersTransfer lgraph
 
             case 'googlenet'
                 imageSize = [224 224];
@@ -266,14 +281,16 @@ else
                     'BiasLearnRateFactor',10);       
                 lgraph = replaceLayer(lgraph,'loss3-classifier',newLayer);
                 lgraph = replaceLayer(lgraph,'output',pxLayer);
-                clear newLayer
-
+                net = lgraph;
+                
                 % freeze early network
                 layers = lgraph.Layers;
                 connections = lgraph.Connections;
                 layers(1:10) = freezeWeights(layers(1:10));
                 lgraph = createLgraphUsingConnections(layers,connections);
-                clear layers connections
+                net = lgraph;
+                
+                clear layers connections lgraph newLayer
 
             case 'inceptionresnetv2'
                 imageSize = [299 299];
@@ -283,19 +300,22 @@ else
                     'Name','fc_new', ...
                     'WeightLearnRateFactor',10, ...
                     'BiasLearnRateFactor',10);       
-                lgraph = replaceLayer(lgraph,'predictions',newLayer);
-                lgraph = replaceLayer(lgraph,'ClassificationLayer_predictions',pxLayer);
-                clear newLayer
-
+                lgraph = replaceLayer(lgraph,...
+                    'predictions',newLayer);
+                lgraph = replaceLayer(lgraph, ...
+                    'ClassificationLayer_predictions',pxLayer);
+                
                 % freeze pretrained network
                 layers = lgraph.Layers;
                 connections = lgraph.Connections;
                 layers(1:end-3) = freezeWeights(layers(1:end-3));
                 lgraph = createLgraphUsingConnections(layers,connections);
-                clear layers connections
-
+                net = lgraph;
+                
+                clear layers connections lgraph newLayer
+ 
             otherwise
-                error('Error: Invalid network specified. Network not created, imageSize not set')
+                error('Error: Invalid network name specified')
         end
 
         clear pxLayer numClasses useCachedNet
@@ -303,7 +323,7 @@ else
         % ToDo: lgraph -> net
         networkStatus.trained = 0;
         save(fullfile(cachePath,'network'),...
-        'net','lgraph','networkStatus','imageSize');
+            'net','networkStatus','imageSize');
         disp("Network created") 
 
     else
@@ -344,9 +364,9 @@ if (doTraining==true)
     % ToDo: Maove this stage into the the intial setupData script
     [imdsTrain, imdsVal, imdsTest, pxdsTrain, pxdsVal, pxdsTest] ...
         = partitionData(imds,pxds);
-    numTrainingImages = numel(imdsTrain.Files)
-    numValidationImages = numel(imdsVal.Files)
-    numTestingImages = numel(imdsTest.Files)
+    numTrainingImages = numel(imdsTrain.Files) %#ok<NOPTS,NASGU>
+    numValidationImages = numel(imdsVal.Files) %#ok<NOPTS,NASGU>
+    numTestingImages = numel(imdsTest.Files) %#ok<NOPTS,NASGU>
 
     % Define validation data.
     pximdsVal = pixelLabelImageDatastore(imdsVal,pxdsVal);
@@ -364,7 +384,7 @@ if (doTraining==true)
         'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
         'ValidationData',pximdsVal, ...
         'MaxEpochs',40, ...  
-        'MiniBatchSize',64, ...
+        'MiniBatchSize',100, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'VerboseFrequency',50,...
@@ -392,29 +412,13 @@ if (doTraining==true)
     
     disp("Beginning training...")
     tic;
-    [net, networkStatus.info] = trainNetwork(pximds, lgraph, options);
+    [net, networkStatus.info] = trainNetwork(pximds, net, options);
     networkStatus.trainingTime = toc;
     
     networkStatus.trained = networkStatus.trained + 1;
     save(fullfile(cachePath,'network'),...
-    'net','lgraph','networkStatus','imageSize');
+        'net','networkStatus','imageSize');
     disp("Network created") 
-    
-    if sendNotification
-        % Send notification when done:
-        apiKey = 'o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5';
-        p = Pushbullet(apiKey);
-        str = strcat(strrep(strrep(datestr(datetime('now'),31),...
-            ' ', '_'), ':', ''),'_',network);
-        [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
-        msg = strcat('Training for', {' '} , network, ...
-            {' has completed at '}, ...
-            datestr(datetime('now'),31), {' after '}, ...
-            string(hours), {' hours'}, ...
-            string(minutes), {' minutes '}, ...
-            string(seconds), {' seconds'});
-        p.pushNote([],title,msg)
-    end
     
     % clear out checkpoints
     delete(fullfile(checkpointPath,'net_checkpoint_*.mat'));
@@ -425,12 +429,12 @@ end
 
 %% EVALUATION
 if networkStatus.trained
-    disp("Evaluating network performance (Parallel Pool)");
+    disp("Evaluating network performance");
     
     testDir = '~/Documents/MATLAB/temp';
 
     pxdsResults = semanticseg(imdsTest,net, ...
-        'MiniBatchSize',8, ...
+        'MiniBatchSize',16, ...
         'WriteLocation',tempdir, ...
         'Verbose',false);
 
@@ -439,23 +443,24 @@ if networkStatus.trained
     metrics.ClassMetrics
     
     save(fullfile(cachePath,'network'),...
-    'net','lgraph','networkStatus','metrics');
+        'net','networkStatus','metrics');
     disp("Network created") 
 end
 
 %% ARCHIVE network, images, and matlab script
+diary off
 
 if (archiveNet)
    disp('Saving data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
    if exist(currentFileName,'file')
-        str = strcat(strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''),'_',network);
-        foldername = fullfile(rootPath,"networks","cache",str);
+        foldername = fullfile(rootPath,"networks","cache",networkStatus.name);
         mkdir(foldername);
         copyfile(currentFileName, foldername);
         copyfile(fullfile(cachePath,'data.mat'),foldername);
         copyfile(fullfile(cachePath,'network.mat'),foldername);
-
+        copy(logFile,foldername);
+        
         if saveImages
             figHandle = findall(groot, 'Type', 'Figure');
             fig_name = figHandle(1).Name;
@@ -467,11 +472,30 @@ if (archiveNet)
             close all;
         end
    else
-       warning(strcat(currentFileName, {' does not exist!'}));
+       str = strcat(string(currentFileName), {' does not exist!'});
+       warning(str);
        warning('Trained network not archived');
    end
 else
     warning('Trained network not archived');
+end
+
+% NOTIFICATIONS
+if sendNotification
+    % Send notification when done:
+    apiKey = 'o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5';
+    p = Pushbullet(apiKey);
+    str = strcat(strrep(strrep(datestr(datetime('now'),31),...
+        ' ', '_'), ':', ''),'_',network);
+    [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
+    subject = strcat('Training for', {' '} , network, {' complete'});
+    msg = strcat('Training for', {' '} , network, ...
+        {' has completed at '}, ...
+        datestr(datetime('now'),31), {' after '}, ...
+        string(hours), {' h '}, ...
+        string(mins), {' min '}, ...
+        string(secs), {' sec'});
+    p.pushNote([],subject,msg);
 end
 
 return % end script
