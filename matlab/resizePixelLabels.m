@@ -1,22 +1,22 @@
-function pxds = resizePixelLabels(pxds, sz, imagePath)
+function pxds = resizePixelLabels(pxds, imageSize, destinationPath)
 % Resize pixel label data to [sz(1) sz(2)].
 
-    y = sz(1);
-    x = sz(2);
-    rez = strcat(string(x),'x',string(y));
-    imagePath = fullfile(imagePath,'resized',rez,'label');
-    
-    if ~exist(imagePath,'dir')
-        mkdir(imagePath)
+    if ~exist(destinationPath,'dir')
+        mkdir(destinationPath)
     end
 
+    y = imageSize(1);
+    x = imageSize(2);
+    loadLabels;
+    
     reset(pxds)
     N = length(pxds.Files);
     r = 1;
-    imageList = string(zeros(1,N));
+    imageList = strings(1,N);
     
-    str = char(strcat('Resizing labels to ',{' '},rez));
-    progressbar(str)
+%     rez = strcat(string(x),'x',string(y));
+%     str = char(strcat('Converting labels to ',{' '},rez));
+%     progressbar('',str)
     
     while hasdata(pxds)
         [C, info] = read(pxds);
@@ -26,7 +26,7 @@ function pxds = resizePixelLabels(pxds, sz, imagePath)
         maskIdx = strfind(filename, str);
         filename = strcat(filename(1:maskIdx-1),"label",filename(maskIdx+length(str):end));
         
-        if ~exist(fullfile(imagePath,strcat(filename,ext)), 'file') 
+        if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') 
             
             % Convert from categorical to uint8.
             % (RGB-class label association -> per-pixel integer value)
@@ -36,16 +36,15 @@ function pxds = resizePixelLabels(pxds, sz, imagePath)
             L = imresize(L,[y x],'nearest');
 
             % Write the data to disk.
-            imwrite(L,fullfile(imagePath,strcat(filename,ext)));
+            imwrite(L,fullfile(destinationPath,strcat(filename,ext)));
             
         end
         
-        imageList(r) = fullfile(imagePath,strcat(filename,ext));
-        progressbar(r/N);
+        imageList(r) = fullfile(destinationPath,strcat(filename,ext));
+        progressbar([],r/N);
+        r = r + 1;
     end
 
-    progressbar(1);
-    ClassNames = pxds.ClassNames;
-    labelIDs_Scalar = 1:numel(ClassNames);
-    pxds = pixelLabelDatastore(imageList,ClassNames,labelIDs_Scalar);
+    progressbar([],1);
+    pxds = pixelLabelDatastore(imageList,labelNames,labelIDs_scalar);
 end

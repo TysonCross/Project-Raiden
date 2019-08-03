@@ -19,7 +19,9 @@ network = 'alexnet';
 percentage = 1.0;
 
 % Phases to run
-useCachedData       = 0         % if false, load and resize/process new data
+forceConvert        = 1         % if true, resize/process new data (slow)
+partitionData       = 1         % if true, will split Test/Training (warning)
+useCachedData       = 0         % if false, recreate datastores
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
@@ -43,11 +45,179 @@ if ~exist(checkpointPath,'dir')
     mkdir(checkpointPath);
 end
 
+% resolution setup
+imageSize = getResolution(network);
+y = imageSize(1);
+x = imageSize(2);
+rez = strcat(string(x),'x',string(y));
+    
 logFile = fullfile(rootPath,'logs',strcat(networkStatus.name,'.log'))
 diary(logFile)
 
-%% DATA SETUP PHASE
-disp("Setting up Data...")
+%% CONVERT  PHASE 
+% slow, once off:
+disp('Checking sequences...')
+if (forceConvert==false)
+    % hashCheck:
+    
+    if (exist(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'file')) ...
+            
+        loadLabels;
+        loadSequences;
+        newHash = mlreportgen.utils.hash(strcat(sequences{:},network,rez));
+        load(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'fingerprint');
+        if (fingerprint==newHash)
+            convertData=false;
+        else
+            convertData=true;
+        end
+    else % hashCheck is missing, but maybe the sequences are correct
+        warning('Hash file not found. Comparing converted and specified sequences')
+        converted = listConvertedSequences(rootPath, imageSize);
+        if length(sequences)==length(converted)
+            converted = sort(converted);
+            sequences = sort(sequences);
+            for i=1:numel(converted)
+                if strcmpi(converted(i),sequences(i))
+                    if ~forceConvert
+                        warning('Source and conversion folders match. Data will not converted. Enable forceConvert to override')
+                        convertData=false;
+                        break
+                    else
+                        warning('Source and conversion folders match but forceConvert is on');
+                        convertData=true;
+                    end
+                else
+                    warning('Converted images differ from source. New data will be be converted.')
+                    convertData=true;
+                end
+            end
+        else
+            convertData=true;
+        end
+    end
+else
+    convertData=true;
+end
+    
+if ( (convertData==true) || (forceConvert==true) )
+    disp("Converting Data...")
+    
+    % [Get list of sequences]
+    loadLabels;
+    loadSequences;
+    assert(numel(imageFolders)==numel(maskFolders));
+    resizedImageFolders = fullfile(rootPath,'data','resized',rez,sequences,'image');
+    resizedLabelFolders = fullfile(rootPath,'data','resized',rez,sequences,'label');
+    assert(numel(resizedImageFolders)==numel(resizedLabelFolders));
+    
+    resolutionList = {
+        [227 227]; ...
+%         [224 224]; ...
+%         [299 299]; ...
+        };
+    
+    % create default datastores
+    parfor i = 1:numel(imageFolders)
+        imds{i} = imageDatastore(imageFolders(i),...
+            'FileExtensions','.tif');
+        pxds{i} = pixelLabelDatastore(maskFolders(i),...
+            labelNames,labelIDs,'FileExtensions','.tif');
+    end
+    
+    for i = 1:numel(resolutionList)
+        sz = resolutionList{i};
+        y = sz(1);
+        x = sz(2);
+        rez = strcat(string(x),'x',string(y));
+        str = char(strcat('Resizing images to ',{' '},rez));
+        progressbar('Resizing image sequences',str)
+        for j = 1:numel(imageFolders)
+            % [Convert all 'tifs' to imageSize]
+            imds{j} = resizeImages(imds{j}, sz, resizedImageFolders{j});
+            progressbar(j/numel(imageFolders),[])
+        end
+        str = char(strcat('Converting labels to ',{' '},rez));
+        progressbar('Resizing and converting label sequences',str)
+        for j = 1:numel(imageFolders)
+            % [Convert all 'mask' to imageSize, and RGB -> categorical]
+            pxds{j} = resizePixelLabels(pxds{j}, sz, resizedLabelFolders{j});
+            progressbar(j/numel(imageFolders),[])
+        end
+    end
+     progressbar(1)
+    
+    converted = listConvertedSequences(rootPath, imageSize);
+    if numel(converted)~=numel(sequences)
+        disp('Conversion failed for sequences:');
+        disp(setdiff(sequences,converted));
+        error('Conversion failed');
+    else
+        fingerprint = mlreportgen.utils.hash(strcat(converted{:},network,rez));
+        save(fullfile(rootPath,'data','resized',rez,'fingerprint'),'fingerprint');
+    end
+    
+    clear imds pxds imageSize resolutionList
+    clear imageFolders maskFolders x y
+    
+else
+    % load the data
+end
+
+%% PARTITION PHASE 
+disp("Partitioning Test and Training Data...")
+
+if (partitionData==true)
+    
+     switch network
+        case 'fcn8s'
+            imageSize = [227 227];
+
+        case 'alexnet'
+            imageSize = [227 227];
+
+        case 'vgg16'
+            imageSize = [224 224];
+
+        case 'googlenet'
+            imageSize = [224 224];
+
+        case 'inceptionresnetv2'
+            imageSize = [299 299];
+            
+        otherwise
+            warning('Invalid network name: assuming resolution of 227x227')
+            imageSize = [227 227];
+    end
+            
+    % get list of files
+    y = imageSize(1);
+    x = imageSize(2);
+    sz = strcat(string(x),'x',string(y));
+    imagePath = fullfile(rootPath,'data','resized',sz,'image');
+    dirList = dir([char(imagePath) '/*.tif']);
+%     imagelist{1,numel(dirList)} = '';
+    parfor i = 1: numel(dirList)
+        imageList(i) = string(fullfile(imagePath,dirList(i).name));
+    end
+
+    
+    [trainList, testList] = splitData(fileList, splitPercent);
+
+    % [ split training and test ]
+    imdsTEST = imageDatastore(imageList);
+    
+    % [create converted lists]
+    % imagesTest, labelsTest
+    % imagesTrain, labelsTrain
+    
+    clear x y rez dirList imageList
+else
+    
+end
+
+%% DATA PHASE 
+disp("Creating Datastores...")
 
 % Check to see if cache exists
 if useCachedData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
@@ -57,11 +227,17 @@ end
 
 if (useCachedData==false)
     
-    % Phase options
-    showPixelFrequency = false;
 
-    loadLabels;
-    loadSequences;
+    
+    % [split training/validation]
+    
+    % [create datastores and pixelLabeldatastores]
+    % imdsTrain, pxdsTrain
+    % imdsVal, pxdsVal
+    % imdsTest, pxdsTest
+
+    % [ Cache data ]
+   
     
     [trainIndex, testIndex] = splitData(imageFolders, 0.25);
 
@@ -76,7 +252,7 @@ if (useCachedData==false)
     pxdsTest = pixelLabelDatastore(maskFolders(testIndex),...
         labelNames,labelIDs,'FileExtensions','.tif');
 
-    % Split training ang validation
+    % Split training and validation
     [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
         partitionTrainingData(imds, pxds);
 
