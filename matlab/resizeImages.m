@@ -1,28 +1,27 @@
-function imds = resizeImages(imds, sz, imagePath)
+function imds = resizeImages(imds, imageSize, destinationPath)
  % Resize images to [sz(1) sz(2)].
 
-    y = sz(1);
-    x = sz(2);
-   
-    rez = strcat(string(x),'x',string(y));
-    imagePath = fullfile(imagePath,'resized',rez,'image');
- 
-    if ~exist(imagePath,'dir')
-        mkdir(imagePath)
-    end
-
+     if ~exist(destinationPath,'dir')
+        mkdir(destinationPath)
+     end
+    
+    y = imageSize(1);
+    x = imageSize(2);
+    
     reset(imds)
     N = length(imds.Files);
+    r = 1;
     imageList = string(zeros(1,N));
     
-    str = char(strcat('Resizing images to ',{' '},rez));
-    progressbar(str)
+%     rez = strcat(string(x),'x',string(y));
+%     str = char(strcat('Resizing images to ',{' '},rez));
+%     progressbar('',str)
 
-    for r = 1:numel(imds.Files)
-        [~, filename, ext] = fileparts(imds.Files{r});
+    while hasdata(imds)
+        [Im16,info] = read(imds);
+        [~, filename, ext] = fileparts(info.Filename);
         
-        if ~exist(fullfile(imagePath,strcat(filename,ext)), 'file')
-            Im16 = imds.readimage(r);
+        if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file')
 
             % Convert to 8-bit
             I = uint8(Im16/256);
@@ -31,13 +30,14 @@ function imds = resizeImages(imds, sz, imagePath)
             I = imresize(I,[y x]);    
 
             % Write to disk.
-            imwrite(I,fullfile(imagePath,strcat(filename,ext)));
+            imwrite(I,fullfile(destinationPath,strcat(filename,ext)));
         end
         
-        imageList(r) = fullfile(imagePath,strcat(filename,ext));
-        progressbar(r/N);
+        imageList(r) = fullfile(destinationPath,strcat(filename,ext));
+        progressbar([],r/N);
+        r = r + 1;
     end
 
-    progressbar(1);
+    progressbar([],1);
     imds = imageDatastore(imageList);
 end

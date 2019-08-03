@@ -1,16 +1,16 @@
 function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
   
     if (splitPercent==0)      
-        trainIndex = [];
-        testIndex = 1:length(imageFolders);
+        testIndex = [];
+        trainIndex = 1:length(imageFolders);
     else
         
         numberOfSequences = length(imageFolders);
         sequenceLengths = zeros(1, numberOfSequences);
 
         % get the number of tif files in each folder
-        for i = 1:numberOfSequences
-            sequenceLengths(i) = numel(dir([imageFolders{i} '*.tif']));
+        parfor i = 1:numberOfSequences
+            sequenceLengths(i) = numel(dir([imageFolders{i} '/*.tif']));
         end
 
         totalFrames = sum(sequenceLengths);
@@ -22,11 +22,12 @@ function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
         
         while ~isempty(candidateIndex)
             % pick a random sequence
-            testIndex = [ testIndex ...
-                candidateIndex(randi(length(candidateIndex)))];
+            chosenSequence = candidateIndex(randi(length(candidateIndex)));
+            testIndex = [ testIndex chosenSequence];
 
-            % subtract the added sequence length 
-            framesToFill = framesToFill - sum(sequenceLengths(testIndex));
+            % subtract the added sequence length
+            chosenSequenceLength = sum(sequenceLengths(chosenSequence));
+            framesToFill = framesToFill - chosenSequenceLength;
             
             % recheck which sequences are short enough
             candidateIndex = find(sequenceLengths < framesToFill);
@@ -37,6 +38,9 @@ function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
         
         testIndex = sort(nonzeros(testIndex))';
         trainIndex = setdiff(1:numberOfSequences, testIndex);
+%         disp(['Test frames: ', string(sum(sequenceLengths(testIndex)))]);
+%         disp(['Train frames: ', string(sum(sequenceLengths(trainIndex)))]);
+%         disp(['Test is ', string(sum(sequenceLengths(testIndex))/sum(sequenceLengths)*100),'%']);
         assert(numberOfSequences-numel(trainIndex)-numel(testIndex)==0);
     end
 end
