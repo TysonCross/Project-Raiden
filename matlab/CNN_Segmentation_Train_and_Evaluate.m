@@ -188,7 +188,7 @@ if partitionData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
 end
 
 if (partitionData==true)
-    disp("Partitioning Test and Training Data...")
+    disp("Partitioning test and training Data...")
 
     % [split training and test]
     splitPercent = 0.25;
@@ -209,20 +209,8 @@ if (partitionData==true)
     pxdsTest = pixelLabelDatastore(labelFolder(testIndex),...
         labelNames,labelIDs_scalar,'FileExtensions','.tif');
     assert(numel(imdsTest.Files)==numel(pxdsTest.Files));
-    
-%     % Find errant files:
-%     for i=1:max(numel(imdsTrain.Files),numel(pxdsTrain.Files))
-%         str1=string(imdsTrain.Files{i});
-%         str2 = string(strrep(pxdsTrain.Files{i},'_label',''));
-%         if extractBetween(str1,strlength(str1)-33,strlength(str1))~=...
-%                 extractBetween(str2,strlength(str2)-33,strlength(str2))
-%             disp(imdsTrain.Files{i});
-%             disp(pxdsTrain.Files{i});
-%             break
-%         end
-%     end
 
-    % Specify the class weights 
+    % Calculate the class weights 
     disp("Counting per-label pixel distribution...")  % ToDo: This is slow!
     labelTable = pxdsTrain.countEachLabel;
     imageFreq = labelTable.PixelCount ./ labelTable.ImagePixelCount;
@@ -239,6 +227,7 @@ if (partitionData==true)
 else
     load(fullfile(cachePath,'data'));
     disp('Loaded datastores from cache...')
+    disp("Per-label pixel distribution:")
     disp(labelTable);
 end
 
@@ -246,7 +235,7 @@ diary off; diary on;
 
 %% Training partition phase 
 
-if (resplitValidation==false)
+if (resplitValidation==true)
     disp("Splitting training/validation data...")
 
    clear numFiles imagePath imageFreq labelTable
@@ -261,15 +250,17 @@ if (resplitValidation==false)
     fprintf('Training images: %d \n', numel(imdsTrain.Files));
     fprintf('Validation images: %d \n', numel(imdsVal.Files));
     fprintf('Testing images: %d \n', numel(imdsTest.Files));
+    
+    % Define validation data.
+    pximdsVal = pixelLabelImageDatastore(imdsVal,pxdsVal);
         
     save(fullfile(cachePath,'data'), ...
         'imdsTrain', 'imdsVal', 'imdsTest', ...
         'pxdsTrain', 'pxdsVal', 'pxdsTest', ...
-        'labelWeights');
+        'pximdsVal', 'labelWeights');
     disp("Data cached") 
 else
     load(fullfile(cachePath,'data'));
-    clear percentage filename
     disp('Using training/validation split from cache...')
 end
 
@@ -488,7 +479,7 @@ if (doTraining==true)
         'Momentum',0.9, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
         'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
-        'ValidationData',pxdsVal, ...
+        'ValidationData',pximdsVal, ...
         'MaxEpochs',40, ...  
         'MiniBatchSize',100, ...
         'Shuffle','every-epoch', ...
