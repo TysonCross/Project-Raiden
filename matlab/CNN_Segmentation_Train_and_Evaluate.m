@@ -19,9 +19,9 @@ network = 'alexnet';
 percentage = 1.0;
 
 % Phases to run
-forceConvert        = 1         % if true, resize/process new data (slow)
-partitionData       = 1         % if true, will split Test/Training (warning)
-useCachedData       = 0         % if false, recreate datastores
+forceConvert        = 0         % if true, resize/process new data (slow)
+partitionData       = 1         % if true, re-split Test/Training (warning)
+resplitValidation   = 1         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
@@ -54,14 +54,18 @@ rez = strcat(string(x),'x',string(y));
 logFile = fullfile(rootPath,'logs',strcat(networkStatus.name,'.log'))
 diary(logFile)
 
-%% CONVERT  PHASE 
-% slow, once off:
-disp('Checking sequences...')
+%% Data Conversion Phase 
+
+% This process is slow. Although there are several checks to determine
+% if any source files (tifs or mask images) must be reconverted,
+% this should ideally be a once off conversion. If a file exists on disk
+% in the destination resized/converted folder, it will not be reconverted.
+
 if (forceConvert==false)
+    disp('Checking sequences...')
     % hashCheck:
-    
     if (exist(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'file')) ...
-            
+         
         loadLabels;
         loadSequences;
         newHash = mlreportgen.utils.hash(strcat(sequences{:},network,rez));
@@ -104,12 +108,11 @@ if ( (convertData==true) || (forceConvert==true) )
     disp("Converting Data...")
     
     % [Get list of sequences]
-    loadLabels;
     loadSequences;
-    assert(numel(imageFolders)==numel(maskFolders));
-    resizedImageFolders = fullfile(rootPath,'data','resized',rez,sequences,'image');
-    resizedLabelFolders = fullfile(rootPath,'data','resized',rez,sequences,'label');
-    assert(numel(resizedImageFolders)==numel(resizedLabelFolders));
+    resizedImageFolders = fullfile(rootPath,'data','resized', ...
+        rez,sequences,'image');
+    resizedLabelFolders = fullfile(rootPath,'data','resized', ...
+        rez,sequences,'label');
     
     resolutionList = {
         [227 227]; ...
@@ -118,6 +121,7 @@ if ( (convertData==true) || (forceConvert==true) )
         };
     
     % create default datastores
+    loadLabels;
     parfor i = 1:numel(imageFolders)
         imds{i} = imageDatastore(imageFolders(i),...
             'FileExtensions','.tif');
@@ -125,6 +129,7 @@ if ( (convertData==true) || (forceConvert==true) )
             labelNames,labelIDs,'FileExtensions','.tif');
     end
     
+    disp("Resizing images and labels, converting to categorical label form...")   
     for i = 1:numel(resolutionList)
         sz = resolutionList{i};
         y = sz(1);
@@ -153,172 +158,70 @@ if ( (convertData==true) || (forceConvert==true) )
         disp(setdiff(sequences,converted));
         error('Conversion failed');
     else
+        disp("Data converted successfully")
         fingerprint = mlreportgen.utils.hash(strcat(converted{:},network,rez));
         save(fullfile(rootPath,'data','resized',rez,'fingerprint'),'fingerprint');
     end
     
-    clear imds pxds imageSize resolutionList
-    clear imageFolders maskFolders x y
-    
+    clear imds pxds resolutionList fingerprint newHash 
+    clear imageFolders maskFolders forceConvert convertData
+
+    save(fullfile(cachePath,'metadata'), ...
+    'resizedImageFolders','resizedLabelFolders', ...
+    'labelIDs','labelIDs_scalar','labelNames', ...
+    'sequences','rez');
+    disp("Datapaths cached") 
 else
-    % load the data
-end
-
-%% PARTITION PHASE 
-disp("Partitioning Test and Training Data...")
-
-if (partitionData==true)
-    
-     switch network
-        case 'fcn8s'
-            imageSize = [227 227];
-
-        case 'alexnet'
-            imageSize = [227 227];
-
-        case 'vgg16'
-            imageSize = [224 224];
-
-        case 'googlenet'
-            imageSize = [224 224];
-
-        case 'inceptionresnetv2'
-            imageSize = [299 299];
-            
-        otherwise
-            warning('Invalid network name: assuming resolution of 227x227')
-            imageSize = [227 227];
-    end
-            
-    % get list of files
-    y = imageSize(1);
-    x = imageSize(2);
-    sz = strcat(string(x),'x',string(y));
-    imagePath = fullfile(rootPath,'data','resized',sz,'image');
-    dirList = dir([char(imagePath) '/*.tif']);
-%     imagelist{1,numel(dirList)} = '';
-    parfor i = 1: numel(dirList)
-        imageList(i) = string(fullfile(imagePath,dirList(i).name));
-    end
-
-    
-    [trainList, testList] = splitData(fileList, splitPercent);
-
-    % [ split training and test ]
-    imdsTEST = imageDatastore(imageList);
-    
-    % [create converted lists]
-    % imagesTest, labelsTest
-    % imagesTrain, labelsTrain
-    
-    clear x y rez dirList imageList
-else
-    
-end
-
-%% DATA PHASE 
-disp("Creating Datastores...")
-
-% Check to see if cache exists
-if useCachedData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
-    warning(['No data cache found at: ',fullfile(cachePath,'data'),newline, '(Data will be reloaded)'])
-    useCachedData=0;
-end
-
-if (useCachedData==false)
-    
-
-    
-    % [split training/validation]
-    
-    % [create datastores and pixelLabeldatastores]
-    % imdsTrain, pxdsTrain
-    % imdsVal, pxdsVal
-    % imdsTest, pxdsTest
-
-    % [ Cache data ]
-   
-    
-    [trainIndex, testIndex] = splitData(imageFolders, 0.25);
-
-    % Split off test data
-    imds = imageDatastore(imageFolders(trainIndex),...
-        'FileExtensions','.tif');
-    pxds = pixelLabelDatastore(maskFolders(trainIndex),...
-        labelNames,labelIDs,'FileExtensions','.tif');
-    
-    imdsTest = imageDatastore(imageFolders(testIndex),...
-        'FileExtensions','.tif');
-    pxdsTest = pixelLabelDatastore(maskFolders(testIndex),...
-        labelNames,labelIDs,'FileExtensions','.tif');
-
-    % Split training and validation
-    [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
-        partitionTrainingData(imds, pxds);
-
-    assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
-    assert(numel(imdsVal.Files)==numel(pxdsVal.Files));
-    assert(numel(imdsTest.Files)==numel(pxdsTest.Files));
-    
-    fprintf('Training images: %d \n', numel(imdsTrain.Files));
-    fprintf('Validation images: %d \n', numel(imdsVal.Files));
-    fprintf('Testing images: %d \n', numel(imdsTest.Files));
-    
-    clear trainIndex testIndex imds pxds
-    clear percentage idx imageFolders maskFolders sequencesPath
-    clear showTestImage showPixelFrequency shuffledIndices
-    clear imagesFolders maskFolders labelTable
-    
-    dataStatus.categoricalLabels = 0;
-
-    save(fullfile(cachePath,'data'), ...
-        'imdsTrain', 'imdsVal', 'imdsTest', ...
-        'pxdsTrain', 'pxdsVal', 'pxdsTest', ...
-        'dataStatus', 'labelNames', 'labelIDs');
-    disp("Data cached") 
-else
-    load(fullfile(cachePath,'data'));
-    clear percentage filename
+    load(fullfile(cachePath,'metadata'));
     disp('Loaded Data from cache...')
 end
 
 diary off; diary on;
-%% Image Processing
-if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
-    
-    switch network
-        case 'fcn8s'
-            imageSize = [227 227];
 
-        case 'alexnet'
-            imageSize = [227 227];
+%% Test partition phase
 
-        case 'vgg16'
-            imageSize = [224 224];
+% Check to see if cache exists
+if partitionData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
+    warning(['No datastore cache found at: ', fullfile(cachePath,'data'), ...
+        newline, '(Data will be repartitioned)'])
+    partitionData=0;
+end
 
-        case 'googlenet'
-            imageSize = [224 224];
+if (partitionData==true)
+    disp("Partitioning Test and Training Data...")
 
-        case 'inceptionresnetv2'
-            imageSize = [299 299];
+    % [split training and test]
+    splitPercent = 0.25;
+    [trainIndex, testIndex] = splitData(resizedImageFolders, splitPercent);
+    
+    imageFolder = cellstr(resizedImageFolders);
+    labelFolder = cellstr(resizedLabelFolders);
 
-        otherwise
-            error('Error: Invalid network: unable to determine input size')
-    end
+    % Create datastores
+    imdsTrain = imageDatastore(imageFolder(trainIndex),...
+        'FileExtensions','.tif');
+    pxdsTrain = pixelLabelDatastore(labelFolder(trainIndex),...
+        labelNames,labelIDs_scalar,'FileExtensions','.tif');
+    assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
     
-    imagePath = fullfile(rootPath,'data');
+    imdsTest = imageDatastore(imageFolder(testIndex),...
+        'FileExtensions','.tif');
+    pxdsTest = pixelLabelDatastore(labelFolder(testIndex),...
+        labelNames,labelIDs_scalar,'FileExtensions','.tif');
+    assert(numel(imdsTest.Files)==numel(pxdsTest.Files));
     
-    disp("Resizing images and labels, converting to categorical label form...")   
-	
-    imdsTrain = resizeImages(imdsTrain, imageSize, imagePath); 
-    imdsVal = resizeImages(imdsVal, imageSize, imagePath);
-    imdsTest = resizeImages(imdsTest, imageSize, imagePath);
-    pxdsTrain = resizePixelLabels(pxdsTrain, imageSize, imagePath);
-    pxdsVal = resizePixelLabels(pxdsVal, imageSize, imagePath);
-    pxdsTest = resizePixelLabels(pxdsTest, imageSize, imagePath);
-    
-    dataStatus.categoricalLabels = 1;
-    
+%     % Find errant files:
+%     for i=1:max(numel(imdsTrain.Files),numel(pxdsTrain.Files))
+%         str1=string(imdsTrain.Files{i});
+%         str2 = string(strrep(pxdsTrain.Files{i},'_label',''));
+%         if extractBetween(str1,strlength(str1)-33,strlength(str1))~=...
+%                 extractBetween(str2,strlength(str2)-33,strlength(str2))
+%             disp(imdsTrain.Files{i});
+%             disp(pxdsTrain.Files{i});
+%             break
+%         end
+%     end
+
     % Specify the class weights 
     disp("Counting per-label pixel distribution...")  % ToDo: This is slow!
     labelTable = pxdsTrain.countEachLabel;
@@ -326,20 +229,54 @@ if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
     labelWeights = median(imageFreq) ./ imageFreq;
     disp(labelTable);
 
+    clear trainIndex testIndex
+
+    save(fullfile(cachePath,'data'), ...
+    'imdsTrain','pxdsTrain', ...
+    'imdsTest','pxdsTest', ...
+    'labelWeights');
+    disp("Datastores cached") 
+else
+    load(fullfile(cachePath,'data'));
+    disp('Loaded datastores from cache...')
+    disp(labelTable);
+end
+
+diary off; diary on;
+
+%% Training partition phase 
+
+if (resplitValidation==false)
+    disp("Splitting training/validation data...")
+
    clear numFiles imagePath imageFreq labelTable
+    
+    % Split training and validation
+    [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
+        partitionTrainingData(imdsTrain, pxdsTrain);
+
+    assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
+    assert(numel(imdsVal.Files)==numel(pxdsVal.Files));
+    
+    fprintf('Training images: %d \n', numel(imdsTrain.Files));
+    fprintf('Validation images: %d \n', numel(imdsVal.Files));
+    fprintf('Testing images: %d \n', numel(imdsTest.Files));
         
     save(fullfile(cachePath,'data'), ...
         'imdsTrain', 'imdsVal', 'imdsTest', ...
         'pxdsTrain', 'pxdsVal', 'pxdsTest', ...
-        'dataStatus', 'labelNames', 'labelIDs','labelWeights');
+        'labelWeights');
     disp("Data cached") 
 else
     load(fullfile(cachePath,'data'));
-    disp('Loaded Data from cache...')
+    clear percentage filename
+    disp('Using training/validation split from cache...')
 end
 
 diary off; diary on;
-%% NETWORK SETUP PHASE
+
+%% Network setup phase
+
 disp("Setting up Network...")
 if recoverCheckpoint
     filename = fullfile(checkpointPath,getLatestFile(checkpointPath));
@@ -534,7 +471,9 @@ else
 end
 
 diary off; diary on;
+
 %% Training
+
 if (doTraining==true)
     disp("Setting up Training...")
     
@@ -594,6 +533,7 @@ else
 end
 
 diary off; diary on;
+
 %% EVALUATION
 if networkStatus.trained
     disp("Evaluating network performance");
@@ -615,6 +555,7 @@ if networkStatus.trained
 end
 
 diary off; diary on;
+
 %% ARCHIVE network, images, and matlab script
 
 if (archiveNet)
@@ -696,6 +637,7 @@ for i = 3:4
 end
 
 %% Visualize activations
+
 im = readimage(imdsTest,randi(length(imdsTest.Files)));
 
 act1 = activations(net,im,'conv3');

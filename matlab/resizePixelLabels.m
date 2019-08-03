@@ -25,19 +25,19 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath)
         str = 'mask';
         maskIdx = strfind(filename, str);
         filename = strcat(filename(1:maskIdx-1),"label",filename(maskIdx+length(str):end));
-        
-        if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') 
-            
-            % Convert from categorical to uint8.
-            % (RGB-class label association -> per-pixel integer value)
-            L = uint8(C);
+        if (filename~='label.tif') % bug fix
+            if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') 
 
-            % Resize the data using 'nearest' interpolation to preserve labelIDs.
-            L = imresize(L,[y x],'nearest');
+                % Convert from categorical to uint8.
+                % (RGB-class label association -> per-pixel integer value)
+                L = uint8(C);
 
-            % Write the data to disk.
-            imwrite(L,fullfile(destinationPath,strcat(filename,ext)));
-            
+                % Resize the data using 'nearest' interpolation to preserve labelIDs.
+                L = imresize(L,[y x],'nearest');
+
+                % Write the data to disk.
+                imwrite(L,fullfile(destinationPath,strcat(filename,ext)));
+            end
         end
         
         imageList(r) = fullfile(destinationPath,strcat(filename,ext));

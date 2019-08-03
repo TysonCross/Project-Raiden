@@ -26,6 +26,6 @@ function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, 
     % Create pixel label datastores for trainin and validation
     trainingLabels = pxds.Files(trainingIdx);
     validationLabels = pxds.Files(validationIdx);
-    pxdsTrain = pixelLabelDatastore(trainingLabels, labelNames, labelIDs);
-    pxdsVal = pixelLabelDatastore(validationLabels, labelNames, labelIDs);
+    pxdsTrain = pixelLabelDatastore(trainingLabels, labelNames, labelIDs_scalar);
+    pxdsVal = pixelLabelDatastore(validationLabels, labelNames, labelIDs_scalar);
 end
