@@ -557,6 +557,7 @@ if (archiveNet)
         mkdir(foldername);
         copyfile(currentFileName, foldername);
         copyfile(fullfile(cachePath,'data.mat'),foldername);
+        copyfile(fullfile(cachePath,'metadata.mat'),foldername);
         copyfile(fullfile(cachePath,'network.mat'),foldername);
         copy(logFile,foldername);
         
