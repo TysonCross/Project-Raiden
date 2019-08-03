@@ -12,20 +12,21 @@ function pxds = resizePixelLabels(pxds, sz, imagePath)
 
     reset(pxds)
     N = length(pxds.Files);
+    r = 1;
     imageList = string(zeros(1,N));
     
     str = char(strcat('Resizing labels to ',{' '},rez));
     progressbar(str)
     
-    for r = 1:numel(pxds.Files)
-        [~, filename, ext] = fileparts(pxds.Files{r});
+    while hasdata(pxds)
+        [C, info] = read(pxds);
+        [~, filename, ext] = fileparts(info.Filename);
         
         str = 'mask';
         maskIdx = strfind(filename, str);
         filename = strcat(filename(1:maskIdx-1),"label",filename(maskIdx+length(str):end));
         
         if ~exist(fullfile(imagePath,strcat(filename,ext)), 'file') 
-            C = pxds.readimage(r);
             
             % Convert from categorical to uint8.
             % (RGB-class label association -> per-pixel integer value)

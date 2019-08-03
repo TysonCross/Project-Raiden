@@ -106,6 +106,7 @@ else
     disp('Loaded Data from cache...')
 end
 
+diary off; diary on;
 %% Image Processing
 if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
     
@@ -131,16 +132,15 @@ if ( (useCachedData==false) || (dataStatus.categoricalLabels==0) )
     
     imagePath = fullfile(rootPath,'data');
     
-    disp("Resizing images and labels, converting to categorical label form...")
-
-	imdsTrain = resizeImages(imdsTrain, imageSize, imagePath);    
+    disp("Resizing images and labels, converting to categorical label form...")   
+	
+    imdsTrain = resizeImages(imdsTrain, imageSize, imagePath); 
     imdsVal = resizeImages(imdsVal, imageSize, imagePath);
     imdsTest = resizeImages(imdsTest, imageSize, imagePath);
-
     pxdsTrain = resizePixelLabels(pxdsTrain, imageSize, imagePath);
     pxdsVal = resizePixelLabels(pxdsVal, imageSize, imagePath);
     pxdsTest = resizePixelLabels(pxdsTest, imageSize, imagePath);
-
+    
     dataStatus.categoricalLabels = 1;
     
     % Specify the class weights 
@@ -162,6 +162,7 @@ else
     disp('Loaded Data from cache...')
 end
 
+diary off; diary on;
 %% NETWORK SETUP PHASE
 disp("Setting up Network...")
 if recoverCheckpoint
@@ -356,6 +357,7 @@ else
     end
 end
 
+diary off; diary on;
 %% Training
 if (doTraining==true)
     disp("Setting up Training...")
@@ -415,6 +417,7 @@ else
     warning("Training skipped by user request")
 end
 
+diary off; diary on;
 %% EVALUATION
 if networkStatus.trained
     disp("Evaluating network performance");
@@ -435,8 +438,8 @@ if networkStatus.trained
     disp("Network created") 
 end
 
+diary off; diary on;
 %% ARCHIVE network, images, and matlab script
-diary off
 
 if (archiveNet)
    disp('Saving data, please wait...')
@@ -486,13 +489,14 @@ if sendNotification
     p.pushNote([],subject,msg);
 end
 
+diary off;
 return % end script
 % ToDo:  Cleanup and format below
 
 %% SINGLE IMAGES TEST
 
 % Single Images Check
-imIdx = randperm(numel(imdsTest.Files),2); %randi(length(imdsTest.Files)); 
+imIdx = randperm(numel(imdsTest.Files),2); %#ok<*UNRCH> %randi(length(imdsTest.Files)); 
 figure(1)
 for i = 1:2
     subplot(2,2,i)
