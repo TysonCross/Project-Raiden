@@ -16,18 +16,18 @@ network = 'alexnet';
 %}
 
 % Percent of data to train with (0-1)
-percentage = 1.0;
+% percentage = 1.0;
 
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
-partitionData       = 1         % if true, re-split Test/Training (warning)
-resplitValidation   = 1         % if true, re-split Training/Validation
-useCachedNet        = 0         % if false, generate new neural network
-doTraining         	= 1         % if true, perform training
+partitionData       = 0         % if true, re-split Test/Training (warning)
+resplitValidation   = 0         % if true, re-split Training/Validation
+useCachedNet        = 1         % if false, generate new neural network
+doTraining         	= 0         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
-archiveNet          = 1         % archive NN, data and figures to subfolder
-saveImages          = 1         % generate performance figures
-sendNotification    = 1         % send PushBullet notification on completion
+archiveNet          = 0         % archive NN, data and figures to subfolder
+saveImages          = 0         % generate performance figures
+sendNotification    = 0         % send email notification on completion
 
 % global setup
 rootPath = '/home/tyson/Raiden/';
@@ -222,13 +222,13 @@ if (partitionData==true)
     save(fullfile(cachePath,'data'), ...
     'imdsTrain','pxdsTrain', ...
     'imdsTest','pxdsTest', ...
-    'labelWeights');
+    'labelWeights','labelTable');
     disp("Datastores cached") 
 else
     load(fullfile(cachePath,'data'));
     disp('Loaded datastores from cache...')
     disp("Per-label pixel distribution:")
-    disp(labelTable);
+%     disp(labelTable);
 end
 
 diary off; diary on;
@@ -529,11 +529,14 @@ diary off; diary on;
 if networkStatus.trained
     disp("Evaluating network performance");
     
-    testDir = '~/Documents/MATLAB/temp';
-
+    testDir = fullfile('~/Documents/MATLAB/temp',networkStatus.name);
+    if ~exist(testDir,'dir')
+        mkdir(testDir)
+    end
+    
     pxdsResults = semanticseg(imdsTest,net, ...
         'MiniBatchSize',16, ...
-        'WriteLocation',tempdir, ...
+        'WriteLocation',testDir, ...
         'Verbose',false);
 
     metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest,'Verbose',false);
@@ -548,7 +551,7 @@ end
 diary off; diary on;
 
 %% ARCHIVE network, images, and matlab script
-
+sendFileList = {''};
 if (archiveNet)
    disp('Saving data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
@@ -559,9 +562,9 @@ if (archiveNet)
         copyfile(fullfile(cachePath,'data.mat'),foldername);
         copyfile(fullfile(cachePath,'metadata.mat'),foldername);
         copyfile(fullfile(cachePath,'network.mat'),foldername);
-        copy(logFile,foldername);
-        
-        if saveImages
+        disp('Network and data archived')
+        figHandle = findall(groot, 'Type', 'Figure');
+        if saveImages && (numel(figHandle)>0)
             figHandle = findall(groot, 'Type', 'Figure');
             fig_name = figHandle(1).Name;
             fig_name(isspace(fig_name)==1)='_';
@@ -569,8 +572,15 @@ if (archiveNet)
             fn = sprintf('%s/%s.pdf',foldername,fig_name);
             export_fig(fn,figHandle(1));
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
+            sendFileList = strcat(sendFileList,{' -A '},fullfile(foldername,fn));
+            disp('Figure archived')
             close all;
         end
+        
+        diary off;
+        copyfile(logFile,foldername);
+        sendFileList = strcat(sendFileList, {' -A '},logFile);
+        disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
        warning(str);
@@ -580,25 +590,29 @@ else
     warning('Trained network not archived');
 end
 
+diary off;
 % NOTIFICATIONS
 if sendNotification
-    % Send notification when done:
-    apiKey = 'o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5';
-    p = Pushbullet(apiKey);
-    str = strcat(strrep(strrep(datestr(datetime('now'),31),...
-        ' ', '_'), ':', ''),'_',network);
+%     % Send notification when done:
+
     [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
-    subject = strcat('Training for', {' '} , network, {' complete'});
-    msg = strcat('Training for', {' '} , network, ...
+    subject = strcat('ELEN4012 - Training for', {' '} , networkStatus.name, {' complete'});
+    msg = strcat({'Training for '}, networkStatus.name, ...
         {' has completed at '}, ...
-        datestr(datetime('now'),31), {' after '}, ...
-        string(hours), {' h '}, ...
-        string(mins), {' min '}, ...
-        string(secs), {' sec'});
-    p.pushNote([],subject,msg);
+        datestr(datetime('now'),31), ...
+        {'. Training time took '}, ...
+        string(hours), {':'}, ...
+        string(mins), {':'}, ...
+        string(secs), {' (hh:mm:ss)'});
+    
+%     apiKey = 'o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5';
+%     p = Pushbullet(apiKey);
+%     p.pushNote([],subject,msg);
+	mail_str = strcat({'echo "'}, msg, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
+    unix(mail_str);
+    disp('Notification sent')
 end
 
-diary off;
 return % end script
 % ToDo:  Cleanup and format below
 

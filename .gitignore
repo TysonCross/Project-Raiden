@@ -752,6 +752,7 @@ DerivedData/
 *.nk.autosave
 
 # MATLAB
+matlab/pathdef.m
 pathdef.m
 
 experiments/**

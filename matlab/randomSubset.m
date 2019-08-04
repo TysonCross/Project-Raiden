@@ -15,8 +15,8 @@ imageFiles = imds_full.Files(idx);
 imds = imageDatastore(imageFiles,'FileExtensions','.tif');
 
 % Create pixel label datastores
-ClassNames = pxds_full.ClassNames;
-labelIDs = 1:numel(pxds_full.ClassNames);
+loadLabels;
 labelFiles = pxds_full.Files(idx);
-pxds = pixelLabelDatastore(labelFiles, ClassNames, labelIDs,'FileExtensions','.tif');
+pxds = pixelLabelDatastore(labelFiles, labelNames, labelIDs,'FileExtensions','.tif');
+% pxds = pixelLabelDatastore(labelFiles, labelNames, labelIDs_scalar,'FileExtensions','.tif');
 end
