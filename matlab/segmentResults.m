@@ -8,27 +8,30 @@
 % outputDir = '/home/jason/Desktop/Testout';
 % sz = net.Layers(1).InputSize(1:2);
 
-
 sequenceDir = app.EditField.Value;
 labelDir = app.EditField_4.Value;
 load(app.EditField_2.Value); %%ToDo add a check here and only load the vars as requested
 outputDir = app.EditField_3.Value;
 sz = net.Layers(1).InputSize(1:2);
-getLabelIDs;
+loadLabels;
 setupColors;
 
 %% Resize
 imds = imageDatastore(sequenceDir);
 pxds = pixelLabelDatastore(labelDir,...
-    classNames,labelIDs,'FileExtensions','.tif');
+    labelNames,labelIDs,'FileExtensions','.tif');
 disp("Resizing images and labels, converting to categorical label form...")
-imds = resizeImages(imds, sz, [outputDir '/img/'] );
-pxds = resizePixelLabels(pxds, sz, [outputDir '/label/']);
+imds = resizeImages(imds, sz, fullfile(outputDir,'img') );
+pxds = resizePixelLabels(pxds, sz, fullfile(outputDir,'label'));
 
 %% Create output folders
-  mkdir(strcat(outputDir,'/output/'));
+if ~exist(fullfile(outputDir,'output'),'dir')
+  mkdir(fullfile(outputDir,'output'));
+end
   if(app.ComparewithexpectedCheckBox.Value)
-    mkdir(strcat(outputDir,'/compare/'))
+     if ~exist(fullfile(outputDir,'compare'),'dir')
+        mkdir(fullfile(outputDir,'compare'))
+     end
   end
 
 %% Segment data
@@ -44,7 +47,7 @@ for n = 1:length(imds.Files)
         segImage = unit8(resultPixelLabels);
     end
     if(app.ComparewithexpectedCheckBox.Value)
-        numClasses = numel(classNames);
+        numClasses = numel(labelNames);
         expectedResult = readimage(pxds,n);
         actual = uint8(resultPixelLabels.readimage(n))*(255/numClasses);
         expected = uint8(expectedResult)*(255/numClasses);
@@ -58,10 +61,7 @@ for n = 1:length(imds.Files)
     
 end
 
-
 disp('Done');
-
-
 
 %if MakeOverlay
 %if(app.MakeoverlayCheckBox.Value)

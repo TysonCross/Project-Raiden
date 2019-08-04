@@ -14,7 +14,6 @@ sequenceDir = uigetdir(fullfile(rootPath),'Select the sequence to load');
     end
 %% Options
 
-
 outputDir = uigetdir(fullfile(rootPath),'Select the output diretory');
     if ~outputDir
         disp('No directory has been defined, using standard tmp')
@@ -38,7 +37,7 @@ sz = net.Layers(1).InputSize(1:2);
 %% Resize
 imds = imageDatastore(sequenceDir);
 pxds = pixelLabelDatastore(labelDir,...
-    classNames,labelIDs,'FileExtensions','.tif');
+    labelNames,labelIDs,'FileExtensions','.tif');
 disp("Resizing images and labels, converting to categorical label form...")
 imds = resizeImages(imds, sz, outputDir);
 pxds = resizePixelLabels(pxds, sz, outputDir);
