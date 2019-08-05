@@ -11,10 +11,19 @@
 sequenceDir = app.EditField.Value;
 labelDir = app.EditField_4.Value;
 load(app.EditField_2.Value); %%ToDo add a check here and only load the vars as requested
+if ~exist('net','var')
+    if exist('lgraph','var')
+        net =lgraph;
+    else
+        error('No network defined')
+    end
+end
+
 outputDir = app.EditField_3.Value;
 sz = net.Layers(1).InputSize(1:2);
 loadLabels;
 setupColors;
+
 
 %% Resize
 imds = imageDatastore(sequenceDir);
@@ -23,19 +32,23 @@ pxds = pixelLabelDatastore(labelDir,...
 disp("Resizing images and labels, converting to categorical label form...")
 imds = resizeImages(imds, sz, fullfile(outputDir,'img') );
 pxds = resizePixelLabels(pxds, sz, fullfile(outputDir,'label'));
-
 %% Create output folders
 if ~exist(fullfile(outputDir,'output'),'dir')
   mkdir(fullfile(outputDir,'output'));
 end
-  if(app.ComparewithexpectedCheckBox.Value)
-     if ~exist(fullfile(outputDir,'compare'),'dir')
-        mkdir(fullfile(outputDir,'compare'))
-     end
-  end
-
+if(app.ComparewithexpectedCheckBox.Value)
+ if ~exist(fullfile(outputDir,'compare'),'dir')
+    mkdir(fullfile(outputDir,'compare'))
+ end
+end
+if ~exist(fullfile(outputDir,'tmp'),'dir')
+    mkdir(fullfile(outputDir,'tmp'))
+end
 %% Segment data
-resultPixelLabels = semanticseg(imds,net); %Label the data
+resultPixelLabels = semanticseg(imds,net, ...
+        'MiniBatchSize', 1, ...
+        'WriteLocation', fullfile(outputDir, 'tmp'), ...
+        'Verbose', false); %Label the data
 for n = 1:length(imds.Files)
  [~,name,~] = fileparts(string(imds.Files(n)));
  [I, info] = readimage(imds,n); %Read image
@@ -51,7 +64,7 @@ for n = 1:length(imds.Files)
         expectedResult = readimage(pxds,n);
         actual = uint8(resultPixelLabels.readimage(n))*(255/numClasses);
         expected = uint8(expectedResult)*(255/numClasses);
-        diffImage = imfuse(actual, expected, 'diff');
+        diffImage = imfuse(actual, expected);
         str = strcat(outputDir,'/compare/', name.insertAfter(21,'_compare'), '.tif');
         imwrite(diffImage, str);
         
