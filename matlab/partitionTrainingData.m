@@ -1,4 +1,4 @@
-function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, pxds)
+function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, pxds, splitPercentage)
 % Partition data by randomly selecting 80% of the data for training,
 % the rest is used for validation.
     
@@ -7,8 +7,8 @@ function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, 
     numFiles = numel(imds.Files);
     shuffledIndices = randperm(numFiles);
 
-    % Use 80% of the images for training
-    N = round(0.80 * numFiles);
+    % Use a percentage% of the images for training
+    N = round(splitPercentage * numFiles);
     trainingIdx = shuffledIndices(1:N);
 
     % Use the rest for testing

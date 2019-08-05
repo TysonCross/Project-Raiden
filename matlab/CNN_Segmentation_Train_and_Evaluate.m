@@ -1,12 +1,10 @@
-clear all; clc; %#ok<CLALL>
-reset(gpuDevice(1));
 figHandle = findall(groot, 'Type', 'Figure');
 close(figHandle(:))
-clear figHandle;
-
 setenv('NVIDIA_CUDNN', '/usr/local/cuda');
 setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 % results = coder.checkGpuInstall('full')
+clc;
+clearvars;
 
 %% SETUP
 network = 'deeplabv3';
@@ -14,7 +12,7 @@ network = 'deeplabv3';
     Network choices are:
     'fcn8s' (batch size ~10)
     'alexnet' (batchsize ~100)
-    'deeplabv3' (batchsize ~3)
+    'deeplabv3' (batchsize ~8)
     'vgg16' TBD (output not correct dimension)
     'googlenet' TBD (output not correct dimension)
     'inceptionresnetv2' SLOW to setup, TBD (output not correct dimension)
@@ -25,8 +23,8 @@ network = 'deeplabv3';
 
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
-partitionData       = 1         % if true, re-split Test/Training (warning)
-resplitValidation   = 1         % if true, re-split Training/Validation
+partitionData       = 0         % if true, re-split Test/Training (warning)
+resplitValidation   = 0         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
@@ -176,10 +174,10 @@ if ( (convertData==true) || (forceConvert==true) )
     'resizedImageFolders','resizedLabelFolders', ...
     'labelIDs','labelIDs_scalar','labelNames', ...
     'sequences','rez');
-    disp("Datapaths cached") 
+    disp("Metadata cached") 
 else
     load(fullfile(cachePath,'metadata'));
-    disp('Loaded Data from cache...')
+    disp('Loaded metadata from cache...')
 end
 
 diary off; diary on;
@@ -197,7 +195,7 @@ if (partitionData==true)
     disp("Partitioning test and training Data...")
 
     % [split training and test]
-    splitPercent = 0.25;
+    splitPercent = 0.15;
     [trainIndex, testIndex] = splitData(resizedImageFolders, splitPercent);
     
     imageFolder = cellstr(resizedImageFolders);
@@ -233,8 +231,8 @@ if (partitionData==true)
 else
     load(fullfile(cachePath,'data'));
     disp('Loaded datastores from cache...')
-%     disp("Per-label pixel distribution:")
-%     disp(labelTable);
+    disp("Per-label pixel distribution:")
+    disp(labelTable);
 end
 
 diary off; diary on;
@@ -243,12 +241,11 @@ diary off; diary on;
 
 if (resplitValidation==true)
     disp("Splitting training/validation data...")
-
-   clear numFiles imagePath imageFreq labelTable
-    
+   
+    splitPercentage = 0.20;
     % Split training and validation
     [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
-        partitionTrainingData(imdsTrain, pxdsTrain);
+        partitionTrainingData(imdsTrain, pxdsTrain, splitPercentage);
 
     assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
     assert(numel(imdsVal.Files)==numel(pxdsVal.Files));
@@ -263,11 +260,14 @@ if (resplitValidation==true)
     save(fullfile(cachePath,'data'), ...
         'imdsTrain', 'imdsVal', 'imdsTest', ...
         'pxdsTrain', 'pxdsVal', 'pxdsTest', ...
-        'pximdsVal', 'labelWeights');
+        'pximdsVal', 'labelWeights', 'labelTable');
     disp("Data cached") 
 else
     load(fullfile(cachePath,'data'));
     disp('Using training/validation split from cache...')
+    fprintf('Training images: %d \n', numel(imdsTrain.Files));
+    fprintf('Validation images: %d \n', numel(imdsVal.Files));
+    fprintf('Testing images: %d \n', numel(imdsTest.Files));
 end
 
 diary off; diary on;
@@ -494,39 +494,47 @@ if (doTraining==true)
     
     
     % Define training options.
-    % ToDo: trainingDefaults? With individual overrides?
-%     options = trainingOptions('sgdm', ...
-%         'ExecutionEnvironment','parallel', ...
+%     ToDo: trainingDefaults? With individual overrides?
+    options = trainingOptions('sgdm', ...
+        'ExecutionEnvironment','auto', ...
+        'DispatchInBackground', false, ...
+        'MaxEpochs',30, ...  
+        'MiniBatchSize',100, ...
+        'Shuffle','every-epoch', ...
+        'CheckpointPath', checkpointPath, ...
+        'InitialLearnRate',1e-3, ... % from 1e-3
+        'LearnRateSchedule','piecewise',...
+        'LearnRateDropPeriod',10,...
+        'LearnRateDropFactor',0.3,...
+        'Momentum',0.9, ...
+        'L2Regularization',0.005, ... % from 0.005
+        'GradientThreshold', 10, ...
+        'ValidationData',pximdsVal, ...
+        'ValidationFrequency', 100,...
+        'ValidationPatience', 20, ...
+        'Verbose', 1, ...
+        'VerboseFrequency',50,...
+        'Plots','training-progress')
+
+%     options = trainingOptions('adam', ...
+%         'ExecutionEnvironment','auto', ... % 'WorkerLoad', 1, ...
+%         'DispatchInBackground', true, ...
+%         'MaxEpochs',30, ...
+%         'MiniBatchSize',8, ...
+%         'Shuffle','every-epoch', ...
+%         'CheckpointPath', checkpointPath, ...
 %         'LearnRateSchedule','piecewise',...
 %         'LearnRateDropPeriod',10,...
 %         'LearnRateDropFactor',0.3,...
-%         'Momentum',0.9, ...
-%         'InitialLearnRate',1e-2, ... % from 1e-3
-%         'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
+%         'InitialLearnRate',1e-2, ...
+%         'L2Regularization',0.001, ...
+%         'GradientThreshold', 10, ...
 %         'ValidationData',pximdsVal, ...
-%         'MaxEpochs',40, ...  
-%         'MiniBatchSize',10, ...
-%         'Shuffle','every-epoch', ...
-%         'CheckpointPath', checkpointPath, ...
-%         'VerboseFrequency',50,...
-%         'Plots','training-progress',...
-%         'ValidationFrequency', 100,...
+%         'ValidationFrequency', 50,...
 %         'ValidationPatience', 6, ...
-%         'DispatchInBackground', 'true')
-
-    options = trainingOptions('adam', ...
-        'ExecutionEnvironment','auto', ...
-        'MaxEpochs',30, ...
-        'MiniBatchSize',5, ...
-        'Plots','training-progress', ...
-        'Shuffle','every-epoch', ...
-        'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-2, ...
-        'ValidationData',pximdsVal, ...
-        'ValidationFrequency', 50,...
-        'ValidationPatience', 4, ...
-        'WorkerLoad', 1, ...
-        'DispatchInBackground', true)
+%         'Verbose', 1, ...
+%         'VerboseFrequency',50,...
+%         'Plots','training-progress')
 
     % Define augmenting methods
     pixelRange = [-20 20];
@@ -543,12 +551,18 @@ if (doTraining==true)
 
     
     % shuffle the data
-    pximds.shuffle;
+    pximds = pximds.shuffle;
     
     % Clear memory
 %     reset(gpuDevice(1));
-    clear numClasses numTestingImages numTrainingImages numValidationImages
-    clear inputLayer
+    clear numTestingImages numTrainingImages numValidationImages
+    clear inputLayer convertData forceConvert partitionData
+    clear recoverCheckpoint resplitValidation
+    clear imdsTrain imdsVal pxdsTrain pxdsVal labelIDs labelIDs_scalar
+    clear labelTable labelWeights network sequences
+    clear maskFolders imageFolders resizedImageFolders resizedLabelFolders
+    clear fingerprint newHash 
+    clear pixelRange scaleRange 
     
     disp("Beginning training...")
     tic;
@@ -615,14 +629,14 @@ if (archiveNet)
             fn = sprintf('%s/%s.pdf',foldername,fig_name);
             export_fig(fn,figHandle(1));
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
-            sendFileList = strcat(sendFileList,{' -A '},fullfile(foldername,fn));
+            sendFileList = strcat(sendFileList,{' -A "'},fullfile(fn),{'"'});
             disp('Figure archived')
             close(figHandle(:));
         end
         
         diary off;
         copyfile(logFile,foldername);
-        sendFileList = strcat(sendFileList, {' -A '},logFile);
+        sendFileList = strcat(sendFileList, {' -A '},logFile,{'"'});
         disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
