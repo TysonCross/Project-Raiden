@@ -1,15 +1,20 @@
-clear all; clc; close all; %#ok<CLALL>
+clear all; clc; %#ok<CLALL>
+reset(gpuDevice(1));
+figHandle = findall(groot, 'Type', 'Figure');
+close(figHandle(:))
+clear figHandle;
 
 setenv('NVIDIA_CUDNN', '/usr/local/cuda');
 setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 % results = coder.checkGpuInstall('full')
 
 %% SETUP
-network = 'alexnet';
+network = 'deeplabv3';
 %{
     Network choices are:
-    'fcn8s'
-    'alexnet'
+    'fcn8s' (batch size ~10)
+    'alexnet' (batchsize ~100)
+    'deeplabv3' (batchsize ~3)
     'vgg16' TBD (output not correct dimension)
     'googlenet' TBD (output not correct dimension)
     'inceptionresnetv2' SLOW to setup, TBD (output not correct dimension)
@@ -20,14 +25,14 @@ network = 'alexnet';
 
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
-partitionData       = 0         % if true, re-split Test/Training (warning)
-resplitValidation   = 0         % if true, re-split Training/Validation
-useCachedNet        = 1         % if false, generate new neural network
-doTraining         	= 0         % if true, perform training
+partitionData       = 1         % if true, re-split Test/Training (warning)
+resplitValidation   = 1         % if true, re-split Training/Validation
+useCachedNet        = 0         % if false, generate new neural network
+doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
-archiveNet          = 0         % archive NN, data and figures to subfolder
-saveImages          = 0         % generate performance figures
-sendNotification    = 0         % send email notification on completion
+archiveNet          = 1         % archive NN, data and figures to subfolder
+saveImages          = 1         % generate performance figures
+sendNotification    = 1         % send email notification on completion
 
 % global setup
 rootPath = '/home/tyson/Raiden/';
@@ -61,14 +66,15 @@ diary(logFile)
 % this should ideally be a once off conversion. If a file exists on disk
 % in the destination resized/converted folder, it will not be reconverted.
 
+loadLabels;
+loadSequences;
+
 if (forceConvert==false)
     disp('Checking sequences...')
     % hashCheck:
     if (exist(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'file')) ...
          
-        loadLabels;
-        loadSequences;
-        newHash = mlreportgen.utils.hash(strcat(sequences{:},network,rez));
+        newHash = mlreportgen.utils.hash(strcat(sequences{:},rez));
         load(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'fingerprint');
         if (fingerprint==newHash)
             convertData=false;
@@ -159,7 +165,7 @@ if ( (convertData==true) || (forceConvert==true) )
         error('Conversion failed');
     else
         disp("Data converted successfully")
-        fingerprint = mlreportgen.utils.hash(strcat(converted{:},network,rez));
+        fingerprint = mlreportgen.utils.hash(strcat(converted{:},rez));
         save(fullfile(rootPath,'data','resized',rez,'fingerprint'),'fingerprint');
     end
     
@@ -227,7 +233,7 @@ if (partitionData==true)
 else
     load(fullfile(cachePath,'data'));
     disp('Loaded datastores from cache...')
-    disp("Per-label pixel distribution:")
+%     disp("Per-label pixel distribution:")
 %     disp(labelTable);
 end
 
@@ -315,7 +321,7 @@ else
 
         switch network
             case 'fcn8s' % fully connected CNN, based on vgg16 weighting
-                imageSize = [227 227];
+%                 imageSize = [227 227];
                 lgraph = fcnLayers(imageSize, numClasses);   
                 lgraph = removeLayers(lgraph,'pixelLabels');
                 lgraph = addLayers(lgraph, pxLayer);
@@ -325,7 +331,7 @@ else
                 clear lgraph
 
             case 'alexnet'
-                imageSize = [227 227];
+%                 imageSize = [227 227];
                 net = alexnet;
                 layers = net.Layers;
 
@@ -381,11 +387,19 @@ else
                 lgraph = connectLayers(lgraph, 'data', 'score/ref');
                 net = lgraph;
                 
-                clear idx layers upscore bias weights upscore conv1New\
+                clear idx layers upscore bias weights upscore conv1New
                 clear conv1 lgraph
+                
+            case 'deeplabv3'
+%                 imageSize = [227 227];
+                lgraph = helperDeeplabv3PlusResnet18([imageSize 3], numClasses);
+                lgraph = replaceLayer(lgraph,"classification", pxLayer);
+                net = lgraph;
+                
+                clear lgraph
 
             case 'vgg16'
-                imageSize = [224 224];
+                imageSize = [223 224];
                 net = vgg16;
                 layersTransfer = net.Layers(1:end-3);
                 lgraph = [
@@ -399,9 +413,9 @@ else
                 net = lgraph;
                 
                 clear layersTransfer lgraph
-
+                    
             case 'googlenet'
-                imageSize = [224 224];
+%                 imageSize = [224 224];
                 net = googlenet;
                 lgraph = layerGraph(net);
                 newLayer = fullyConnectedLayer(numClasses, ...
@@ -422,7 +436,7 @@ else
                 clear layers connections lgraph newLayer
 
             case 'inceptionresnetv2'
-                imageSize = [299 299];
+%                 imageSize = [299 299];
                 net = inceptionresnetv2;
                 lgraph = layerGraph(net);
                 newLayer = fullyConnectedLayer(numClasses, ...
@@ -456,8 +470,15 @@ else
         disp("Network created") 
 
     else
+        updatedNetName = networkStatus.name;
         load(fullfile(cachePath,'network'));
         disp('Loaded Network from cache...')
+        
+        networkStatus.name = updatedNetName;
+        
+        disp('Updating network name...')
+        save(fullfile(cachePath,'network'),...
+            'net','networkStatus','imageSize');
     end
 end
 
@@ -469,25 +490,43 @@ if (doTraining==true)
     disp("Setting up Training...")
     
     checkpointsFolder = fullfile(rootPath,'networks','checkpoints');
-
+    close all;
+    
+    
     % Define training options.
     % ToDo: trainingDefaults? With individual overrides?
-    options = trainingOptions('sgdm', ...
-        'LearnRateSchedule','piecewise',...
-        'LearnRateDropPeriod',10,...
-        'LearnRateDropFactor',0.3,...
-        'Momentum',0.9, ...
-        'InitialLearnRate',1e-2, ... % from 1e-3
-        'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
-        'ValidationData',pximdsVal, ...
-        'MaxEpochs',40, ...  
-        'MiniBatchSize',100, ...
+%     options = trainingOptions('sgdm', ...
+%         'ExecutionEnvironment','parallel', ...
+%         'LearnRateSchedule','piecewise',...
+%         'LearnRateDropPeriod',10,...
+%         'LearnRateDropFactor',0.3,...
+%         'Momentum',0.9, ...
+%         'InitialLearnRate',1e-2, ... % from 1e-3
+%         'L2Regularization',0.001, ... % from 0.005  %'GradientThreshold', 6, ...
+%         'ValidationData',pximdsVal, ...
+%         'MaxEpochs',40, ...  
+%         'MiniBatchSize',10, ...
+%         'Shuffle','every-epoch', ...
+%         'CheckpointPath', checkpointPath, ...
+%         'VerboseFrequency',50,...
+%         'Plots','training-progress',...
+%         'ValidationFrequency', 100,...
+%         'ValidationPatience', 6, ...
+%         'DispatchInBackground', 'true')
+
+    options = trainingOptions('adam', ...
+        'ExecutionEnvironment','auto', ...
+        'MaxEpochs',30, ...
+        'MiniBatchSize',5, ...
+        'Plots','training-progress', ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'VerboseFrequency',50,...
-        'Plots','training-progress',...
-        'ValidationFrequency', 100,...
-        'ValidationPatience', 6);
+        'InitialLearnRate',1e-2, ...
+        'ValidationData',pximdsVal, ...
+        'ValidationFrequency', 50,...
+        'ValidationPatience', 4, ...
+        'WorkerLoad', 1, ...
+        'DispatchInBackground', true)
 
     % Define augmenting methods
     pixelRange = [-20 20];
@@ -502,7 +541,12 @@ if (doTraining==true)
     pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
         'DataAugmentation', augmenter);
 
+    
+    % shuffle the data
+    pximds.shuffle;
+    
     % Clear memory
+%     reset(gpuDevice(1));
     clear numClasses numTestingImages numTrainingImages numValidationImages
     clear inputLayer
     
@@ -565,8 +609,7 @@ if (archiveNet)
         disp('Network and data archived')
         figHandle = findall(groot, 'Type', 'Figure');
         if saveImages && (numel(figHandle)>0)
-            figHandle = findall(groot, 'Type', 'Figure');
-            fig_name = figHandle(1).Name;
+            fig_name = figHandle.Name;
             fig_name(isspace(fig_name)==1)='_';
             fig_name = regexprep(fig_name, '[ .,''!?():]', '');
             fn = sprintf('%s/%s.pdf',foldername,fig_name);
@@ -574,7 +617,7 @@ if (archiveNet)
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
             sendFileList = strcat(sendFileList,{' -A '},fullfile(foldername,fn));
             disp('Figure archived')
-            close all;
+            close(figHandle(:));
         end
         
         diary off;
@@ -591,10 +634,10 @@ else
 end
 
 diary off;
-% NOTIFICATIONS
-if sendNotification
-%     % Send notification when done:
 
+%% NOTIFICATIONS
+
+if sendNotification
     [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
     subject = strcat('ELEN4012 - Training for', {' '} , networkStatus.name, {' complete'});
     msg = strcat({'Training for '}, networkStatus.name, ...
@@ -604,60 +647,9 @@ if sendNotification
         string(hours), {':'}, ...
         string(mins), {':'}, ...
         string(secs), {' (hh:mm:ss)'});
-    
-%     apiKey = 'o.iU7I4FP6qJmjML6GOW6WL49iTM5Zvjf5';
-%     p = Pushbullet(apiKey);
-%     p.pushNote([],subject,msg);
 	mail_str = strcat({'echo "'}, msg, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
     unix(mail_str);
     disp('Notification sent')
 end
 
 return % end script
-% ToDo:  Cleanup and format below
-
-%% SINGLE IMAGES TEST
-
-% Single Images Check
-imIdx = randperm(numel(imdsTest.Files),2); %#ok<*UNRCH> %randi(length(imdsTest.Files)); 
-figure(1)
-for i = 1:2
-    subplot(2,2,i)
-    [I,info] = readimage(imdsTest,imIdx(i));
-    C = semanticseg(I, net);
-    B = labeloverlay(I,C,'Colormap',cmap,'Transparency',0.4);
-    imshow(B);
-    pixelLabelColorbar(cmap, labelNames);
-    [~, filename, ext] = fileparts(info.Filename);
-    title(filename,'Interpreter','none','FontSize',6);
-end
-for i = 3:4
-    subplot(2,2,i)
-    [I,info] = readimage(imdsTest,imIdx(i-2));
-    C = semanticseg(I, net);
-    expectedResult = readimage(pxdsTest,imIdx(i-2));
-    actual = uint8(C);
-    expected = uint8(expectedResult);
-    imshowpair(actual, expected, 'diff')
-    title('Actual vs Expected');
-end
-
-%% Visualize activations
-
-im = readimage(imdsTest,randi(length(imdsTest.Files)));
-
-act1 = activations(net,im,'conv3');
-sz1 = size(act1);
-act1 = reshape(act1,[sz1(1) sz1(2) 1 sz1(3)]);
-I = imtile(mat2gray(act1),'GridSize',[8 12]);
-imshow(I)
-
-act1ch32 = act1(:,:,:,32);
-act1ch32 = mat2gray(act1ch32);
-act1ch32 = imresize(act1ch32,imageSize);
-
-I = imtile({im,act1ch32});
-imshow(I)
-
-% clear GPU
-reset(gpuDevice(1));
