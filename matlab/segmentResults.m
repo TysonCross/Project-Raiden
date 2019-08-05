@@ -1,5 +1,5 @@
 
-%% Import vairables
+%% Import variables
 %% ARHG: Can't change labels after removing them from the view
 %testing
 % sequenceDir = '/home/jason/Desktop/reduced/tif';

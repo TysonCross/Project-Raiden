@@ -6,7 +6,7 @@ labelButton= true;
 %% Define root path
 %ToDo: This should be done dynamically
 rootPath = '~/Desktop/';
-setupDataPaths;
+loadSequences;
 %% Sequence to load
 sequenceDir = uigetdir(fullfile(rootPath),'Select the sequence to load');
     if ~sequenceDir
