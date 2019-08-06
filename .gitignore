@@ -754,7 +754,8 @@ DerivedData/
 # MATLAB
 matlab/pathdef.m
 pathdef.m
-
+matlab/Apps/**
+!*.mlapp
 experiments/**
 data/**
 networks/**
