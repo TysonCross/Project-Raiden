@@ -7,6 +7,8 @@
 % outputDir = '/home/jason/Desktop/test';
 % sz = net.Layers(1).InputSize(1:2);
 
+%Might be worth it to check the folders for tifs in the app??
+
 sequenceDir = app.Inputfolder_Edit.Value;
 outputDir = app.Outputpath_Edit.Value;
 load(app.Networkfile_Edit.Value); 
@@ -92,6 +94,11 @@ if exist(fullfile(outputDir,'tmp'),'dir')
     [status, msg]=rmdir(fullfile(outputDir,'tmp'), 's'); % s = rm -rf
     disp(msg);
 end
+clear actual ans cmap diffImage expected expectedResult I ...
+    imds info labelDir labelIDs labelIDs_scalar labelNames ...
+    msg n name net numClasses originalSize outputImage ...
+    outputDir pxds resultPixelLabels segImage sequenceDir ...
+    status str sz outImage;
 disp('Done');
 
 %if MakeOverlay
