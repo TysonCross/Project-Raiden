@@ -4,7 +4,9 @@ load('/home/tyson/Raiden/networks/cache/2019-07-28_114235/alexnet_2019-07-28_114
 load('/home/tyson/Raiden/networks/cache/alexnet_2019-07-30_121421/alexnet_2019-07-30_121421.mat');
 
 % analyzeNetwork(net)
-
+figure
+plot(net)
+subplot_tight(net)
 
     subplot(1,2,1)
     C = semanticseg(im, net);

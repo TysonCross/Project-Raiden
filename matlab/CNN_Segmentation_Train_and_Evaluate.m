@@ -25,12 +25,13 @@ network = 'deeplabv3';
 forceConvert        = 0         % if true, resize/process new data (slow)
 partitionData       = 0         % if true, re-split Test/Training (warning)
 resplitValidation   = 0         % if true, re-split Training/Validation
-useCachedNet        = 0         % if false, generate new neural network
+useCachedNet        = 1         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
 archiveNet          = 1         % archive NN, data and figures to subfolder
 saveImages          = 1         % generate performance figures
 sendNotification    = 1         % send email notification on completion
+evaluateNet         = 1         % if true, evaluate performance on test set
 
 % global setup
 rootPath = '/home/tyson/Raiden/';
@@ -274,12 +275,13 @@ diary off; diary on;
 
 %% Network setup phase
 
-disp("Setting up Network...")
 if recoverCheckpoint
+    disp("Attempting to load checkpoint for network...")
     filename = fullfile(checkpointPath,getLatestFile(checkpointPath));
     if exist(filename,'file')
         load(filename);
         disp(['Loaded checkpoint from ', string(filename)]);
+        net = layerGraph(net)
     else
         error(strcat({'Error: User specified: recoverCheckpoint = 1, '},...
                 {'but no checkpoint found in '}, string(checkpointPath)));
@@ -287,6 +289,7 @@ if recoverCheckpoint
     clear filename
 else
     if useCachedNet
+        disp("Loading cached Network...")
         if ~exist(fullfile(cachePath,strcat('network','.mat')),'file')
            msg = 'No Network Cache found. What would you like to do?';
            title = 'Create New Network?';
@@ -307,6 +310,7 @@ else
     end
 
     if (useCachedNet==false)
+        disp("Setting up Network...")
 
         % Balance class weightings
         if (exist('labelWeights','var'))
@@ -463,7 +467,6 @@ else
 
         clear pxLayer numClasses useCachedNet
 
-        % ToDo: lgraph -> net
         networkStatus.trained = 0;
         save(fullfile(cachePath,'network'),...
             'net','networkStatus','imageSize');
@@ -485,6 +488,9 @@ end
 diary off; diary on;
 
 %% Training
+if (doTraining==true) && (useCachedNet)
+    net = layerGraph(net);
+end
 
 if (doTraining==true)
     disp("Setting up Training...")
@@ -498,11 +504,11 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'DispatchInBackground', false, ...
-        'MaxEpochs',30, ...  
+        'MaxEpochs',20, ...  
         'MiniBatchSize',100, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-3, ... % from 1e-3
+        'InitialLearnRate',1e-5, ... % from 1e-3
         'LearnRateSchedule','piecewise',...
         'LearnRateDropPeriod',10,...
         'LearnRateDropFactor',0.3,...
@@ -510,8 +516,8 @@ if (doTraining==true)
         'L2Regularization',0.005, ... % from 0.005
         'GradientThreshold', 10, ...
         'ValidationData',pximdsVal, ...
-        'ValidationFrequency', 100,...
-        'ValidationPatience', 20, ...
+        'ValidationFrequency', 50,...
+        'ValidationPatience', 8, ...
         'Verbose', 1, ...
         'VerboseFrequency',50,...
         'Plots','training-progress')
@@ -584,7 +590,7 @@ end
 diary off; diary on;
 
 %% EVALUATION
-if networkStatus.trained
+if (networkStatus.trained && evaluateNet)
     disp("Evaluating network performance");
     
     testDir = fullfile('~/Documents/MATLAB/temp',networkStatus.name);
@@ -629,14 +635,14 @@ if (archiveNet)
             fn = sprintf('%s/%s.pdf',foldername,fig_name);
             export_fig(fn,figHandle(1));
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
-            sendFileList = strcat(sendFileList,{' -A "'},fullfile(fn),{'"'});
+            sendFileList = strcat(sendFileList,{' -a "'},fullfile(fn),{'"'});
             disp('Figure archived')
             close(figHandle(:));
         end
         
         diary off;
         copyfile(logFile,foldername);
-        sendFileList = strcat(sendFileList, {' -A '},logFile,{'"'});
+        sendFileList = strcat(sendFileList, {' -a "'},logFile,{'"'});
         disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
