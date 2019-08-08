@@ -7,7 +7,7 @@ function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, 
     numFiles = numel(imds.Files);
     shuffledIndices = randperm(numFiles);
 
-    % Use a percentage% of the images for training
+    % Use a percentage of the images for training
     N = round(splitPercentage * numFiles);
     trainingIdx = shuffledIndices(1:N);
 

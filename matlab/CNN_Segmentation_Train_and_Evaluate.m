@@ -12,10 +12,9 @@ network = 'deeplabv3';
     Network choices are:
     'fcn8s' (batch size ~10)
     'alexnet' (batchsize ~100)
-    'deeplabv3' (batchsize ~8)
-    'vgg16' TBD (output not correct dimension)
-    'googlenet' TBD (output not correct dimension)
-    'inceptionresnetv2' SLOW to setup, TBD (output not correct dimension)
+    'deeplabv3' (batchsize ~100)
+    'segnet' TBD
+    'u-net' TBD
 %}
 
 % Percent of data to train with (0-1)
@@ -24,8 +23,8 @@ network = 'deeplabv3';
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
 partitionData       = 0         % if true, re-split Test/Training (warning)
-resplitValidation   = 0         % if true, re-split Training/Validation
-useCachedNet        = 1         % if false, generate new neural network
+resplitValidation   = 1         % if true, re-split Training/Validation
+useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
 archiveNet          = 1         % archive NN, data and figures to subfolder
@@ -243,7 +242,7 @@ diary off; diary on;
 if (resplitValidation==true)
     disp("Splitting training/validation data...")
    
-    splitPercentage = 0.20;
+    splitPercentage = 0.80;
     % Split training and validation
     [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
         partitionTrainingData(imdsTrain, pxdsTrain, splitPercentage);
@@ -325,7 +324,6 @@ else
 
         switch network
             case 'fcn8s' % fully connected CNN, based on vgg16 weighting
-%                 imageSize = [227 227];
                 lgraph = fcnLayers(imageSize, numClasses);   
                 lgraph = removeLayers(lgraph,'pixelLabels');
                 lgraph = addLayers(lgraph, pxLayer);
@@ -335,7 +333,6 @@ else
                 clear lgraph
 
             case 'alexnet'
-%                 imageSize = [227 227];
                 net = alexnet;
                 layers = net.Layers;
 
@@ -395,15 +392,20 @@ else
                 clear conv1 lgraph
                 
             case 'deeplabv3'
-%                 imageSize = [227 227];
                 lgraph = helperDeeplabv3PlusResnet18([imageSize 3], numClasses);
                 lgraph = replaceLayer(lgraph,"classification", pxLayer);
                 net = lgraph;
                 
                 clear lgraph
 
+            case 'segnet'
+                lgraph = segnetLayers([imageSize 3], numClasses, 'vgg16');
+                lgraph = replaceLayer(lgraph,"classification", pxLayer);
+                net = lgraph;
+                
+                clear lgraph
+                
             case 'vgg16'
-                imageSize = [223 224];
                 net = vgg16;
                 layersTransfer = net.Layers(1:end-3);
                 lgraph = [
@@ -419,7 +421,6 @@ else
                 clear layersTransfer lgraph
                     
             case 'googlenet'
-%                 imageSize = [224 224];
                 net = googlenet;
                 lgraph = layerGraph(net);
                 newLayer = fullyConnectedLayer(numClasses, ...
@@ -440,7 +441,6 @@ else
                 clear layers connections lgraph newLayer
 
             case 'inceptionresnetv2'
-%                 imageSize = [299 299];
                 net = inceptionresnetv2;
                 lgraph = layerGraph(net);
                 newLayer = fullyConnectedLayer(numClasses, ...
@@ -465,7 +465,7 @@ else
                 error('Error: Invalid network name specified')
         end
 
-        clear pxLayer numClasses useCachedNet
+        clear pxLayer numClasses
 
         networkStatus.trained = 0;
         save(fullfile(cachePath,'network'),...
@@ -488,7 +488,7 @@ end
 diary off; diary on;
 
 %% Training
-if (doTraining==true) && (useCachedNet)
+if (doTraining==true) && (useCachedNet==true)
     net = layerGraph(net);
 end
 
@@ -504,11 +504,11 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'DispatchInBackground', false, ...
-        'MaxEpochs',20, ...  
+        'MaxEpochs',40, ...  
         'MiniBatchSize',100, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-5, ... % from 1e-3
+        'InitialLearnRate',1e-3, ... % from 1e-3
         'LearnRateSchedule','piecewise',...
         'LearnRateDropPeriod',10,...
         'LearnRateDropFactor',0.3,...
@@ -635,14 +635,14 @@ if (archiveNet)
             fn = sprintf('%s/%s.pdf',foldername,fig_name);
             export_fig(fn,figHandle(1));
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
-            sendFileList = strcat(sendFileList,{' -a "'},fullfile(fn),{'"'});
+            sendFileList = strcat(sendFileList,{' -A "'},fullfile(fn),{'"'});
             disp('Figure archived')
             close(figHandle(:));
         end
         
         diary off;
         copyfile(logFile,foldername);
-        sendFileList = strcat(sendFileList, {' -a "'},logFile,{'"'});
+%         sendFileList = strcat(sendFileList, {' -A "'},logFile,{'"'});
         disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
@@ -659,15 +659,15 @@ diary off;
 
 if sendNotification
     [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
-    subject = strcat('ELEN4012 - Training for', {' '} , networkStatus.name, {' complete'});
-    msg = strcat({'Training for '}, networkStatus.name, ...
+%     subject = strcat('ELEN4012 - Training for', {' '} , networkStatus.name, {' complete'});
+    subject = strcat({'Training for '}, networkStatus.name, ...
         {' has completed at '}, ...
         datestr(datetime('now'),31), ...
         {'. Training time took '}, ...
         string(hours), {':'}, ...
         string(mins), {':'}, ...
         string(secs), {' (hh:mm:ss)'});
-	mail_str = strcat({'echo "'}, msg, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
+	mail_str = strcat({'cat "'}, logFile, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
     unix(mail_str);
     disp('Notification sent')
 end
