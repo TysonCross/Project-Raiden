@@ -1,0 +1,101 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="2754322545" file="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/labelLightning.prj" location="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab" name="labelLightning" target="target.mlapps" target-name="Package App">
+    <param.appname>labelLightning</param.appname>
+    <param.authnamewatermark>Jason Smit, Tyson Cross</param.authnamewatermark>
+    <param.email>jason.smit@students.wits.ac.za, tyson.cross1@students.wits.ac.za</param.email>
+    <param.company>University of the Witwatersrand</param.company>
+    <param.icon>${PROJECT_ROOT}/labelLightning_resources/icon_24.png</param.icon>
+    <param.icons>
+      <file>${PROJECT_ROOT}/labelLightning_resources/icon_48.png</file>
+      <file>${PROJECT_ROOT}/labelLightning_resources/icon_24.png</file>
+      <file>${PROJECT_ROOT}/labelLightning_resources/icon_16.png</file>
+    </param.icons>
+    <param.summary>Segment lightning footage</param.summary>
+    <param.description>This app segments an input sequence of images, using a chosen network, outputting the segmented labels as an image. Optionally, an overlay of the predicted labels on top of the original images can be generated as well. There is also an option to compare the predicted labels with the known ground truth, if the user provides an input label sequence.</param.description>
+    <param.screenshot>${PROJECT_ROOT}/Apps/screenshot.png</param.screenshot>
+    <param.version>1.6</param.version>
+    <param.products.name>
+      <item>MATLAB</item>
+      <item>Computer Vision Toolbox</item>
+      <item>Deep Learning Toolbox</item>
+      <item>Image Processing Toolbox</item>
+    </param.products.name>
+    <param.products.id>
+      <item>1</item>
+      <item>96</item>
+      <item>12</item>
+      <item>17</item>
+    </param.products.id>
+    <param.products.version>
+      <item>9.6</item>
+      <item>9.0</item>
+      <item>12.1</item>
+      <item>10.4</item>
+    </param.products.version>
+    <param.platforms />
+    <param.output>${PROJECT_ROOT}/Apps</param.output>
+    <param.guid>491b5a7e-2514-4750-975e-dd6355b44aa1</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.platforms />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/Apps/Segment_app.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>/home/tyson/Documents/MATLAB/progressbar.m</file>
+      <file>${PROJECT_ROOT}/Apps/folder.png</file>
+      <file>${PROJECT_ROOT}/utilities/loadLabels.m</file>
+      <file>${PROJECT_ROOT}/utilities/resizeImages.m</file>
+      <file>${PROJECT_ROOT}/utilities/resizePixelLabels.m</file>
+      <file>${PROJECT_ROOT}/utilities/segmentResults.m</file>
+      <file>${PROJECT_ROOT}/utilities/setupColors.m</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}" name="Apps" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/usr/local/MATLAB/R2019a</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="gpucoder" />
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <gpucoder>
+          <enabled>true</enabled>
+        </gpucoder>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>5.0.0-23-generic</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

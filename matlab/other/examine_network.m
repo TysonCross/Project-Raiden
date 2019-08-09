@@ -1,32 +1,41 @@
 clear all; clc;
 
-load('/home/tyson/Raiden/networks/cache/2019-07-28_114235/alexnet_2019-07-28_114235.mat');
-load('/home/tyson/Raiden/networks/cache/alexnet_2019-07-30_121421/alexnet_2019-07-30_121421.mat');
+load('/home/tyson/Raiden/networks/cache/alexnet_2019-08-04_011521/network.mat');
+load('/home/tyson/Raiden/networks/cache/deeplabv3_2019-08-08_073519/network.mat');
+load('/home/tyson/Raiden/networks/cache/segnet_2019-08-09_083513/network.mat');
 
 % analyzeNetwork(net)
 figure
 plot(net)
 subplot_tight(net)
 
+loadLabels;
+setupColors;
+I = imread('/mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_010/tif/2017-02-10_163357_010.00000255.tif');
+im = uint8(I/256);
+im = imresize(im,[227 227]);
+im = imresize(im,[256 256]);
+
+
+
     subplot(1,2,1)
     C = semanticseg(im, net);
     B = labeloverlay(im,C,'Colormap',cmap,'Transparency',0.4);
     imshow(B);
-    pixelLabelColorbar(cmap, classNames);
-    [~, filename, ext] = fileparts(info.Filename);
-    title(filename,'Interpreter','none','FontSize',6);
-
-
+    pixelLabelColorbar(cmap, labelNames);
+%     [~, filename, ext] = fileparts(info.Filename);
+%     title(filename,'Interpreter','none','FontSize',6);
 
 
 %% Visualize activations
-im = imIdx = randperm(numel(imdsTest.Files),2); %randi(length(imdsTest.Files)); 
+% im = imIdx = randperm(numel(imdsTest.Files),2); %randi(length(imdsTest.Files)); 
 
 act1 = activations(net,im,'conv1');
 sz = size(act1);
 act1 = reshape(act1,[sz(1) sz(2) 1 sz(3)]);
-I = imtile(mat2gray(act1),'GridSize',[8 12]);
-imshow(I)
+I_a = imtile(mat2gray(act1),'GridSize',[6 10]);
+figure
+imshow(I_a)
 
 
 act1 = activations(net,im,'upscore');

@@ -47,3 +47,20 @@ x = sz(2);
     ClassNames = pxds.ClassNames;
     labelIDs_Scalar = 1:numel(ClassNames);
     pxds = pixelLabelDatastore(imageList,ClassNames,labelIDs_Scalar);
+    
+    
+imagefilename = '/mnt/Shield/Raiden/data/sequences/test/dark/tif/2017-10-21_171820_000.00000240.tif';
+image = imread(imagefilename);
+subplot(1, 2, 1);
+imshow(image);
+title('Original Image', 'FontSize', 20);
+image = im2double(image);
+image = (image - mean2(image))./std2(image);
+image = im2uint8(rgb2gray(image));
+subplot(1, 2, 2);
+imshow(image);
+title('Output image', 'FontSize', 20);
+    
+    spectrumPlot(image)
+    sfPlot(image)
+    

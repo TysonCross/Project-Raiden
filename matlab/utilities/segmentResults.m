@@ -1,17 +1,22 @@
 
 %% Import variables
-%testing
-% sequenceDir = '/home/jason/Desktop/reduced/tif';
-% labelDir = '/home/jason/Desktop/reduced/mask';
-% load('/home/jason/Desktop/reduced/alexnet_2019-07-30_121421/alexnet_2019-07-30_121421.mat'); %%ToDo add a check here and only load the vars as requested
-% outputDir = '/home/jason/Desktop/test';
-% sz = net.Layers(1).InputSize(1:2);
+fromApp = true;
+if ~fromApp
+    load('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/networks/cache/deeplabv3_2019-08-08_073519/network.mat');
+    sequenceDir = '/mnt/Shield/Raiden/data/sequences/test/full_seq/tif';
+    outputDir = '~/Desktop/test';
+    % labelDir = '/home/jason/Desktop/reduced/mask';
+    doOverlay = true;
+    doCompare = false;
+else
+    load(app.Networkfile_Edit.Value); 
+    sequenceDir = app.Inputfolder_Edit.Value;
+    outputDir = app.Outputpath_Edit.Value;
 
-%Might be worth it to check the folders for tifs in the app??
+    doOverlay = app.Makeoverlay_CheckBox.Value;
+    doCompare = app.Comparewithexpected_CheckBox.Value;
+end
 
-sequenceDir = app.Inputfolder_Edit.Value;
-outputDir = app.Outputpath_Edit.Value;
-load(app.Networkfile_Edit.Value); 
 if ~exist('net','var')
     if exist('lgraph','var')
         net =lgraph;
@@ -20,59 +25,76 @@ if ~exist('net','var')
     end
 end
 
-if (app.Comparewithexpected_CheckBox.Value)
+if doCompare
     labelDir = app.Pixellabels_Edit.Value;
-    %created required dir
-     if ~exist(fullfile(outputDir,'comparison'),'dir')
-        mkdir(fullfile(outputDir,'comparison'))
-    end
 end
 
 loadLabels;
-sz = net.Layers(1).InputSize(1:2);
 setupColors;
+sz = net.Layers(1).InputSize(1:2);
 
 %% Resize
 imds = imageDatastore(sequenceDir);
 originalSize = size(imds.readimage(1));
 
-disp("Resizing images")
-imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img') );
-if (exist('labelDir'))
-    pxds = pixelLabelDatastore(labelDir,...
-    labelNames,labelIDs,'FileExtensions','.tif');
-    disp("Resizing labels and converting to categorical label form...")
-    pxds = resizePixelLabels(pxds, sz, fullfile(outputDir,'tmp','label'));
-end
 
-
-%% Create output folders
+% Create output folders
 if ~exist(fullfile(outputDir,'output'),'dir')
   mkdir(fullfile(outputDir,'output'));
 end
+
 if ~exist(fullfile(outputDir,'tmp'),'dir')
     mkdir(fullfile(outputDir,'tmp'))
 end
-if ~exist(fullfile(outputDir,'overlay'),'dir')
-    mkdir(fullfile(outputDir,'overlay'))
+
+disp("Resizing images...")
+
+y = sz(1);
+x = sz(2);
+rez = strcat(string(x),'x',string(y));
+str = char(strcat('Resizing images to ',{' '},rez));
+progressbar('Resizing image sequences',str)
+imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img') );
+if doCompare
+    pxds = pixelLabelDatastore(labelDir,...
+    labelNames,labelIDs,'FileExtensions','.tif');
+    disp("Resizing labels and converting to categorical label form...")
+    str = char(strcat('Converting labels to ',{' '},rez));
+    progressbar('Resizing and converting label sequences',str)
+    pxds = resizePixelLabels(pxds, sz, fullfile(outputDir,'tmp','label'));
 end
+progressbar(1)
 
 %% Segment data
-resultPixelLabels = semanticseg(imds,net, ...
-        'MiniBatchSize', 1, ...
+resultPixelLabels = semanticseg(imds, net, ...
+        'MiniBatchSize', 32, ...
         'WriteLocation', fullfile(outputDir, '/output'), ...
-        'Verbose', false); %Label the data
+        'Verbose', true);
+
+if doCompare
+     if ~exist(fullfile(outputDir,'comparison'),'dir')
+        mkdir(fullfile(outputDir,'comparison'))
+    end
+end
+
+if doOverlay
+    disp('Creating overlay...')
+    if ~exist(fullfile(outputDir,'overlay'),'dir')
+        mkdir(fullfile(outputDir,'overlay'))
+    end
+end
+
 for n = 1:length(imds.Files)
  [~,name,~] = fileparts(string(imds.Files(n)));
- [I, info] = readimage(imds,n); %Read image
-    %if MakeOverlay
-    if(app.Makeoverlay_CheckBox.Value)
+ 
+ I = readimage(imds,n);
+    if doOverlay
         segImage = labeloverlay(I,resultPixelLabels.readimage(n),'Colormap',cmap,'Transparency',0.4);
     else
         segImage = unit8(resultPixelLabels);
     end
     
-    if(app.Comparewithexpected_CheckBox.Value)
+    if doCompare
         numClasses = numel(labelNames);
         expectedResult = readimage(pxds,n);
         actual = uint8(resultPixelLabels.readimage(n))*(255/numClasses);
@@ -88,18 +110,19 @@ for n = 1:length(imds.Files)
     
     
 end
-disp('Clearing tmp folder')
-%Only attempt to remove a dir that exists 
+
+disp('Clearing tmp folder...')
+
 if exist(fullfile(outputDir,'tmp'),'dir')
-    [status, msg]=rmdir(fullfile(outputDir,'tmp'), 's'); % s = rm -rf
+    [~, msg] = rmdir(fullfile(outputDir,'tmp'), 's');
     disp(msg);
 end
+
 clear actual ans cmap diffImage expected expectedResult I ...
     imds info labelDir labelIDs labelIDs_scalar labelNames ...
     msg n name net numClasses originalSize outputImage ...
     outputDir pxds resultPixelLabels segImage sequenceDir ...
     status str sz outImage;
-disp('Done');
 
-%if MakeOverlay
-%if(app.MakeoverlayCheckBox.Value)
+disp('Done.')
+msgbox('Operation Completed');

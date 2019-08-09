@@ -1,0 +1,188 @@
+#! /usr/local/Nuke11.3v4/libnuke-11.3.4.so -nx
+version 11.3 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="67" y="27" w="2493" h="1023" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1099" stretch="1"/>
+            <splitter orientation="2">
+                <split size="977"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+            </splitter>
+            <split size="1346"/>
+            <dock id="" activePageId="DAG.1" focus="true">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/test/full_and_black_noise.nk"
+ frame 501
+ last_frame 500
+ lock_range true
+ format "512 352 0 0 512 352 1 "
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Media/Exported_Clips/2017-10-21_171820/2017-10-21_171820_all/tif/2017-10-21_171820_all.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 0
+ last 100
+ after loop
+ origfirst 0
+ origlast 100
+ origset true
+ name Read2
+ xpos 57
+ ypos -403
+}
+set N8dff520 [stack 0]
+TemporalMedian {
+ core 0.01
+ name TemporalMedian1
+ xpos 225
+ ypos -313
+}
+set N4ab8d80 [stack 0]
+Median {
+ ignore_top_line false
+ name Median1
+ xpos 225
+ ypos -272
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Media/Exported_Clips/2017-10-21_171820/2017-10-21_171820_all/tif/2017-10-21_171820_all.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 0
+ last 8280
+ origfirst 0
+ origlast 8280
+ origset true
+ name Read1
+ xpos -255
+ ypos -481
+}
+set N9a25630 [stack 0]
+Vectorfield {
+ vfield_file "/opt/resolve/LUT/False Color/FLSCLRV1.cube"
+ version 1
+ file_type cube
+ name Vectorfield1
+ xpos -145
+ ypos -402
+}
+push $N9a25630
+Text2 {
+ font_size_toolbar 100
+ font_width_toolbar 100
+ font_height_toolbar 100
+ message "\[ metadata input/frame ]"
+ old_message {{48}
+   }
+ old_expression_markers {{0 0}
+   }
+ box {187 236.5 347 337.5}
+ xjustify center
+ yjustify center
+ transforms {{0 2}
+   }
+ cursor_position 24
+ center {256 176}
+ cursor_initialised true
+ initial_cursor_position {{267 287}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 256 176 0 0 1 1 0 0 0 0}
+   }
+ background_color {1 1 1 1}
+ background_color_panelDropped true
+ name Text2
+ xpos -334
+ ypos -384
+ disable true
+}
+push $N8dff520
+Text2 {
+ font_size_toolbar 100
+ font_width_toolbar 100
+ font_height_toolbar 100
+ message "\[ metadata input/frame ]"
+ old_message {{49 48 48}
+   }
+ old_expression_markers {{0 2}
+   }
+ box {222.5 3.5 329.5 104.5}
+ xjustify center
+ yjustify center
+ transforms {{0 2}
+   }
+ cursor_position 24
+ center {256 176}
+ cursor_initialised true
+ initial_cursor_position {{276 54}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 256 176 0 0 1 1 0 0 0 0}
+   }
+ background_color {1 1 1 1}
+ background_color_panelDropped true
+ name Text1
+ xpos -13
+ ypos -302
+ disable true
+}
+push $N8dff520
+Write {
+ file /mnt/Shield/Raiden/data/sequences/test/black_noise/tif/2017-10-21_171820_000.########.tif
+ file_type tiff
+ create_directories true
+ checkHashOnRead false
+ version 10
+ name Write1
+ xpos 57
+ ypos -185
+ postage_stamp true
+}
+push $N4ab8d80
+push $N9a25630
+Write {
+ file /mnt/Shield/Raiden/data/sequences/test/full_seq/tif/2017-10-21_171820_000.########.tif
+ file_type tiff
+ create_directories true
+ checkHashOnRead false
+ version 9
+ name Write2
+ xpos -255
+ ypos -263
+ postage_stamp true
+}
+Viewer {
+ inputs 2
+ frame 501
+ frame_range 1-500
+ fps 60
+ name Viewer1
+ xpos -40
+ ypos -9
+}
