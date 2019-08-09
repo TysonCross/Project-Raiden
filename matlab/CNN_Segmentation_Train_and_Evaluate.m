@@ -7,7 +7,7 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'deeplabv3';
+network = 'segnet';
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -23,10 +23,10 @@ network = 'deeplabv3';
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
 partitionData       = 0         % if true, re-split Test/Training (warning)
-resplitValidation   = 1         % if true, re-split Training/Validation
+resplitValidation   = 0         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
-recoverCheckpoint   = 0         % if training did not finish, use checkpoint
+recoverCheckpoint   = 1         % if training did not finish, use checkpoint
 archiveNet          = 1         % archive NN, data and figures to subfolder
 saveImages          = 1         % generate performance figures
 sendNotification    = 1         % send email notification on completion
@@ -118,12 +118,6 @@ if ( (convertData==true) || (forceConvert==true) )
     resizedLabelFolders = fullfile(rootPath,'data','resized', ...
         rez,sequences,'label');
     
-    resolutionList = {
-        [227 227]; ...
-%         [224 224]; ...
-%         [299 299]; ...
-        };
-    
     % create default datastores
     loadLabels;
     parfor i = 1:numel(imageFolders)
@@ -134,27 +128,24 @@ if ( (convertData==true) || (forceConvert==true) )
     end
     
     disp("Resizing images and labels, converting to categorical label form...")   
-    for i = 1:numel(resolutionList)
-        sz = resolutionList{i};
-        y = sz(1);
-        x = sz(2);
-        rez = strcat(string(x),'x',string(y));
-        str = char(strcat('Resizing images to ',{' '},rez));
-        progressbar('Resizing image sequences',str)
-        for j = 1:numel(imageFolders)
-            % [Convert all 'tifs' to imageSize]
-            imds{j} = resizeImages(imds{j}, sz, resizedImageFolders{j});
-            progressbar(j/numel(imageFolders),[])
-        end
-        str = char(strcat('Converting labels to ',{' '},rez));
-        progressbar('Resizing and converting label sequences',str)
-        for j = 1:numel(imageFolders)
-            % [Convert all 'mask' to imageSize, and RGB -> categorical]
-            pxds{j} = resizePixelLabels(pxds{j}, sz, resizedLabelFolders{j});
-            progressbar(j/numel(imageFolders),[])
-        end
+    y = imageSize(1);
+    x = imageSize(2);
+    rez = strcat(string(x),'x',string(y));
+    str = char(strcat('Resizing images to ',{' '},rez));
+    progressbar('Resizing image sequences',str)
+    for j = 1:numel(imageFolders)
+        % [Convert all 'tifs' to imageSize]
+        imds{j} = resizeImages(imds{j}, imageSize, resizedImageFolders{j});
+        progressbar(j/numel(imageFolders),[])
     end
-     progressbar(1)
+    str = char(strcat('Converting labels to ',{' '},rez));
+    progressbar('Resizing and converting label sequences',str)
+    for j = 1:numel(imageFolders)
+        % [Convert all 'mask' to imageSize, and RGB -> categorical]
+        pxds{j} = resizePixelLabels(pxds{j}, imageSize, resizedLabelFolders{j});
+        progressbar(j/numel(imageFolders),[])
+    end
+ progressbar(1)
     
     converted = listConvertedSequences(rootPath, imageSize);
     if numel(converted)~=numel(sequences)
@@ -280,7 +271,8 @@ if recoverCheckpoint
     if exist(filename,'file')
         load(filename);
         disp(['Loaded checkpoint from ', string(filename)]);
-        net = layerGraph(net)
+        net = layerGraph(net);
+        networkStatus.trained = 0;
     else
         error(strcat({'Error: User specified: recoverCheckpoint = 1, '},...
                 {'but no checkpoint found in '}, string(checkpointPath)));
@@ -400,10 +392,18 @@ else
 
             case 'segnet'
                 lgraph = segnetLayers([imageSize 3], numClasses, 'vgg16');
-                lgraph = replaceLayer(lgraph,"classification", pxLayer);
+                lgraph = replaceLayer(lgraph,"pixelLabels", pxLayer);
                 net = lgraph;
                 
                 clear lgraph
+                
+            case 'u-net'
+                lgraph = unetLayers([imageSize 3], numClasses);
+                lgraph = replaceLayer(lgraph,"pixelLabels", pxLayer);
+                net = lgraph;
+                
+                clear lgraph
+                
                 
             case 'vgg16'
                 net = vgg16;
@@ -504,8 +504,8 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'DispatchInBackground', false, ...
-        'MaxEpochs',40, ...  
-        'MiniBatchSize',100, ...
+        'MaxEpochs',1, ...  
+        'MiniBatchSize', 20, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-3, ... % from 1e-3

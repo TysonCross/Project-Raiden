@@ -5,13 +5,20 @@ function imageSize = getResolution(network)
 
             case 'alexnet'
                 imageSize = [227 227];
-
-            case 'vgg16'
-                imageSize = [224 224];
                 
             case 'deeplabv3'
                 imageSize = [227 227];
+%                 imageSize = [512 256];
+                
+            case 'segnet'
+                imageSize = [256 256];
 
+            case 'u-net'
+                imageSize = [256 256];
+                
+            case 'vgg16'
+                imageSize = [224 224];
+                
             case 'googlenet'
                 imageSize = [224 224];
 
