@@ -7,7 +7,7 @@ function imageSize = getResolution(network)
                 imageSize = [227 227];
                 
             case 'deeplabv3'
-                imageSize = [227 227];
+                imageSize = [256 256];
 %                 imageSize = [512 256];
                 
             case 'segnet'

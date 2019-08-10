@@ -7,13 +7,13 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'segnet';
+network = 'deeplabv3';
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
     'alexnet' (batchsize ~100)
     'deeplabv3' (batchsize ~100)
-    'segnet' TBD
+    'segnet' (batchsize ~20)
     'u-net' TBD
 %}
 
@@ -26,7 +26,7 @@ partitionData       = 0         % if true, re-split Test/Training (warning)
 resplitValidation   = 0         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
-recoverCheckpoint   = 1         % if training did not finish, use checkpoint
+recoverCheckpoint   = 0         % if training did not finish, use checkpoint
 archiveNet          = 1         % archive NN, data and figures to subfolder
 saveImages          = 1         % generate performance figures
 sendNotification    = 1         % send email notification on completion
@@ -53,9 +53,10 @@ imageSize = getResolution(network);
 y = imageSize(1);
 x = imageSize(2);
 rez = strcat(string(x),'x',string(y));
-    
-logFile = fullfile(rootPath,'logs',strcat(networkStatus.name,'.log'))
-diary(logFile)
+
+logFile = strcat(networkStatus.name,'.txt');
+logFileFull = fullfile(rootPath,'logs',logFile)
+diary(logFileFull)
 
 %% Data Conversion Phase 
 
@@ -504,8 +505,8 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'DispatchInBackground', false, ...
-        'MaxEpochs',1, ...  
-        'MiniBatchSize', 20, ...
+        'MaxEpochs',50, ...  
+        'MiniBatchSize', 100, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-3, ... % from 1e-3
@@ -615,7 +616,7 @@ end
 diary off; diary on;
 
 %% ARCHIVE network, images, and matlab script
-sendFileList = {''};
+sendFileList = {''}; % --content-type=utf8 
 if (archiveNet)
    disp('Saving data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
@@ -632,17 +633,18 @@ if (archiveNet)
             fig_name = figHandle.Name;
             fig_name(isspace(fig_name)==1)='_';
             fig_name = regexprep(fig_name, '[ .,''!?():]', '');
-            fn = sprintf('%s/%s.pdf',foldername,fig_name);
+            fig_name = sprintf('%s.pdf',fig_name);
+            fn = sprintf('%s/%s',foldername,fig_name);
             export_fig(fn,figHandle(1));
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
-            sendFileList = strcat(sendFileList,{' -A "'},fullfile(fn),{'"'});
+            sendFileList = strcat(sendFileList,{' --content-type="application/pdf" --attach="'},fn,{'"'}); % --content-filename="'},fig_name,{'" 
             disp('Figure archived')
             close(figHandle(:));
         end
         
         diary off;
-        copyfile(logFile,foldername);
-%         sendFileList = strcat(sendFileList, {' -A "'},logFile,{'"'});
+        copyfile(logFileFull,foldername);
+        sendFileList = strcat(sendFileList, {' --content-type="text/plain" --attach="'},logFileFull,{'"'}); % --content-filename="'},logfile,{'"
         disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
@@ -667,9 +669,13 @@ if sendNotification
         string(hours), {':'}, ...
         string(mins), {':'}, ...
         string(secs), {' (hh:mm:ss)'});
-	mail_str = strcat({'cat "'}, logFile, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
-    unix(mail_str);
-    disp('Notification sent')
+% 	mail_str = strcat({'cat "'}, logFile, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
+mail_str = strcat({'echo " " | mail -s "'}, subject, {'" '}, sendFileList, {' 1239448@students.wits.ac.za'});
+    if ~(unix(char(mail_str)))
+        disp('Notification sent')
+    else
+        warning('Warning: mail notification failed')
+    end
 end
 
 return % end script
