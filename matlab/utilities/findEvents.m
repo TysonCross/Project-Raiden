@@ -1,10 +1,10 @@
-function output = findEvents(imds,eventID,blankFramesToIgnore)
-output =[];
+function output = findEvents(imds, eventID, blankFramesToIgnore)
+output = [];
 
-strokeEntries = indexLabel(imds,eventID);
+strokeEntries = indexLabel(imds, eventID);
 % ToDo: What if no strokes single stroke?
-index=1; % by def
-output =[];
+index = 1; % by def
+output = [];
 if numel(strokeEntries) == 1
     output = [strokeEntries(1) 1];
 elseif numel(strokeEntries > 1)
