@@ -1,4 +1,6 @@
 function imageSize = getResolution(network)
+        % [ height x width ]
+
     switch network
             case 'fcn8s'
                 imageSize = [227 227];
@@ -7,8 +9,8 @@ function imageSize = getResolution(network)
                 imageSize = [227 227];
                 
             case 'deeplabv3'
-                imageSize = [256 256];
-%                 imageSize = [512 256];
+%                 imageSize = [256 256];
+                imageSize = [256 512];
                 
             case 'segnet'
                 imageSize = [256 256];

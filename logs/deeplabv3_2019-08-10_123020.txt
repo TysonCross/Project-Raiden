@@ -1,0 +1,84 @@
+Checking sequences...
+Loaded metadata from cache...
+Loaded datastores from cache...
+Per-label pixel distribution:
+       <strong>Name</strong>        <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>___________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'lightning'    4.7808e+06      1.3836e+09   
+    'stroke'       6.6153e+05      2.6935e+07   
+    'sky'          8.6656e+08      1.6498e+09   
+    'cloud'        6.0089e+08      1.1435e+09   
+    'ground'       1.7668e+08      1.6499e+09   
+Using training/validation split from cache...
+Training images: 20140 
+Validation images: 5035 
+Testing images: 4420 
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-03
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 5.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 50
+                MiniBatchSize: 90
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 50
+           ValidationPatience: 8
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'parallel'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 1
+Beginning training...
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to the parallel pool (number of workers: 16).
+Training across multiple GPUs.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+|       1 |           1 |       00:06:11 |       15.61% |       25.12% |       1.9016 |       1.5196 |          0.0010 |
+Lab  1: 
+  Warning: GPU is low on memory, which can slow performance due to additional data transfers with main memory. Try reducing the 'MiniBatchSize' training option. This warning will not appear again unless you run the command: <a href="matlab:warning('on','nnet_cnn:warning:GPULowOnMemory')">warning('on','nnet_cnn:warning:GPULowOnMemory')</a>.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('trainNetwork', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m', 165)" style="font-weight:bold">trainNetwork</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m',165,0)">line 165</a>)
+Out of memory. Type "help memory" for your options.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 576)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',576,0)">line 576</a>)
+    [net, networkStatus.info] = trainNetwork(pximds, net, options);
+Caused by:
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.ParallelTrainer/train', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/ParallelTrainer.m', 95)" style="font-weight:bold">nnet.internal.cnn.ParallelTrainer/train</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/ParallelTrainer.m',95,0)">line 95</a>)
+    Error detected on worker 1.
+        Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.util.aggregateArrayFromObservations', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+util/aggregateArrayFromObservations.m', 12)" style="font-weight:bold">nnet.internal.cnn.util.aggregateArrayFromObservations</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+util/aggregateArrayFromObservations.m',12,0)">line 12</a>)
+        Out of memory. Type "help memory" for your options.} 
+MathWorks::System::IUserException [Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.internal.webwindow', '/usr/local/MATLAB/R2019a/toolbox/matlab/cefclient/+matlab/+internal/webwindow.m', 333)" style="font-weight:bold">matlab.internal.webwindow</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/cefclient/+matlab/+internal/webwindow.m',333,0)">line 333</a>)
+MATLABWindow application failed to launch. System exception: Cannot fork process for: /usr/local/MATLAB/R2019a/bin/glnxa64/MATLABWindow
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.controller.platformhost.CEFFigurePlatformHost/createView', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/+platformhost/CEFFigurePlatformHost.m', 58)" style="font-weight:bold">matlab.ui.internal.controller.platformhost.CEFFigurePlatformHost/createView</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/+platformhost/CEFFigurePlatformHost.m',58,0)">line 58</a>)
+                this.CEF = matlab.internal.webwindow(peerModelInfo.URL, peerModelInfo.DebugPort, position);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.controller.FigureController/createView', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/FigureController.m', 257)" style="font-weight:bold">matlab.ui.internal.controller.FigureController/createView</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/FigureController.m',257,0)">line 257</a>)
+            this.PlatformHost.createView(this.PeerModelInfo, pos, title, visible, resizable, windowState);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.componentframework.WebComponentController/add', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/WebComponentController.m', 75)" style="font-weight:bold">matlab.ui.internal.componentframework.WebComponentController/add</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/WebComponentController.m',75,0)">line 75</a>)
+        obj.createView( parentController, parentView, map );
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.controller.WebCanvasContainerController/add', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/WebCanvasContainerController.m', 51)" style="font-weight:bold">matlab.ui.internal.controller.WebCanvasContainerController/add</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/WebCanvasContainerController.m',51,0)">line 51</a>)
+            add@matlab.ui.internal.componentframework.WebContainerController( this, webComponent, parentController );
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.componentframework.WebControllerFactory/create', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/WebControllerFactory.m', 94)" style="font-weight:bold">matlab.ui.internal.componentframework.WebControllerFactory/create</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/WebControllerFactory.m',94,0)">line 94</a>)
+                    component.createController( parentController, [] );]
+MathWorks::System::IUserException [Dot indexing is not supported for variables of this type.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.componentframework.services.core.eventhandling.WebEventHandlingService/setProperty', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/+services/+core/+eventhandling/WebEventHandlingService.m', 201)" style="font-weight:bold">matlab.ui.internal.componentframework.services.core.eventhandling.WebEventHandlingService/setProperty</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/+services/+core/+eventhandling/WebEventHandlingService.m',201,0)">line 201</a>)
+       obj.ProxyView.PeerNode.setProperties( javaMap );
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.controller.WebCanvasContainerController/updateSceneChannel', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/WebCanvasContainerController.m', 138)" style="font-weight:bold">matlab.ui.internal.controller.WebCanvasContainerController/updateSceneChannel</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/WebCanvasContainerController.m',138,0)">line 138</a>)
+            obj.EventHandlingService.setProperty('SceneServer', propValue);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.controller.WebCanvasContainerController/set.Canvas', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/WebCanvasContainerController.m', 90)" style="font-weight:bold">matlab.ui.internal.controller.WebCanvasContainerController/set.Canvas</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+controller/WebCanvasContainerController.m',90,0)">line 90</a>)
+            updateSceneChannel(obj);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.ui.internal.componentframework.WebControllerFactory/create', '/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/WebControllerFactory.m', 94)" style="font-weight:bold">matlab.ui.internal.componentframework.WebControllerFactory/create</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/uitools/uicomponents/components/+matlab/+ui/+internal/+componentframework/WebControllerFactory.m',94,0)">line 94</a>)
+                    component.createController( parentController, [] );]

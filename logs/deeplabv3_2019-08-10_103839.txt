@@ -1,0 +1,62 @@
+Checking sequences...
+Loaded metadata from cache...
+Loaded datastores from cache...
+Per-label pixel distribution:
+       <strong>Name</strong>        <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>___________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'lightning'    4.7808e+06      1.3836e+09   
+    'stroke'       6.6153e+05      2.6935e+07   
+    'sky'          8.6656e+08      1.6498e+09   
+    'cloud'        6.0089e+08      1.1435e+09   
+    'ground'       1.7668e+08      1.6499e+09   
+Using training/validation split from cache...
+Training images: 20140 
+Validation images: 5035 
+Testing images: 4420 
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-03
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 5.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 50
+                MiniBatchSize: 100
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 50
+           ValidationPatience: 8
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'parallel'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 1
+Beginning training...
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to the parallel pool (number of workers: 16).
+Training across multiple GPUs.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+Lab  1: 
+  Warning: GPU is low on memory, which can slow performance due to additional data transfers with main memory. Try reducing the 'MiniBatchSize' training option. This warning will not appear again unless you run the command: <a href="matlab:warning('on','nnet_cnn:warning:GPULowOnMemory')">warning('on','nnet_cnn:warning:GPULowOnMemory')</a>.
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('trainNetwork', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m', 165)" style="font-weight:bold">trainNetwork</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m',165,0)">line 165</a>)
+Out of memory. Type "help memory" for your options.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 576)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',576,0)">line 576</a>)
+    [net, networkStatus.info] = trainNetwork(pximds, net, options);
+Caused by:
+    Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.ParallelTrainer/train', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/ParallelTrainer.m', 95)" style="font-weight:bold">nnet.internal.cnn.ParallelTrainer/train</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/ParallelTrainer.m',95,0)">line 95</a>)
+    Error detected on worker 1.
+        Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.util.VectorReporter/computeAndReport', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+util/VectorReporter.m', 56)" style="font-weight:bold">nnet.internal.cnn.util.VectorReporter/computeAndReport</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+util/VectorReporter.m',56,0)">line 56</a>)
+        Out of memory. Type "help memory" for your options.} 

@@ -7,7 +7,7 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'deeplabv3';
+network = 'deeplabv3'; 
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -22,8 +22,8 @@ network = 'deeplabv3';
 
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
-partitionData       = 0         % if true, re-split Test/Training (warning)
-resplitValidation   = 0         % if true, re-split Training/Validation
+partitionData       = 1         % if true, re-split Test/Training (warning)
+resplitValidation   = 1         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
@@ -505,7 +505,7 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'DispatchInBackground', false, ...
-        'MaxEpochs',50, ...  
+        'MaxEpochs', 50, ...  
         'MiniBatchSize', 100, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
@@ -518,7 +518,7 @@ if (doTraining==true)
         'GradientThreshold', 10, ...
         'ValidationData',pximdsVal, ...
         'ValidationFrequency', 50,...
-        'ValidationPatience', 8, ...
+        'ValidationPatience', 6, ...
         'Verbose', 1, ...
         'VerboseFrequency',50,...
         'Plots','training-progress')
@@ -544,8 +544,8 @@ if (doTraining==true)
 %         'Plots','training-progress')
 
     % Define augmenting methods
-    pixelRange = [-20 20];
-    scaleRange = [0.9 1.1];
+    pixelRange = [-32 32];
+    scaleRange = [0.5 2.0];
     augmenter = imageDataAugmenter( ...
         'RandXReflection',true, ...
         'RandXTranslation',pixelRange, ...
@@ -616,7 +616,7 @@ end
 diary off; diary on;
 
 %% ARCHIVE network, images, and matlab script
-sendFileList = {''}; % --content-type=utf8 
+sendFileList = {''};
 if (archiveNet)
    disp('Saving data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
@@ -637,14 +637,14 @@ if (archiveNet)
             fn = sprintf('%s/%s',foldername,fig_name);
             export_fig(fn,figHandle(1));
             fprintf("%d figures exported to %s\n",length(figHandle),foldername);
-            sendFileList = strcat(sendFileList,{' --content-type="application/pdf" --attach="'},fn,{'"'}); % --content-filename="'},fig_name,{'" 
+            sendFileList = strcat(sendFileList,{' --content-type="application/pdf" --attach="'},fn,{'"'});
             disp('Figure archived')
             close(figHandle(:));
         end
         
         diary off;
         copyfile(logFileFull,foldername);
-        sendFileList = strcat(sendFileList, {' --content-type="text/plain" --attach="'},logFileFull,{'"'}); % --content-filename="'},logfile,{'"
+        sendFileList = strcat(sendFileList, {' --content-type="text/plain" --attach="'},logFileFull,{'"'});
         disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
@@ -669,7 +669,6 @@ if sendNotification
         string(hours), {':'}, ...
         string(mins), {':'}, ...
         string(secs), {' (hh:mm:ss)'});
-% 	mail_str = strcat({'cat "'}, logFile, {'" | mail -s "'}, subject, {'" '},sendFileList, {' 1239448@students.wits.ac.za'});
 mail_str = strcat({'echo " " | mail -s "'}, subject, {'" '}, sendFileList, {' 1239448@students.wits.ac.za'});
     if ~(unix(char(mail_str)))
         disp('Notification sent')
