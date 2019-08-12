@@ -2,7 +2,6 @@ function output = findEvents(imds, eventID, blankFramesToIgnore)
 output = [];
 
 strokeEntries = indexLabel(imds, eventID);
-% ToDo: What if no strokes single stroke?
 index = 1; % by def
 output = [];
 if numel(strokeEntries) == 1
