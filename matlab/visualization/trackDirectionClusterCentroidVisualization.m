@@ -6,9 +6,8 @@ fontSize = 16;
 frameStart = 7;
 frameEnd = 43;
 
-
 %% Main
-scr = get(groot,'ScreenSize');                              % screen resolution
+% scr = get(groot,'ScreenSize');                              % screen resolution
 % fig1 =  figure('Position',...                               % draw figure
 %     [1 scr(4)*3/5 scr(3)*3/5 scr(4)*3/5]);
 fig1 = figure('Position',[27,131,1661,785])
@@ -16,12 +15,6 @@ set(fig1,'numbertitle','off',...                            % Give figure useful
     'name','ELEN3012 Lightning Direction (DBScan clustering)')
 set(fig1, 'MenuBar', 'none');                               % Make figure clean
 set(fig1, 'ToolBar', 'none');                               %
-%c = listfonts
-set(0,'defaultAxesFontName', 'CMU Serif');                  % Make fonts pretty
-set(0,'defaultTextFontName', 'CMU Serif');                  %
-set(0,'defaultAxesFontSize', 14);                           % Make fonts readable
-set(0,'defaultTextFontSize', 12);                           %
-set(groot,'FixedWidthFontName', 'ElroNet Monospace')        %
 
 jj = frameStart;
 keepPlaying = true;
@@ -71,7 +64,7 @@ while keepPlaying
 
     % show results
     subplot(2, 4, 1);  
-    imshow(maskedImage,[])
+    plot_input = imshow(maskedImage,[])
     xlim([0 x_max-1])
     ylim([0 y_max-1])
     axis on image;
@@ -95,7 +88,7 @@ while keepPlaying
     % plot points
     subplot(2, 4, 2);
     if numel(pointImage)>0
-        scatter(pointImage(:,1),pointImage(:,2),10,'.');
+        plot_point = scatter(pointImage(:,1),pointImage(:,2),10,'.');
     else
         cla;
     end
@@ -145,7 +138,7 @@ while keepPlaying
         idx(~corepts)=[];
 
         subplot(2, 4, 5);
-        gscatter(pointImage(:,1),pointImage(:,2),idx);
+        plot_clusters = gscatter(pointImage(:,1),pointImage(:,2),idx);
         axis on image;
         set(gca, 'YDir','reverse')
         xlim([0 255])
@@ -180,13 +173,13 @@ while keepPlaying
         weightedCentre = round(clusterCentres{index});
 
         centroidMarker(jj,:) = weightedCentre;
-        
         pointImage =  clusters{index};
 
         subplot(2, 4, 6);
-        scatter(pointImage(:,1),pointImage(:,2));
+        cla
+        plot_reduced = scatter(pointImage(:,1),pointImage(:,2));
         hold on
-        scatter(weightedCentre(1),weightedCentre(2),'filled','r');
+        plot_centroid = scatter(weightedCentre(1),weightedCentre(2),'filled','r');
         axis on image;
         set(gca, 'YDir','reverse');
         xlim([0 255]);
@@ -194,15 +187,14 @@ while keepPlaying
         title(strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']'))
         hold off
         
-%         figure(2)
         subplot(2, 4, [3, 4, 7, 8] )
 %         scatter(centroidMarker(:,1),centroidMarker(:,2),50)
 %         hold on
-        imshow(1-reconstructedImage,[])
+        plot_reconstructed = imshow(1-reconstructedImage,[])
         axis on image;
         title('Reconstructed Image','fontsize',fontSize);
         hold on
-        offset = 8;
+        offset = [6 0];
         for kk=2:size(centroidMarker,1)
             if (~min(centroidMarker(kk,:)==[0 0]) && ~min(centroidMarker(kk-1,:)==[0 0]))
                 p0 = centroidMarker(kk-1,:);
@@ -210,7 +202,7 @@ while keepPlaying
                 vectarrow(p0,p1);
                 direction{kk} = p1-p0;
                 set(gca, 'YDir','reverse')
-                text(p1(1)+offset,p1(2)+offset,string(kk),...
+                text(p1(1)+offset(1),p1(2)+offset(2),string(kk),...
                     'Color','red','FontSize',10);
                 hold on
             end
@@ -246,10 +238,22 @@ while keepPlaying
         
     else
         subplot(2, 4, 5);
-        cla
+%         cla
+        set(gca,'Color',[0.5 0.5 0.5 0.5]);
+        for ii=1:numel(plot_clusters)
+            plot_clusters(ii).Color = [0.5 0.5 0.5 0.5];
+        end
+        legend('hide');
         hold off
         subplot(2, 4, 6);
-        cla
+        %         cla
+        set(gca,'Color',[0.5 0.5 0.5 0.5]);
+        for ii=1:numel(plot_reduced)
+            plot_reduced(ii).MarkerFaceColor  = [0.5 0.5 0.5];
+            plot_reduced(ii).MarkerEdgeColor  = [0.5 0.5 0.5];
+        end
+%         for ii=1:numel(plot_centroid)
+        plot_centroid.MarkerFaceColor  = [0.18 0.18 0.18];
         hold off
     end
     

@@ -8,14 +8,15 @@ function imds = resizeImages(imds, imageSize, destinationPath, outerProgressBar,
         preProcess = false;
     end
 
+    if preProcess
+        destinationPath = strcat(destinationPath,'_processed');
+    end
+    
     if ~exist(destinationPath,'dir')
         mkdir(destinationPath)
     end
 
-    if preProcess
-        destinationPath = strcat(destinationPath,'_processed');
-    end
-     
+    
     y = imageSize(1);
     x = imageSize(2);
     
@@ -36,21 +37,17 @@ function imds = resizeImages(imds, imageSize, destinationPath, outerProgressBar,
         
         if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file')
 
-            % Convert to 8-bit
-%             I = uint8(Im16/256);
-            Igpu = gpuArray(uint8(Im16/256));
-
-            % Resize image.
-            Igpu2 = imresize(Igpu,[y x]);
-            
+            % Reduce Noise, improve contrast
             if preProcess
-               Igpu3 = imadjust(Igpu2);
-               clear Igpu2
-               Igpu2 = medfilt2(Igpu3);
+                Im16 = improve_contrast(Im16);
+                Im16 = noise_removal(Im16b, 2);  
             end
-
-            I = gather(Igpu2);
-%             figure, montage({Im16,I})
+            
+            % convert to 8-bit
+            I = uint8(Im16/255);
+            
+            % Resize image.
+            I = imresize(I,[y x]);
 
             % Write to disk.
             imwrite(I,fullfile(destinationPath,strcat(filename,ext)));

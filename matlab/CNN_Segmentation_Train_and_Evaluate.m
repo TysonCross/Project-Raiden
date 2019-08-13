@@ -17,27 +17,30 @@ network = 'deeplabv3';
     'u-net' TBD
 %}
 
-% Percent of data to train with (0-1)
-% percentage = 1.0;
-
 % Phases to run
-forceConvert        = 0         % if true, resize/process new data (slow)
-partitionData       = 1         % if true, re-split Test/Training (warning)
-resplitValidation   = 1         % if true, re-split Training/Validation
+forceConvert        = 1         % if true, resize/process new data (slow)
+preProcess          = 1         % if true, constrast + median on input data
+partitionData       = 0         % if true, re-split Test/Training (warning)
+resplitValidation   = 0         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
-doTraining         	= 1         % if true, perform training
+doTraining         	= 0         % if true, perform training
 recoverCheckpoint   = 0         % if training did not finish, use checkpoint
-archiveNet          = 1         % archive NN, data and figures to subfolder
-saveImages          = 1         % generate performance figures
-sendNotification    = 1         % send email notification on completion
-evaluateNet         = 1         % if true, evaluate performance on test set
+archiveNet          = 0         % archive NN, data and figures to subfolder
+saveImages          = 0         % generate performance figures
+sendNotification    = 0         % send email notification on completion
+evaluateNet         = 0         % if true, evaluate performance on test set
+
+% resolution setup
+imageSize = getResolution(network)
+y = imageSize(1);
+x = imageSize(2);
+rez = strcat(string(x),'x',string(y));
 
 % global setup
 rootPath = '/home/tyson/Raiden/';
 scriptPath = fullfile(rootPath,'matlab');
 setupColors;
-preProcess = true;              % if true, constrast & median filter on input
-networkStatus.name = strcat(network,'_', ...
+networkStatus.name = strcat(network,'_', rez, '_', ...
     strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
 
 cachePath = fullfile(scriptPath,'cache');
@@ -48,12 +51,6 @@ checkpointPath = fullfile(rootPath,'networks','checkpoints');
 if ~exist(checkpointPath,'dir')
     mkdir(checkpointPath);
 end
-
-% resolution setup
-imageSize = getResolution(network);
-y = imageSize(1);
-x = imageSize(2);
-rez = strcat(string(x),'x',string(y));
 
 logFile = strcat(networkStatus.name,'.txt');
 logFileFull = fullfile(rootPath,'logs',logFile)
