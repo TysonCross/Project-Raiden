@@ -1,5 +1,9 @@
-function pxds = resizePixelLabels(pxds, imageSize, destinationPath)
+function pxds = resizePixelLabels(pxds, imageSize, destinationPath, outerProgressBar)
 % Resize pixel label data to [sz(1) sz(2)].
+
+    if nargin < 4
+        outerProgressBar = false;
+    end
 
     if ~exist(destinationPath,'dir')
         mkdir(destinationPath)
@@ -14,9 +18,11 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath)
     r = 1;
     imageList = strings(1,N);
     
-%     rez = strcat(string(x),'x',string(y));
-%     str = char(strcat('Converting labels to ',{' '},rez));
-%     progressbar('',str)
+    if ~outerProgressBar
+        rez = strcat(string(x),'x',string(y));
+        str = char(strcat('Converting labels to ',{' '},rez));
+        progressbar(str)
+    end
     
     while hasdata(pxds)
         [C, info] = read(pxds);
@@ -41,10 +47,19 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath)
         end
         
         imageList(r) = fullfile(destinationPath,strcat(filename,ext));
-        progressbar([],r/N);
+        
+        if outerProgressBar
+            progressbar([],r/N);
+        else
+            progressbar(r/N);
+        end
         r = r + 1;
     end
 
-    progressbar([],1);
+    if outerProgressBar
+        progressbar([],1);
+    else
+        progressbar(1);
+    end
     pxds = pixelLabelDatastore(imageList,labelNames,labelIDs_scalar);
 end

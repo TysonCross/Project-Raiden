@@ -1,11 +1,5 @@
 % Overlay colors
-cmap = [
-    255 000 000;...    % leader
-    255 255 255;...    % stroke
-    000 000 255;...    % sky
-    000 255 255;...    % cloud
-    000 255 000;...    % ground
-    ];
+cmap = labelIDs;
 
-% Normalize between [0 1].
-cmap = cmap ./ 255;
+% Normalize between [0 1], to one s.f.
+cmap = round(cmap ./ 255, 1);

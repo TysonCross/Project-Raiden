@@ -1,35 +1,29 @@
+% Label enum class required
+% setupColors uses labelIds to display the label colors.
+
 labelIDs = [... 
     255 000 000;...    % leader
     255 255 255;...    % stroke
     000 000 255;...    % sky
     000 255 255;...    % cloud
     000 255 000;...    % ground
+    000 127 000;...    % other
     ];
 
 labelIDs_scalar = [... 
-    1 ...    % leader
-    2 ...    % stroke
-    3 ...    % sky
-    4 ...    % cloud
-    5 ...    % ground
+    double(Label.leader) ...    % leader (1)
+    double(Label.stroke) ...    % stroke (2)
+    double(Label.sky)    ...    % sky    (3)
+    double(Label.cloud)  ...    % cloud  (4)
+    double(Label.ground) ...    % ground (5)
+    double(Label.other)  ...    % other  (6)
     ];
 
 labelNames = [
-    "lightning" , ...
+    "leader" , ...
     "stroke"    , ...
     "sky"       , ...
     "cloud"     , ...
-    "ground"
+    "ground"    , ...
+    "other"
     ];
-
-% old ordering:
-% labelID_scalar = [... 
-%     1;...    % leader
-%     2;...    % stroke
-%     4;...    % cloud
-%     3;...    % sky
-%     5;...    % ground
-%     ];
-
-
-

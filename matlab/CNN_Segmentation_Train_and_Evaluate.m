@@ -7,7 +7,7 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'alexnet'; 
+network = 'deeplabv3'; 
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -36,8 +36,9 @@ evaluateNet         = 1         % if true, evaluate performance on test set
 rootPath = '/home/tyson/Raiden/';
 scriptPath = fullfile(rootPath,'matlab');
 setupColors;
-
-networkStatus.name = strcat(network,'_',strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
+preProcess = true;              % if true, constrast & median filter on input
+networkStatus.name = strcat(network,'_', ...
+    strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
 
 cachePath = fullfile(scriptPath,'cache');
 if ~exist(cachePath,'dir')
@@ -71,10 +72,12 @@ loadSequences;
 if (forceConvert==false)
     disp('Checking sequences...')
     % hashCheck:
-    if (exist(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'file')) ...
+    if (exist(fullfile(rootPath,'data','resized',rez,...
+            'fingerprint.mat'),'file')) ...
          
         newHash = mlreportgen.utils.hash(strcat(sequences{:},rez));
-        load(fullfile(rootPath,'data','resized',rez,'fingerprint.mat'),'fingerprint');
+        load(fullfile(rootPath,'data','resized',rez, ...
+            'fingerprint.mat'),'fingerprint');
         if (fingerprint==newHash)
             convertData=false;
         else
@@ -89,15 +92,19 @@ if (forceConvert==false)
             for i=1:numel(converted)
                 if strcmpi(converted(i),sequences(i))
                     if ~forceConvert
-                        warning('Source and conversion folders match. Data will not converted. Enable forceConvert to override')
+                        warning(strcat({'Source and conversion folders '}, ...
+                            {'match. Data will not converted. Enable '}, ...
+                            {'forceConvert to override'}))
                         convertData=false;
                         break
                     else
-                        warning('Source and conversion folders match but forceConvert is on');
+                        warning(strcat({'Source and conversion folders '},...
+                            {'match but forceConvert is on'}));
                         convertData=true;
                     end
                 else
-                    warning('Converted images differ from source. New data will be be converted.')
+                    warning(strcat({'Converted images differ from '},...
+                        {'source. New data will be be converted.'}))
                     convertData=true;
                 end
             end
@@ -128,7 +135,7 @@ if ( (convertData==true) || (forceConvert==true) )
             labelNames,labelIDs,'FileExtensions','.tif');
     end
     
-    disp("Resizing images and labels, converting to categorical label form...")   
+    disp("Resizing images & labels, converting labels RGB -> categorical ...")   
     y = imageSize(1);
     x = imageSize(2);
     rez = strcat(string(x),'x',string(y));
@@ -136,14 +143,16 @@ if ( (convertData==true) || (forceConvert==true) )
     progressbar('Resizing image sequences',str)
     for j = 1:numel(imageFolders)
         % [Convert all 'tifs' to imageSize]
-        imds{j} = resizeImages(imds{j}, imageSize, resizedImageFolders{j});
+        imds{j} = resizeImages(imds{j}, imageSize, ...
+            resizedImageFolders{j}, true, preProcess);
         progressbar(j/numel(imageFolders),[])
     end
     str = char(strcat('Converting labels to ',{' '},rez));
     progressbar('Resizing and converting label sequences',str)
     for j = 1:numel(imageFolders)
         % [Convert all 'mask' to imageSize, and RGB -> categorical]
-        pxds{j} = resizePixelLabels(pxds{j}, imageSize, resizedLabelFolders{j});
+        pxds{j} = resizePixelLabels(pxds{j}, imageSize, ...
+            resizedLabelFolders{j}, false);
         progressbar(j/numel(imageFolders),[])
     end
  progressbar(1)
@@ -156,7 +165,8 @@ if ( (convertData==true) || (forceConvert==true) )
     else
         disp("Data converted successfully")
         fingerprint = mlreportgen.utils.hash(strcat(converted{:},rez));
-        save(fullfile(rootPath,'data','resized',rez,'fingerprint'),'fingerprint');
+        save(fullfile(rootPath,'data','resized',rez, ...
+            'fingerprint'),'fingerprint');
     end
     
     clear imds pxds resolutionList fingerprint newHash 
@@ -295,7 +305,8 @@ else
                     useCachedNet=0;
                 case btn2
                     clear q msg title btn1 btn2
-                    error(['Error: No network cache found at: ',fullfile(cachePath,'network')])
+                    error(['Error: No network cache found at: ', ...
+                        fullfile(cachePath,'network')])
             end
             clear q msg title btn1 btn2
         end
@@ -326,66 +337,15 @@ else
                 clear lgraph
 
             case 'alexnet'
-                net = alexnet;
-                layers = net.Layers;
-
-                % fc6 is layers 17
-                idx = 17;
-                weights = layers(idx).Weights';
-                weights = reshape(weights, 6, 6, 256, 4096);
-                bias = reshape(layers(idx).Bias, 1, 1, []);
-                layers(idx) = convolution2dLayer(6, 4096, 'NumChannels', 256, 'Name', 'fc6');
-                layers(idx).Weights = weights;
-                layers(idx).Bias = bias;
-
-                % fc7 is layers 20
-                idx = 20;
-                weights = layers(idx).Weights';
-                weights = reshape(weights, 1, 1, 4096, 4096);
-                bias = reshape(layers(idx).Bias, 1, 1, []);
-                layers(idx) = convolution2dLayer(1, 4096, 'NumChannels', 4096, 'Name', 'fc7');
-                layers(idx).Weights = weights;
-                layers(idx).Bias = bias;
-
-                conv1 = layers(2);
-                conv1New = convolution2dLayer(conv1.FilterSize, conv1.NumFilters, ...
-                    'Stride', conv1.Stride, ...
-                    'Padding', [100 100], ...
-                    'NumChannels', conv1.NumChannels, ...
-                    'WeightLearnRateFactor', conv1.WeightLearnRateFactor, ...
-                    'WeightL2Factor', conv1.WeightL2Factor, ...
-                    'BiasLearnRateFactor', conv1.BiasLearnRateFactor, ...
-                    'BiasL2Factor', conv1.BiasL2Factor, ...
-                    'Name', conv1.Name);
-                conv1New.Weights = conv1.Weights;
-                conv1New.Bias = conv1.Bias;
-
-                layers(2) = conv1New;
-                layers(end-2:end) = [];
-
-                upscore = transposedConv2dLayer(64, numClasses, ...
-                    'NumChannels', numClasses,...
-                    'Stride', 32,...
-                    'Name', 'upscore');
-
-                layers = [
-                        layers
-                        convolution2dLayer(1, numClasses, 'Name', 'score_fr');
-                        upscore
-                        crop2dLayer('centercrop', 'Name', 'score')
-                        softmaxLayer('Name', 'softmax')
-                        pxLayer
-                        ];
-
-                lgraph = layerGraph(layers);
-                lgraph = connectLayers(lgraph, 'data', 'score/ref');
+                lgraph = helperAlexNet(numClasses, pxLayer);
                 net = lgraph;
                 
                 clear idx layers upscore bias weights upscore conv1New
                 clear conv1 lgraph
                 
             case 'deeplabv3'
-                lgraph = helperDeeplabv3PlusResnet18([imageSize 3], numClasses);
+                lgraph = helperDeeplabv3PlusResnet18([imageSize 3], ...
+                    numClasses);
                 lgraph = replaceLayer(lgraph,"classification", pxLayer);
                 net = lgraph;
                 
@@ -503,7 +463,7 @@ if (doTraining==true)
     % Define training options.
 %     ToDo: trainingDefaults? With individual overrides?
     options = trainingOptions('sgdm', ...
-        'ExecutionEnvironment','auto', ... % 'DispatchInBackground', false, ...
+        'ExecutionEnvironment','auto', ...
         'MaxEpochs', 50, ...  
         'MiniBatchSize', 100, ...
         'Shuffle','every-epoch', ...
@@ -584,7 +544,8 @@ if (networkStatus.trained && evaluateNet)
         'WriteLocation',testDir, ...
         'Verbose',false);
 
-    metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest,'Verbose',false);
+    metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest, ...
+        'Verbose',false);
     metrics.DataSetMetrics
     metrics.ClassMetrics
     
@@ -616,15 +577,18 @@ if (archiveNet)
             fig_name = sprintf('%s.pdf',fig_name);
             fn = sprintf('%s/%s',foldername,fig_name);
             export_fig(fn,figHandle(1));
-            fprintf("%d figures exported to %s\n",length(figHandle),foldername);
-            sendFileList = strcat(sendFileList,{' --content-type="application/pdf" --attach="'},fn,{'"'});
+            fprintf("%d figures exported to %s\n", ...
+                length(figHandle),foldername);
+            sendFileList = strcat(sendFileList, ...
+                {' --content-type="application/pdf" --attach="'},fn,{'"'});
             disp('Figure archived')
             close(figHandle(:));
         end
         
         diary off;
         copyfile(logFileFull,foldername);
-        sendFileList = strcat(sendFileList, {' --content-type="text/plain" --attach="'},logFileFull,{'"'});
+        sendFileList = strcat(sendFileList, ...
+            {' --content-type="text/plain" --attach="'},logFileFull,{'"'});
         disp('Log archived')
    else
        str = strcat(string(currentFileName), {' does not exist!'});
@@ -641,7 +605,6 @@ diary off;
 
 if sendNotification
     [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
-%     subject = strcat('ELEN4012 - Training for', {' '} , networkStatus.name, {' complete'});
     subject = strcat({'Training for '}, networkStatus.name, ...
         {' has completed at '}, ...
         datestr(datetime('now'),31), ...
@@ -649,7 +612,8 @@ if sendNotification
         string(hours), {':'}, ...
         string(mins), {':'}, ...
         string(secs), {' (hh:mm:ss)'});
-mail_str = strcat({'echo " " | mail -s "'}, subject, {'" '}, sendFileList, {' 1239448@students.wits.ac.za'});
+    mail_str = strcat({'echo " " | mail -s "'}, subject, ...
+        {'" '}, sendFileList, {' 1239448@students.wits.ac.za'});
     if ~(unix(char(mail_str)))
         disp('Notification sent')
     else

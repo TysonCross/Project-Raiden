@@ -3,10 +3,8 @@ clc;
 close all;
 
 fontSize = 16;
-frameStart = 1;
-frameEnd = 100;
-% frameStart = 8;
-% frameEnd = 25;
+frameStart = 7;
+frameEnd = 43;
 
 
 %% Main
@@ -34,8 +32,9 @@ while keepPlaying
 
     
     % Get the name of the image the user wants to use.
-    folder = '/home/tyson/Documents/MATLAB/temp/deeplabv3_2019-08-10_171747/';
+%     folder = '/home/tyson/Documents/MATLAB/temp/deeplabv3_2019-08-10_171747/';
 %     folder = '/home/tyson/Documents/MATLAB/temp/deeplabv3_2019-08-09_202933/';
+    folder = '~/Desktop/test/output';
     filename = sprintf('pixelLabel.%04d.png',jj);
     fullFileName = fullfile(folder, filename);
 
@@ -108,7 +107,7 @@ while keepPlaying
     hold off
 
     % choose minimum cluster size
-    minpts = min(round(sqrt(x_max)),10);
+    minpts = min(round(sqrt(x_max)),4);
 
 %     kD = pdist2(X,X,'euc','Smallest',minpts); % The minpts smallest pairwise distances
 
@@ -121,7 +120,7 @@ while keepPlaying
 %     axis on image;
 
     % choose radius about centre
-    epsilon = 12;
+    epsilon = 10;
     if numel(pointImage)>0
         [idx, corepts] = dbscan(pointImage,epsilon,minpts);
     else
