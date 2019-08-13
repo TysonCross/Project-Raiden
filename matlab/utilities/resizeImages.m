@@ -41,14 +41,15 @@ function imds = resizeImages(imds, imageSize, destinationPath, outerProgressBar,
             Igpu = gpuArray(uint8(Im16/256));
 
             % Resize image.
-            Igpu = imresize(Igpu,[y x]);
+            Igpu2 = imresize(Igpu,[y x]);
             
             if preProcess
-               Igpu = imadjust(Igpu);
-               Igpu = medfilt2(Igpu);
+               Igpu3 = imadjust(Igpu2);
+               clear Igpu2
+               Igpu2 = medfilt2(Igpu3);
             end
 
-            I = gather(Igpu);
+            I = gather(Igpu2);
 %             figure, montage({Im16,I})
 
             % Write to disk.
