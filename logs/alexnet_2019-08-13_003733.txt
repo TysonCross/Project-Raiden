@@ -1,0 +1,8 @@
+Converting Data...
+Resizing images and labels, converting to categorical label form...
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('progressbar', '/home/tyson/Documents/MATLAB/progressbar.m', 295)" style="font-weight:bold">progressbar</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/progressbar.m',295,0)">line 295</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('resizeImages', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m', 37)" style="font-weight:bold">resizeImages</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m',37,0)">line 37</a>)
+        progressbar([],r/N);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 139)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',139,0)">line 139</a>)
+        imds{j} = resizeImages(imds{j}, imageSize, resizedImageFolders{j});} 
