@@ -1,4 +1,5 @@
 function output = findEvents(imds, eventID, blankFramesToIgnore)
+%#ok<*AGROW>
 output = [];
 
 strokeEntries = indexLabel(imds, eventID);
@@ -6,7 +7,7 @@ index = 1; % by def
 output = [];
 if numel(strokeEntries) == 1
     output = [strokeEntries(1) 1];
-elseif numel(strokeEntries > 1)
+elseif numel(strokeEntries) > 1
     
     for i=1 : numel(strokeEntries)-1
         currentFrame = strokeEntries(i);
@@ -19,7 +20,7 @@ elseif numel(strokeEntries > 1)
                 firstOfEvent = strokeEntries(i-(index-2)) ;
                 output = [output; ...
                     [ strokeEntries(i-(index-2)), ...
-                    (lastOfEvent- firstOfEvent+1)] ];
+                    (lastOfEvent- firstOfEvent+1)] ]; 
             end
         else
             lastOfEvent = strokeEntries(i);
