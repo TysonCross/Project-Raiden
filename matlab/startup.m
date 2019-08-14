@@ -5,3 +5,5 @@ set(0,'defaultAxesFontSize', 14);                           % Make fonts readabl
 set(0,'defaultTextFontSize', 12);                           %
 set(groot,'FixedWidthFontName', 'ElroNet Monospace')        %
 %c = listfonts
+tempdir = '/home/tyson/Documents/MATLAB/tmp';
+delete(fullfile(tempdir,'*'));
