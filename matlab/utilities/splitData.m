@@ -1,3 +1,17 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             SPLITDATA.M
+% [trainIndex, test] = splitData(imageFolders, splitPercent)
+% splitData is a function used to create an index for the training and
+% testing data based on the requested split percentage. This allows the for
+% example, testing the 'true' performance of a CNN, on unseen footage.
+%
+% INPUT : imageFolders = A list of folders containg image sequences 
+%         splitPercent = 0 to 1 value of the original data to use as 
+%                        training data
+%
+% OUTPUT: trainIndex = The index of the seqeunce images to use for training
+%         test       = The index of the sequence images to use for testing 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
   
     if (splitPercent==0)      
