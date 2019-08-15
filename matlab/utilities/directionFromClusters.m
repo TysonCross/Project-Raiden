@@ -1,6 +1,16 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                        DIRECTIONFROMCLUSTERS.m
+% This function determines the most likely direction using the largest cluster 
+% by determining the progression of the centroid of the cluster over several frames
+% INPUT:
+%        filePath: The filepath for full events segmented images to use
+%        frameStart: The determined start of a lighting event
+%        frameLength: The number of frames to consider as part of the classifiable event
+% OUTPUT:
+%        dirVector: The resultant vector of produced by the movement of the centroids
+%        dir: The direction of the resultant vector
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [dirVector, dir] = directionFromClusters(filePath, frameStart, frameLength)
-% Calculates the direction of the movement of input pixels, using DBSCAN
-% and centroid of the largest cluster.
 
 %{ 
  % passed into script/function:

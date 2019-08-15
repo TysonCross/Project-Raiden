@@ -1,6 +1,9 @@
-%% Take in Sequence, options and trained network
-%Basic defined vars
-%ToDo: add selection options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                          DISPLAYSEGMENTRESULTS.M
+% Take in Sequence, options and trained network
+% Basic defined vars
+% ToDo: add selection options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 labelButton= true;
 
 %% Define root path
