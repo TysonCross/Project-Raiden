@@ -7,7 +7,7 @@ labelIDs = [...
     000 000 255;...    % sky
     000 255 255;...    % cloud
     000 255 000;...    % ground
-    000 127 000;...    % other
+    255 255 000;...    % other
     ];
 
 labelIDs_scalar = [... 

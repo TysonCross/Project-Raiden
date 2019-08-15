@@ -18,7 +18,7 @@ network = 'deeplabv3';
 %}
 
 % Phases to run
-forceConvert        = 1         % if true, resize/process new data (slow)
+forceConvert        = 0         % if true, resize/process new data (slow)
 preProcess          = 1         % if true, constrast + median on input data
 partitionData       = 1         % if true, re-split Test/Training (warning)
 resplitValidation   = 1         % if true, re-split Training/Validation
@@ -72,7 +72,8 @@ if (forceConvert==false)
     if (exist(fullfile(rootPath,'data','resized',rez,...
             'fingerprint.mat'),'file')) ...
          
-        newHash = mlreportgen.utils.hash(strcat(sequences{:},rez));
+        hashString = strcat(sequences{:},rez);
+        newHash = mlreportgen.utils.hash(hashString);
         load(fullfile(rootPath,'data','resized',rez, ...
             'fingerprint.mat'),'fingerprint');
         if (fingerprint==newHash)
@@ -89,19 +90,22 @@ if (forceConvert==false)
             for i=1:numel(converted)
                 if strcmpi(converted(i),sequences(i))
                     if ~forceConvert
-                        warning(strcat({'Source and conversion folders '}, ...
+                        str = strcat({'Source and conversion folders '}, ...
                             {'match. Data will not converted. Enable '}, ...
-                            {'forceConvert to override'}))
+                            {'forceConvert to override'});
+                        warning(char(str))
                         convertData=false;
                         break
                     else
-                        warning(strcat({'Source and conversion folders '},...
-                            {'match but forceConvert is on'}));
+                        str = strcat({'Source and conversion folders '},...
+                            {'match but forceConvert is on'});
+                        warning(char(str))
                         convertData=true;
                     end
                 else
-                    warning(strcat({'Converted images differ from '},...
-                        {'source. New data will be be converted.'}))
+                    str = strcat({'Converted images differ from '},...
+                        {'source. New data will be be converted.'});
+                    warning(char(str))
                     convertData=true;
                 end
             end
@@ -118,6 +122,7 @@ if ( (convertData==true) || (forceConvert==true) )
     
     % [Get list of sequences]
     loadSequences;
+
     resizedImageFolders = fullfile(rootPath,'data','resized', ...
         rez,sequences,'image');
     resizedLabelFolders = fullfile(rootPath,'data','resized', ...
@@ -136,12 +141,16 @@ if ( (convertData==true) || (forceConvert==true) )
     y = imageSize(1);
     x = imageSize(2);
     rez = strcat(string(x),'x',string(y));
-    str = char(strcat('Resizing images to ',{' '},rez));
-    progressbar('Resizing image sequences',str)
+    if preProcess
+        str = char(strcat('Processing images, resizing to ',{' '},rez));
+    else
+        str = char(strcat('Resizing images to ',{' '},rez));
+    end
+    progressbar('Processing image sequences',str)
     for j = 1:numel(imageFolders)
         % [Convert all 'tifs' to imageSize]
         imds{j} = resizeImages(imds{j}, imageSize, ...
-            resizedImageFolders{j}, true, preProcess);
+            resizedImageFolders{j}, forceConvert, true, preProcess);
         progressbar(j/numel(imageFolders),[])
     end
     str = char(strcat('Converting labels to ',{' '},rez));
@@ -149,7 +158,7 @@ if ( (convertData==true) || (forceConvert==true) )
     for j = 1:numel(imageFolders)
         % [Convert all 'mask' to imageSize, and RGB -> categorical]
         pxds{j} = resizePixelLabels(pxds{j}, imageSize, ...
-            resizedLabelFolders{j}, false);
+            resizedLabelFolders{j},forceConvert, true);
         progressbar(j/numel(imageFolders),[])
     end
  progressbar(1)
@@ -161,12 +170,13 @@ if ( (convertData==true) || (forceConvert==true) )
         error('Conversion failed');
     else
         disp("Data converted successfully")
-        fingerprint = mlreportgen.utils.hash(strcat(converted{:},rez));
+        hashString = strcat(converted{:},rez);
+        fingerprint = mlreportgen.utils.hash(hashString);
         save(fullfile(rootPath,'data','resized',rez, ...
             'fingerprint'),'fingerprint');
     end
     
-    clear imds pxds resolutionList fingerprint newHash 
+    clear imds pxds resolutionList fingerprint newHash hashString
     clear imageFolders maskFolders forceConvert convertData
 
     save(fullfile(cachePath,'metadata'), ...
@@ -211,7 +221,7 @@ if (partitionData==true)
         'FileExtensions','.tif');
     pxdsTest = pixelLabelDatastore(labelFolder(testIndex),...
         labelNames,labelIDs_scalar,'FileExtensions','.tif');
-    assert(numel(imdsTest.Files)==numel(pxdsTest.Files));
+    assert(numel(imdsTest.Files)==numel(pxdsTest.Files))
 
     % Calculate the class weights 
     disp("Counting per-label pixel distribution...")  % ToDo: This is slow!

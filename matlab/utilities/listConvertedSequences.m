@@ -1,6 +1,5 @@
 function pathNames = listConvertedSequences(rootPath, imageSize)
-% returns a list of folders that have been converted
-
+% returns a list of folders that have been converted  
     y = imageSize(1);
     x = imageSize(2);
     rez = strcat(string(x),'x',string(y));
@@ -11,5 +10,4 @@ function pathNames = listConvertedSequences(rootPath, imageSize)
     pathNames = pathNames([~startsWith(pathNames,rootPath)]);
     pathNames = pathNames([~endsWith(pathNames,'/')]);
     pathNames = pathNames([strlength(pathNames)>17]);
-    
 end

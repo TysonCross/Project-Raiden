@@ -1,0 +1,351 @@
+Checking sequences...
+Loaded metadata from cache...
+Partitioning test and training Data...
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('imageDatastore', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/imageDatastore.m', 125)" style="font-weight:bold">imageDatastore</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/imageDatastore.m',125,0)">line 125</a>)
+Cannot find files or folders matching:
+'/home/tyson/Raiden/data/resized/256x256/2017-11-14_200626/2017-11-14_200626_090/image'.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 216)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',216,0)">line 216</a>)
+    imdsTest = imageDatastore(imageFolder(testIndex),...} 
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',216,0)
+testIndex
+testIndex =
+  Columns 1 through 19
+     9    14    15    20    21    24    29    31    32    33    38    39    41    46    48    50    51    55    56
+  Columns 20 through 33
+    57    59    62    64    65    70    71    72    73    74    75    76    77    78
+imageFolder
+imageFolder =
+  1×78 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+  Columns 1 through 4
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 5 through 8
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 9 through 12
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 13 through 16
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 17 through 20
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 21 through 24
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 25 through 28
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 29 through 32
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 33 through 36
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 37 through 40
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 41 through 44
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 45 through 48
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 49 through 52
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 53 through 56
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 57 through 60
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 61 through 64
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 65 through 68
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 69 through 72
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 73 through 76
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 77 through 78
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+imageFolder{1}
+ans =
+    '/home/tyson/Raiden/data/resized/256x256/2017-02-10_162903/2017-02-10_162903_010/image'
+resizedImageFolders
+resizedImageFolders = 
+  1×78 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+  Columns 1 through 4
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 5 through 8
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 9 through 12
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 13 through 16
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 17 through 20
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 21 through 24
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 25 through 28
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 29 through 32
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 33 through 36
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 37 through 40
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 41 through 44
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 45 through 48
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 49 through 52
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 53 through 56
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 57 through 60
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 61 through 64
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 65 through 68
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 69 through 72
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 73 through 76
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 77 through 78
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+resizedImageFolders{1}
+ans =
+    '/home/tyson/Raiden/data/resized/256x256/2017-02-10_162903/2017-02-10_162903_010/image'
+preProcess
+preProcess =
+     1
+folderStr = 'image_processed';
+sequences
+sequences =
+  1×78 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+  Columns 1 through 4
+    {'2017-02-10_1629…'}    {'2017-02-10_1633…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 5 through 8
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 9 through 12
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 13 through 16
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 17 through 20
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 21 through 24
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 25 through 28
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 29 through 32
+    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}
+  Columns 33 through 36
+    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}
+  Columns 37 through 40
+    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}
+  Columns 41 through 44
+    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}
+  Columns 45 through 48
+    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1644…'}    {'2017-02-10_1644…'}
+  Columns 49 through 52
+    {'2017-02-10_1644…'}    {'2017-02-10_1644…'}    {'2017-02-10_1644…'}    {'2017-09-25_1832…'}
+  Columns 53 through 56
+    {'2017-09-25_1832…'}    {'2017-09-25_1832…'}    {'2017-10-21_1718…'}    {'2017-11-14_2005…'}
+  Columns 57 through 60
+    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}
+  Columns 61 through 64
+    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}
+  Columns 65 through 68
+    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}
+  Columns 69 through 72
+    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}    {'2017-11-22_1441…'}    {'2017-11-22_1441…'}
+  Columns 73 through 76
+    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}
+  Columns 77 through 78
+    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}
+resizedImageFolders = fullfile(rootPath,'data','resized', ...
+        rez,sequences,folderStr);
+resizedImageFolders
+resizedImageFolders = 
+  1×78 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+  Columns 1 through 4
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 5 through 8
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 9 through 12
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 13 through 16
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 17 through 20
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 21 through 24
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 25 through 28
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 29 through 32
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 33 through 36
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 37 through 40
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 41 through 44
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 45 through 48
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 49 through 52
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 53 through 56
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 57 through 60
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 61 through 64
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 65 through 68
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 69 through 72
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 73 through 76
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 77 through 78
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+resizedImageFolders{1}
+ans =
+    '/home/tyson/Raiden/data/resized/256x256/2017-02-10_162903/2017-02-10_162903_010/image_processed'
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',216,0)
+resizedImageFolders
+resizedImageFolders = 
+  1×78 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+  Columns 1 through 4
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 5 through 8
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 9 through 12
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 13 through 16
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 17 through 20
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 21 through 24
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 25 through 28
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 29 through 32
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 33 through 36
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 37 through 40
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 41 through 44
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 45 through 48
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 49 through 52
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 53 through 56
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 57 through 60
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 61 through 64
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 65 through 68
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 69 through 72
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 73 through 76
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 77 through 78
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+resizedLabelFolders
+resizedLabelFolders = 
+  1×78 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+  Columns 1 through 4
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 5 through 8
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 9 through 12
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 13 through 16
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 17 through 20
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 21 through 24
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 25 through 28
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 29 through 32
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 33 through 36
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 37 through 40
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 41 through 44
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 45 through 48
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 49 through 52
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 53 through 56
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 57 through 60
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 61 through 64
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 65 through 68
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 69 through 72
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 73 through 76
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+  Columns 77 through 78
+    "/home/tyson/Raide…"    "/home/tyson/Raide…"
+labelIDs
+labelIDs =
+   255     0     0
+   255   255   255
+     0     0   255
+     0   255   255
+     0   255     0
+     0   127     0
+labelIDs_scalar
+labelIDs_scalar =
+     1     2     3     4     5     6
+labelNames
+labelNames = 
+  1×6 <a href="matlab:helpPopup string" style="font-weight:bold">string</a> array
+    "leader"    "stroke"    "sky"    "cloud"    "ground"    "other"
+sequences
+sequences =
+  1×78 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+  Columns 1 through 4
+    {'2017-02-10_1629…'}    {'2017-02-10_1633…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 5 through 8
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 9 through 12
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 13 through 16
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 17 through 20
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 21 through 24
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 25 through 28
+    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}    {'2017-02-10_1635…'}
+  Columns 29 through 32
+    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}
+  Columns 33 through 36
+    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}    {'2017-02-10_1639…'}
+  Columns 37 through 40
+    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}
+  Columns 41 through 44
+    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}
+  Columns 45 through 48
+    {'2017-02-10_1641…'}    {'2017-02-10_1641…'}    {'2017-02-10_1644…'}    {'2017-02-10_1644…'}
+  Columns 49 through 52
+    {'2017-02-10_1644…'}    {'2017-02-10_1644…'}    {'2017-02-10_1644…'}    {'2017-09-25_1832…'}
+  Columns 53 through 56
+    {'2017-09-25_1832…'}    {'2017-09-25_1832…'}    {'2017-10-21_1718…'}    {'2017-11-14_2005…'}
+  Columns 57 through 60
+    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}
+  Columns 61 through 64
+    {'2017-11-14_2005…'}    {'2017-11-14_2005…'}    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}
+  Columns 65 through 68
+    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}
+  Columns 69 through 72
+    {'2017-11-14_2006…'}    {'2017-11-14_2006…'}    {'2017-11-22_1441…'}    {'2017-11-22_1441…'}
+  Columns 73 through 76
+    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}
+  Columns 77 through 78
+    {'2017-11-24_1625…'}    {'2017-11-24_1625…'}
+rez
+rez = 
+    "256x256"
+clc

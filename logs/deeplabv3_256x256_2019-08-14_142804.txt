@@ -1,0 +1,60 @@
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 85)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',85,0)">line 85</a>)] 
+[Warning: Source and conversion folders match. Data will not converted. Enable forceConvert to override] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 96)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',96,0)">line 96</a>)] 
+Loaded metadata from cache...
+Partitioning test and training Data...
+Starting parallel pool (parpool) using the 'local' profile ...
+
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.getJavaFutureResult', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/getJavaFutureResult.m', 15)" style="font-weight:bold">parallel.internal.getJavaFutureResult</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/getJavaFutureResult.m',15,0)">line 15</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.pool.InteractiveClient/waitForSessionCreation', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/InteractiveClient.m', 649)" style="font-weight:bold">parallel.internal.pool.InteractiveClient/waitForSessionCreation</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/InteractiveClient.m',649,0)">line 649</a>)
+                    sessionFuture, 1, java.util.concurrent.TimeUnit.SECONDS);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.pool.InteractiveClient/start', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/InteractiveClient.m', 356)" style="font-weight:bold">parallel.internal.pool.InteractiveClient/start</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/InteractiveClient.m',356,0)">line 356</a>)
+                    obj.Session = obj.waitForSessionCreation(sessionFuture, connectionCounter, ...
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.Pool>iStartClient', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/@Pool/Pool.m', 796)" style="font-weight:bold">parallel.Pool>iStartClient</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/@Pool/Pool.m',796,0)">line 796</a>)
+spmdInitialized = client.start(poolType , numWorkers, cluster, ...
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.Pool.hBuildPool', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/@Pool/Pool.m', 585)" style="font-weight:bold">parallel.Pool.hBuildPool</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/@Pool/Pool.m',585,0)">line 585</a>)
+                iStartClient(client, 'pool', cluster, guiMode, supportRestart, argsList);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.pool.doParpool', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/doParpool.m', 18)" style="font-weight:bold">parallel.internal.pool.doParpool</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/doParpool.m',18,0)">line 18</a>)
+    pool = parallel.Pool.hBuildPool(constructorArgs{:});
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parpool', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/parpool.m', 98)" style="font-weight:bold">parpool</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/parpool.m',98,0)">line 98</a>)
+    pool = parallel.internal.pool.doParpool(varargin{:});
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.pool.PoolArrayManager.getOrAutoCreateWithCleanup', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/PoolArrayManager.m', 60)" style="font-weight:bold">parallel.internal.pool.PoolArrayManager.getOrAutoCreateWithCleanup</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/PoolArrayManager.m',60,0)">line 60</a>)
+                        cleanPool = parpool(varargin{:});
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('pctTryCreatePoolIfNecessary', '/usr/local/MATLAB/R2019a/toolbox/distcomp/pctTryCreatePoolIfNecessary.m', 23)" style="font-weight:bold">pctTryCreatePoolIfNecessary</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/pctTryCreatePoolIfNecessary.m',23,0)">line 23</a>)
+    pool = parallel.internal.pool.PoolArrayManager.getOrAutoCreateWithCleanup();
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function')" style="font-weight:bold">parallel_function</a>
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('splitData', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/splitData.m', 12)" style="font-weight:bold">splitData</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/splitData.m',12,0)">line 12</a>)
+        parfor i = 1:numberOfSequences
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 208)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',208,0)">line 208</a>)
+    [trainIndex, testIndex] = splitData(resizedImageFolders, splitPercent);} 
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',85,0)
+CNN_Segmentation_Train_and_Evaluate
+forceConvert =
+     1
+preProcess =
+     1
+partitionData =
+     1
+resplitValidation =
+     1
+useCachedNet =
+     0
+doTraining =
+     1
+recoverCheckpoint =
+     0
+archiveNet =
+     1
+saveImages =
+     1
+sendNotification =
+     1
+evaluateNet =
+     1
+imageSize =
+   256   256
+logFileFull = 
+    "/home/tyson/Raiden/logs/deeplabv3_256x256_2019-08-14_142835.txt"

@@ -1,21 +1,21 @@
-function imds = resizeImages(imds, imageSize, destinationPath, outerProgressBar, preProcess)
+function imds = resizeImages(imds, imageSize, destinationPath, ...
+    forceConvert, outerProgressBar, preProcess)
  % Resize images to [sz(1) sz(2)].
 
-    if nargin == 4
+    if nargin == 5
+        preProcess = false;
+    elseif nargin == 4
+        outerProgressBar = false;
         preProcess = false;
     elseif nargin == 3
+        forceConvert = false;
         outerProgressBar = false;
         preProcess = false;
     end
 
-    if preProcess
-        destinationPath = strcat(destinationPath,'_processed');
-    end
-    
     if ~exist(destinationPath,'dir')
         mkdir(destinationPath)
     end
-
     
     y = imageSize(1);
     x = imageSize(2);
@@ -35,12 +35,13 @@ function imds = resizeImages(imds, imageSize, destinationPath, outerProgressBar,
         [Im16,info] = read(imds);
         [~, filename, ext] = fileparts(info.Filename);
         
-        if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file')
+        if (~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') ...
+                || forceConvert)
 
             % Reduce Noise, improve contrast
             if preProcess
                 Im16 = improve_contrast(Im16);
-                Im16 = noise_removal(Im16b, 2);  
+                Im16 = noise_removal(Im16, 2);  
             end
             
             % convert to 8-bit

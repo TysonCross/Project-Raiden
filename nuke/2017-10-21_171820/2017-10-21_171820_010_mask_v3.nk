@@ -26,7 +26,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 Root {
  inputs 0
  name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/2017-10-21_171820/2017-10-21_171820_010_mask_v3.nk"
- frame 257
+ frame 237
  first_frame 237
  last_frame 252
  lock_range true
@@ -111,7 +111,7 @@ Constant {
  xpos -488
  ypos 25
 }
-set N55b82c0 [stack 0]
+set N69e0110 [stack 0]
 Radial {
  premult rgba
  area {87.5 35.76250076 293.5 235.5}
@@ -120,7 +120,7 @@ Radial {
  xpos -488
  ypos 125
 }
-set N5280f00 [stack 0]
+set N69eedc0 [stack 0]
 Blur {
  size 200
  quality 25
@@ -128,10 +128,10 @@ Blur {
  xpos -488
  ypos 149
 }
-set N5258e20 [stack 0]
-push $N5258e20
-push $N5258e20
-push $N55b82c0
+set N6d3a5a0 [stack 0]
+push $N6d3a5a0
+push $N6d3a5a0
+push $N69e0110
 Dot {
  inputs 0
  name Dot12
@@ -151,8 +151,8 @@ Shuffle {
  xpos -125
  ypos 87
 }
-set N55ebc90 [stack 0]
-push $N55b82c0
+set N6d6f9b0 [stack 0]
+push $N69e0110
 Dot {
  inputs 0
  name Dot23
@@ -173,8 +173,8 @@ Shuffle {
  xpos -227
  ypos 49
 }
-set N55ff530 [stack 0]
-push $N55b82c0
+set N6d83250 [stack 0]
+push $N69e0110
 Dot {
  inputs 0
  name Dot26
@@ -200,13 +200,12 @@ Read {
  xpos -352
  ypos -935
 }
-set N56142d0 [stack 0]
 Dot {
  name Dot3
  xpos -318
  ypos -761
 }
-set N56365f0 [stack 0]
+set N6dd2510 [stack 0]
 TimeEcho {
  framesbehind 3
  frmaesfade 3
@@ -220,7 +219,7 @@ Dot {
  xpos -318
  ypos -626
 }
-set N563cd10 [stack 0]
+set N6dc05a0 [stack 0]
 OFlow2 {
  timingOutputSpeed 1
  vectorDetailLocal 0.5
@@ -240,13 +239,13 @@ VectorToMotion {
  ypos -573
  scale {{"proxy ? proxy_scale.0 : 1"} {"proxy ? proxy_scale.1 : 1"}}
 }
-push $N563cd10
+push $N6dc05a0
 Dot {
  name Dot29
  xpos -208
  ypos -626
 }
-push $N563cd10
+push $N6dc05a0
 Denoise2 {
  inputs 3
  lift_blacks true
@@ -302,7 +301,7 @@ Dot {
  xpos -318
  ypos -528
 }
-set Na548910 [stack 0]
+set Nbcbae10 [stack 0]
 Grade {
  blackpoint 0.0015
  whitepoint 1.12
@@ -320,7 +319,7 @@ Dot {
  xpos -318
  ypos -437
 }
-set Na54d0f0 [stack 0]
+set Nbcd00e0 [stack 0]
 Dot {
  name Dot25
  xpos -85
@@ -333,7 +332,7 @@ Keyer {
  xpos -119
  ypos -249
 }
-push $Na54d0f0
+push $Nbcd00e0
 Keyer {
  invert true
  operation "max keyer"
@@ -342,7 +341,7 @@ Keyer {
  xpos -471
  ypos -436
 }
-push $Na54d0f0
+push $Nbcd00e0
 Blur {
  inputs 1+1
  size 2.2
@@ -352,7 +351,7 @@ Blur {
  xpos -352
  ypos -417
 }
-set Na56ac40 [stack 0]
+set Nbcedd60 [stack 0]
 Grade {
  whitepoint 0.3
  multiply 2
@@ -372,7 +371,7 @@ Dot {
  xpos -208
  ypos -364
 }
-push $Na56ac40
+push $Nbcedd60
 Dissolve {
  inputs 2
  channels rgba
@@ -419,8 +418,8 @@ Dot {
  xpos -318
  ypos -133
 }
-set Na5d6d60 [stack 0]
-push $Na5d6d60
+set Nbd5a370 [stack 0]
+push $Nbd5a370
 FrameHold {
  name FrameHold1
  xpos -477
@@ -435,7 +434,7 @@ Merge2 {
  xpos -477
  ypos -81
 }
-push $Na5d6d60
+push $Nbd5a370
 ShuffleCopy {
  inputs 2
  red red
@@ -487,7 +486,7 @@ Grade {
  xpos -352
  ypos 188
 }
-set Na654530 [stack 0]
+set Nbdd7b40 [stack 0]
 Keyer {
  operation "luminance key"
  range {0.01335824852 1 1 1}
@@ -495,7 +494,7 @@ Keyer {
  xpos -314
  ypos 222
 }
-push $Na654530
+push $Nbdd7b40
 Keyer {
  operation "luminance key"
  range {{curve x237 0.002430644495 0.003742984608 0.001349735957 x257 0.001482616514 x260 0.0021892109} 0.6833223908 1 1}
@@ -513,7 +512,7 @@ Merge2 {
  xpos -352
  ypos 270
 }
-push $N55ff530
+push $N6d83250
 Group {
  name PxF_Erode
  help "Erode the edges of an RGBA image by blurring the alpha, applying a gamma to it and doing a \"min\" with the original alpha."
@@ -543,21 +542,21 @@ Group {
   xpos 501
   ypos -28
  }
-set Na698640 [stack 0]
+set Nbe1c470 [stack 0]
  Dot {
   name Dot1
   xpos 735
   ypos 245
  }
-push $Na698640
+push $Nbe1c470
  Unpremult {
   name Unpremult1
   xpos 501
   ypos 49
   disable {{"parent.dSel == 0 ? parent.amount < 0 ? 1 : 0 : parent.dSel == 1 ? 0 : 1"}}
  }
-set Na6a2300 [stack 0]
-push $Na6a2300
+set Nbe26130 [stack 0]
+push $Nbe26130
  Invert {
   name Invert1
   xpos 374
@@ -584,17 +583,17 @@ push $Na6a2300
   ypos 208
   disable {{"amount < 0 ? 0 : 1"}}
  }
-set Na6d08d0 [stack 0]
+set Nbe54700 [stack 0]
  Merge2 {
   inputs 2
   name Merge1
   xpos 459
   ypos 294
  }
-set Na6dc300 [stack 0]
-push $Na6a2300
-push $Na6a2300
-push $Na6d08d0
+set Nbe60130 [stack 0]
+push $Nbe26130
+push $Nbe26130
+push $Nbe54700
  Merge2 {
   inputs 2
   operation mask
@@ -616,7 +615,7 @@ push $Na6d08d0
   xpos 393
   ypos 359
  }
-push $Na6a2300
+push $Nbe26130
  ShuffleCopy {
   inputs 2
   name ShuffleCopy1
@@ -643,7 +642,7 @@ push $Na6a2300
   xpos 510
   ypos 546
  }
-push $Na6dc300
+push $Nbe60130
  Viewer {
   frame_range 1-100
   name Viewer1
@@ -651,7 +650,7 @@ push $Na6dc300
   ypos 129
  }
 end_group
-push $N55ebc90
+push $N6d6f9b0
 Group {
  name PxF_Erode1
  help "Erode the edges of an RGBA image by blurring the alpha, applying a gamma to it and doing a \"min\" with the original alpha."
@@ -681,21 +680,21 @@ Group {
   xpos 501
   ypos -28
  }
-set Na763070 [stack 0]
+set Nbee6ea0 [stack 0]
  Dot {
   name Dot1
   xpos 735
   ypos 245
  }
-push $Na763070
+push $Nbee6ea0
  Unpremult {
   name Unpremult1
   xpos 501
   ypos 49
   disable {{"parent.dSel == 0 ? parent.amount < 0 ? 1 : 0 : parent.dSel == 1 ? 0 : 1"}}
  }
-set Na76c610 [stack 0]
-push $Na76c610
+set Nbef0440 [stack 0]
+push $Nbef0440
  Invert {
   name Invert1
   xpos 374
@@ -722,17 +721,17 @@ push $Na76c610
   ypos 208
   disable {{"amount < 0 ? 0 : 1"}}
  }
-set Na7996c0 [stack 0]
+set Nbf1d4f0 [stack 0]
  Merge2 {
   inputs 2
   name Merge1
   xpos 459
   ypos 294
  }
-set Na7a50f0 [stack 0]
-push $Na76c610
-push $Na76c610
-push $Na7996c0
+set Nbf28f20 [stack 0]
+push $Nbef0440
+push $Nbef0440
+push $Nbf1d4f0
  Merge2 {
   inputs 2
   operation mask
@@ -754,7 +753,7 @@ push $Na7996c0
   xpos 393
   ypos 359
  }
-push $Na76c610
+push $Nbef0440
  ShuffleCopy {
   inputs 2
   name ShuffleCopy1
@@ -781,7 +780,7 @@ push $Na76c610
   xpos 510
   ypos 546
  }
-push $Na7a50f0
+push $Nbf28f20
  Viewer {
   frame_range 1-100
   name Viewer1
@@ -815,7 +814,7 @@ Grade {
  xpos -352
  ypos 327
 }
-set Na8424c0 [stack 0]
+set Nbfc61e0 [stack 0]
 Shuffle {
  red alpha
  green alpha
@@ -829,7 +828,7 @@ Dot {
  xpos -318
  ypos 422
 }
-set Na862d10 [stack 0]
+set Nbfe67a0 [stack 0]
 Grade {
  inputs 1+1
  blackpoint 0.0015
@@ -856,7 +855,7 @@ Grade {
  xpos -488
  ypos 479
 }
-push $Na862d10
+push $Nbfe67a0
 Grade {
  channels rgba
  blackpoint 0.0002
@@ -894,7 +893,7 @@ Grade {
  xpos -352
  ypos 549
 }
-push $Na862d10
+push $Nbfe67a0
 Dot {
  name Dot32
  xpos -181
@@ -1079,7 +1078,7 @@ Dot {
  xpos -318
  ypos 688
 }
-set Na9d6ca0 [stack 0]
+set Nc15a590 [stack 0]
 Constant {
  inputs 0
  color {1 1 0 1}
@@ -1118,7 +1117,7 @@ StickyNote {
  xpos 455
  ypos -423
 }
-push $N56365f0
+push $N6dd2510
 Dot {
  name Dot18
  xpos 772
@@ -1130,8 +1129,8 @@ FrameHold {
  xpos 738
  ypos -699
 }
-set Nd189df0 [stack 0]
-push $Nd189df0
+set Nc18e330 [stack 0]
+push $Nc18e330
 Denoise2 {
  inputs 2
  lift_blacks true
@@ -1192,7 +1191,7 @@ Grade {
  ypos -444
  disable true
 }
-set Nb406ac0 [stack 0]
+set Nc1ae090 [stack 0]
 Keyer {
  operation "luminance key"
  range {0 0.4670589127 1 1}
@@ -1596,7 +1595,7 @@ Dot {
  xpos 872
  ypos -166
 }
-push $Nb406ac0
+push $Nc1ae090
 Grade {
  blackpoint 0.0015
  whitepoint 0.51
@@ -1619,7 +1618,7 @@ Blur {
  ypos -339
  disable true
 }
-set Nb4532f0 [stack 0]
+set Nc39f3d0 [stack 0]
 Dot {
  name Dot24
  xpos 772
@@ -1659,29 +1658,29 @@ Group {
   xpos 171
   ypos -273
  }
-set Nb474ca0 [stack 0]
+set Nc3c0bd0 [stack 0]
  Dot {
   name Dot1
   xpos 405
   ypos 31
  }
-set Nb479350 [stack 0]
-push $Nb479350
-push $Nb474ca0
+set Nc3c5280 [stack 0]
+push $Nc3c5280
+push $Nc3c0bd0
  Colorspace {
   colorspace_out Cineon
   name Colorspace1
   xpos 171
   ypos -163
  }
-set Nb47df70 [stack 0]
+set Nc3ca9a0 [stack 0]
  Blur {
   size 100
   name Blur1
   xpos 132
   ypos -126
  }
-push $Nb47df70
+push $Nc3ca9a0
  Blur {
   name Blur2
   xpos 227
@@ -2039,7 +2038,7 @@ Dot {
  xpos 967
  ypos 183
 }
-set Nc9319c0 [stack 0]
+set Nc5aa5d0 [stack 0]
 Read {
  inputs 0
  file_type tiff
@@ -2057,7 +2056,7 @@ Grade {
  xpos 735
  ypos 72
 }
-set Ncbca730 [stack 0]
+set Nc5cd7f0 [stack 0]
 Roto {
  output alpha
  premultiply alpha
@@ -2131,7 +2130,7 @@ Shuffle {
  xpos 577
  ypos 124
 }
-push $Ncbca730
+push $Nc5cd7f0
 Shuffle {
  green red
  blue red
@@ -2224,11 +2223,13 @@ Write {
  file_type tiff
  checkHashOnRead false
  version 8
+ in_colorspace linear
+ out_colorspace linear
  name Write1
  xpos 735
  ypos 285
 }
-push $Nc9319c0
+push $Nc5aa5d0
 Group {
  name BinaryAlpha2
  tile_color 0x2a2a2aff
@@ -2284,6 +2285,8 @@ Write {
  file_type tiff
  checkHashOnRead false
  version 5
+ in_colorspace linear
+ out_colorspace linear
  name Write2
  xpos 933
  ypos 254
@@ -2781,9 +2784,9 @@ Premult {
  xpos 140
  ypos -176
 }
-set Nabb0890 [stack 0]
-push $Nabb0890
-push $Na548910
+set Nc9182f0 [stack 0]
+push $Nc9182f0
+push $Nbcbae10
 Dot {
  name Dot22
  xpos 428
@@ -2796,7 +2799,7 @@ FrameHold {
  ypos -280
  cached true
 }
-set Nab4e1c0 [stack 0]
+set Nc8ad060 [stack 0]
 Group {
  name PxF_Bandpass4
  help "Extract detail from an image by subtracting the original image from a blur of itself.\nUseful to enhance an image for easier tracking."
@@ -2832,28 +2835,28 @@ Group {
   xpos 171
   ypos -273
  }
-set Nac56340 [stack 0]
+set Nc9984d0 [stack 0]
  Dot {
   name Dot1
   xpos 405
   ypos 31
  }
-set Nac5a9f0 [stack 0]
-push $Nac5a9f0
-push $Nac56340
+set Nc99cb80 [stack 0]
+push $Nc99cb80
+push $Nc9984d0
  Colorspace {
   name Colorspace1
   xpos 171
   ypos -163
  }
-set Nac60110 [stack 0]
+set Nc9a17a0 [stack 0]
  Blur {
   size 37
   name Blur1
   xpos 132
   ypos -126
  }
-push $Nac60110
+push $Nc9a17a0
  Blur {
   name Blur2
   xpos 227
@@ -2918,7 +2921,7 @@ Merge2 {
  xpos 250
  ypos -176
 }
-push $Nab4e1c0
+push $Nc8ad060
 Group {
  name PxF_Bandpass2
  help "Extract detail from an image by subtracting the original image from a blur of itself.\nUseful to enhance an image for easier tracking."
@@ -2953,29 +2956,29 @@ Group {
   xpos 171
   ypos -273
  }
-set Nad0e250 [stack 0]
+set Nca503b0 [stack 0]
  Dot {
   name Dot1
   xpos 405
   ypos 31
  }
-set Nad12900 [stack 0]
-push $Nad12900
-push $Nad0e250
+set Nca54a60 [stack 0]
+push $Nca54a60
+push $Nca503b0
  Colorspace {
   colorspace_out 2.20
   name Colorspace1
   xpos 171
   ypos -163
  }
-set Nad17520 [stack 0]
+set Nca59680 [stack 0]
  Blur {
   size 100
   name Blur1
   xpos 132
   ypos -126
  }
-push $Nad17520
+push $Nca59680
  Blur {
   name Blur2
   xpos 227
@@ -3075,8 +3078,8 @@ Group {
   addUserKnob {7 blur R 0 500}
   addUserKnob {3 iterations}
  }
-set Nadb6970 [stack 0]
-push $Nadb6970
+set Ncaf8cf0 [stack 0]
+push $Ncaf8cf0
  Input {
   inputs 0
   name hole_mask
@@ -3085,7 +3088,7 @@ push $Nadb6970
   ypos -851
   number 1
  }
-set Nadbbbd0 [stack 0]
+set Ncafdf50 [stack 0]
  Shuffle {
   red alpha
   green alpha
@@ -3095,7 +3098,7 @@ set Nadbbbd0 [stack 0]
   xpos 457
   ypos -762
  }
-push $Nadbbbd0
+push $Ncafdf50
  Shuffle {
   red blue
   green blue
@@ -3105,7 +3108,7 @@ push $Nadbbbd0
   xpos 373
   ypos -762
  }
-push $Nadbbbd0
+push $Ncafdf50
  Shuffle {
   red green
   blue green
@@ -3115,7 +3118,7 @@ push $Nadbbbd0
   xpos 290
   ypos -762
  }
-push $Nadbbbd0
+push $Ncafdf50
  Shuffle {
   green red
   blue red
@@ -3133,8 +3136,8 @@ push $Nadbbbd0
   xpos 342
   ypos -668
  }
-set Nae016b0 [stack 0]
-push $Nae016b0
+set Ncb43a30 [stack 0]
+push $Ncb43a30
  Transform {
   rotate {{parent.angle i}}
   center {2048 1463}
@@ -3143,8 +3146,8 @@ push $Nae016b0
   xpos 342
   ypos -587
  }
-set Nae0a030 [stack 0]
-push $Nadb6970
+set Ncb4c3b0 [stack 0]
+push $Ncaf8cf0
  Transform {
   rotate {{parent.angle i}}
   center {2048 1463}
@@ -3161,7 +3164,7 @@ push $Nadb6970
   xpos 137
   ypos -519
  }
-push $Nae0a030
+push $Ncb4c3b0
  Merge2 {
   inputs 2
   operation out
@@ -3176,7 +3179,7 @@ push $Nae0a030
   xpos 137
   ypos -239
  }
-push $Nae0a030
+push $Ncb4c3b0
  Clamp {
   name Clamp1
   label static
@@ -3195,7 +3198,7 @@ push $Nae0a030
   xpos 342
   ypos -400
  }
-set Nae66ba0 [stack 0]
+set Ncba9720 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3204,7 +3207,7 @@ set Nae66ba0 [stack 0]
   ypos -319
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Nae746f0 [stack 0]
+set Ncbb7270 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3218,8 +3221,8 @@ set Nae746f0 [stack 0]
   xpos 310
   ypos -79
  }
-push $Nae66ba0
-push $Nae746f0
+push $Ncba9720
+push $Ncbb7270
  Merge {
   inputs 2
   operation divide
@@ -3233,7 +3236,7 @@ push $Nae746f0
   xpos 470
   ypos -239
  }
-set Naeb1560 [stack 0]
+set Ncbf41f0 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3242,7 +3245,7 @@ set Naeb1560 [stack 0]
   ypos -159
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Naebef70 [stack 0]
+set Ncc01c00 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3256,8 +3259,8 @@ set Naebef70 [stack 0]
   xpos 470
   ypos 81
  }
-push $Naeb1560
-push $Naebef70
+push $Ncbf41f0
+push $Ncc01c00
  Merge {
   inputs 2
   operation divide
@@ -3271,7 +3274,7 @@ push $Naebef70
   xpos 630
   ypos -79
  }
-set Naefb5d0 [stack 0]
+set Ncc3e260 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3280,7 +3283,7 @@ set Naefb5d0 [stack 0]
   ypos 1
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Naf08fe0 [stack 0]
+set Ncc4bc70 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3294,8 +3297,8 @@ set Naf08fe0 [stack 0]
   xpos 630
   ypos 241
  }
-push $Naefb5d0
-push $Naf08fe0
+push $Ncc3e260
+push $Ncc4bc70
  Merge {
   inputs 2
   operation divide
@@ -3309,7 +3312,7 @@ push $Naf08fe0
   xpos 790
   ypos 81
  }
-set Naf45580 [stack 0]
+set Ncc88210 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3318,7 +3321,7 @@ set Naf45580 [stack 0]
   ypos 161
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Naf52f90 [stack 0]
+set Ncc95c20 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3332,8 +3335,8 @@ set Naf52f90 [stack 0]
   xpos 790
   ypos 401
  }
-push $Naf45580
-push $Naf52f90
+push $Ncc88210
+push $Ncc95c20
  Merge {
   inputs 2
   operation divide
@@ -3347,7 +3350,7 @@ push $Naf52f90
   xpos 950
   ypos 241
  }
-set Naf8fde0 [stack 0]
+set Nccd2810 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3356,7 +3359,7 @@ set Naf8fde0 [stack 0]
   ypos 321
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Naf9d7f0 [stack 0]
+set Ncce0220 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3370,8 +3373,8 @@ set Naf9d7f0 [stack 0]
   xpos 950
   ypos 561
  }
-push $Naf8fde0
-push $Naf9d7f0
+push $Nccd2810
+push $Ncce0220
  Merge {
   inputs 2
   operation divide
@@ -3385,7 +3388,7 @@ push $Naf9d7f0
   xpos 1110
   ypos 401
  }
-set Nafda610 [stack 0]
+set Ncd1d040 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3394,7 +3397,7 @@ set Nafda610 [stack 0]
   ypos 481
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Nafe8020 [stack 0]
+set Ncd2aa50 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3408,8 +3411,8 @@ set Nafe8020 [stack 0]
   xpos 1110
   ypos 721
  }
-push $Nafda610
-push $Nafe8020
+push $Ncd1d040
+push $Ncd2aa50
  Merge {
   inputs 2
   operation divide
@@ -3423,7 +3426,7 @@ push $Nafe8020
   xpos 1270
   ypos 561
  }
-set Nb024e40 [stack 0]
+set Ncd67870 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3432,7 +3435,7 @@ set Nb024e40 [stack 0]
   ypos 641
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Nb032850 [stack 0]
+set Ncd75280 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3446,8 +3449,8 @@ set Nb032850 [stack 0]
   xpos 1270
   ypos 881
  }
-push $Nb024e40
-push $Nb032850
+push $Ncd67870
+push $Ncd75280
  Merge {
   inputs 2
   operation divide
@@ -3461,7 +3464,7 @@ push $Nb032850
   xpos 1430
   ypos 721
  }
-set Nb06f4f0 [stack 0]
+set Ncdb1f20 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3470,7 +3473,7 @@ set Nb06f4f0 [stack 0]
   ypos 801
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Nb07cf00 [stack 0]
+set Ncdbf930 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3484,8 +3487,8 @@ set Nb07cf00 [stack 0]
   xpos 1430
   ypos 1041
  }
-push $Nb06f4f0
-push $Nb07cf00
+push $Ncdb1f20
+push $Ncdbf930
  Merge {
   inputs 2
   operation divide
@@ -3499,7 +3502,7 @@ push $Nb07cf00
   xpos 1590
   ypos 881
  }
-set Nb0b9d20 [stack 0]
+set Ncdfc750 [stack 0]
  Grade {
   channels rgba
   blackpoint -0.0001
@@ -3508,7 +3511,7 @@ set Nb0b9d20 [stack 0]
   ypos 961
   disable {{"parent.softEdges ? 0 : 1"}}
  }
-set Nb0c7730 [stack 0]
+set Nce0a160 [stack 0]
  Merge {
   inputs 2
   operation divide
@@ -3522,8 +3525,8 @@ set Nb0c7730 [stack 0]
   xpos 1590
   ypos 1201
  }
-push $Nb0b9d20
-push $Nb0c7730
+push $Ncdfc750
+push $Nce0a160
  Merge {
   inputs 2
   operation divide
@@ -3560,7 +3563,7 @@ push $Nb0c7730
   xpos -163
   ypos 1431
  }
-push $Nadb6970
+push $Ncaf8cf0
  Keymix {
   inputs 3
   name Keymix1
@@ -3576,7 +3579,7 @@ push $Nadb6970
   ypos 1763
   disable {{"parent.ignoreAlpha ? 0 : 1" i}}
  }
-push $Nadb6970
+push $Ncaf8cf0
  Dissolve {
   inputs 2
   which {{parent.mix i}}
@@ -3716,13 +3719,15 @@ Write {
  create_directories true
  checkHashOnRead false
  version 20
+ in_colorspace linear
+ out_colorspace linear
  name Write3
  xpos 394
  ypos 292
 }
-push $N5280f00
-push $Na8424c0
-push $Nb4532f0
+push $N69eedc0
+push $Nbfc61e0
+push $Nc39f3d0
 Read {
  inputs 0
  file_type tiff
@@ -3732,22 +3737,72 @@ Read {
  version 7
  name Read6
  xpos 966
- ypos 364
+ ypos 340
 }
+Group {
+ name BinaryAlpha8
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos 974
+ ypos 427
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
 Shuffle {
  green red
  blue red
  alpha red
  name Shuffle21
  xpos 966
- ypos 448
+ ypos 476
 }
 Dot {
  name Dot9
  xpos 1000
- ypos 493
+ ypos 521
 }
-set Ncd32c40 [stack 0]
+set Ncfa9a70 [stack 0]
 Dot {
  name Dot13
  label Other
@@ -3758,28 +3813,34 @@ Dot {
 }
 Constant {
  inputs 0
- color {0 0.5 0 1}
+ color {1 1 0 1}
  color_panelDropped true
  name Constant17
- xpos 1076
- ypos 709
+ xpos 1085
+ ypos 708
 }
 ShuffleCopy {
  inputs 2
- name ShuffleCopy8
- xpos 966
- ypos 733
+ name ShuffleCopy9
+ xpos 975
+ ypos 732
 }
 Premult {
  name Premult8
- xpos 966
- ypos 771
+ xpos 975
+ ypos 770
+}
+Grade {
+ multiply 2
+ name Grade4
+ xpos 975
+ ypos 806
 }
 Shuffle {
  alpha black
  name Shuffle22
  xpos 966
- ypos 795
+ ypos 855
 }
 Read {
  inputs 0
@@ -3800,7 +3861,7 @@ Shuffle {
  xpos 185
  ypos 405
 }
-push $Ncd32c40
+push $Ncfa9a70
 Merge2 {
  inputs 2
  operation minus
@@ -3813,7 +3874,7 @@ Dot {
  xpos 219
  ypos 493
 }
-set Nb608580 [stack 0]
+set Nd024960 [stack 0]
 Dot {
  name Dot16
  label Clouds
@@ -3848,7 +3909,7 @@ Shuffle {
  xpos 185
  ypos 793
 }
-push $Ncd32c40
+push $Ncfa9a70
 push 0
 Read {
  inputs 0
@@ -3859,23 +3920,73 @@ Read {
  version 8
  name Read1
  xpos 736
- ypos 349
+ ypos 325
 }
+Group {
+ name BinaryAlpha7
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos 738
+ ypos 414
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
 Shuffle {
  green red
  blue red
  alpha red
  name Shuffle16
  xpos 736
- ypos 447
+ ypos 475
 }
 Dot {
  name Dot21
  xpos 770
- ypos 493
+ ypos 521
 }
-set Nb642d50 [stack 0]
-push $Nb608580
+set Nd08ee90 [stack 0]
+push $Nd024960
 Merge2 {
  inputs 3+1
  name Merge7
@@ -3896,7 +4007,7 @@ Dot {
  xpos 483
  ypos 588
 }
-push $Na9d6ca0
+push $Nc15a590
 Dot {
  name Dot28
  label Lightning
@@ -3940,7 +4051,7 @@ Shuffle {
  ypos 794
 }
 push 0
-push $Nb642d50
+push $Nd08ee90
 Dot {
  name Dot14
  label Ground
@@ -3974,7 +4085,7 @@ Shuffle {
  xpos 736
  ypos 802
 }
-push $Na9d6ca0
+push $Nc15a590
 Constant {
  inputs 0
  color {1 0 0 1}
@@ -3989,13 +4100,13 @@ ShuffleCopy {
  xpos -494
  ypos 822
 }
-set Nb6ed7e0 [stack 0]
+set Nd139800 [stack 0]
 Dot {
  name Dot15
  xpos -460
  ypos 911
 }
-push $Na9d6ca0
+push $Nc15a590
 Constant {
  inputs 0
  color {1 1 1 1}
@@ -4010,7 +4121,7 @@ ShuffleCopy {
  xpos -352
  ypos 819
 }
-push $Nb6ed7e0
+push $Nd139800
 Switch {
  inputs 3
  which {{curve K x237 0 x239 1 x242 0 x244 0}}
@@ -4043,13 +4154,12 @@ Write {
  checkHashOnRead false
  version 45
  name Write_mask_sequence
- selected true
  xpos 307
  ypos 1049
 }
-set Nb74caf0 [stack 0]
-push $Nb74caf0
-push $Na548910
+set Nd198e40 [stack 0]
+push $Nd198e40
+push $Nbcbae10
 Merge2 {
  inputs 2
  mix 0.03
@@ -4057,19 +4167,19 @@ Merge2 {
  xpos -1048
  ypos 1055
 }
-push $N56142d0
+push $Nd198e40
 Viewer {
  inputs 6
- frame 257
+ frame 237
  frame_range 237-252
  fps 60
- input_number 1
  gain 6
  roi {-0.1439999938 -0.5479999781 0.574000001 0.2140000015}
  colour_sample_bbox {1.20703125 -0.6875 1.2109375 -0.68359375}
  samplepoints {{1.20703125 -0.6875}
    }
  name Viewer1
+ selected true
  xpos 292
  ypos 1944
 }

@@ -1,7 +1,10 @@
-function pxds = resizePixelLabels(pxds, imageSize, destinationPath, outerProgressBar)
+function pxds = resizePixelLabels(pxds, imageSize, destinationPath, forceConvert, outerProgressBar)
 % Resize pixel label data to [sz(1) sz(2)].
 
-    if nargin < 4
+    if nargin == 4
+        outerProgressBar = false;
+    elseif nargin == 3
+        forceConvert = false;
         outerProgressBar = false;
     end
 
@@ -32,7 +35,8 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, outerProgres
         maskIdx = strfind(filename, str);
         filename = strcat(filename(1:maskIdx-1),"label",filename(maskIdx+length(str):end));
         if (filename~='label.tif') % bug fix
-            if ~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') 
+            if (~exist(fullfile(destinationPath,strcat(filename,ext)), 'file')  ...
+                || forceConvert)
 
                 % Convert from categorical to uint8.
                 % (RGB-class label association -> per-pixel integer value)
