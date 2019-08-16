@@ -1,3 +1,21 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                FINDGAPS.M
+% Function that finds frames that have no lightning in frame where blankLength 
+% determines the number of blank frames that constitues the end of a lightning
+% event.  
+% INPUT:  
+%         ARRAYOFSUMMEDEVENTS:Takes an array where a presence of lightning array
+%                             for the frame sequence is given ie ( 0 1 2 0 1 ).
+%                             This array is formed by summing the binary 
+%                             array indicating lightning frames and the binary  
+%                             array indicating stroke frames.
+%         BLANKLENGTH: The number of blank frames that should surround a 
+%                      'complete' event.
+% OUTPUT:
+%         RESULTS: An array where the first column is the start of a candidate 
+%                  event and the second column is the number of frames in the 
+%                  candidate event.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function results = findGaps(arrayOfSummedEvents, blankLength)
     if nargin == 1
         blankLength=3;
