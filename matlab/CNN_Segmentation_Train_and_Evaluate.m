@@ -18,8 +18,8 @@ network = 'deeplabv3';
 %}
 
 % Phases to run
-forceConvert        = 0         % if true, resize/process new data (slow)
-preProcess          = 1         % if true, constrast + median on input data
+forceConvert        = 1         % if true, resize/process new data (slow)
+preProcess          = 0         % if true, median filter on input data
 partitionData       = 1         % if true, re-split Test/Training (warning)
 resplitValidation   = 1         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
