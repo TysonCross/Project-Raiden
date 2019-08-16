@@ -1,3 +1,13 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     CREATEEVENTS.M
+% Create an array of events for a given input imds. each event has:
+% Start: The frame where the event starts 
+% Length: The number of frames for which the event persists
+% Type: Stroke or attempted leader
+% StrokeFrames: The frame numbers that have the stroke label
+%
+% INPUT: label data store
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function eventsCellArray = createEvents(imds)
     candidateEvents = getCandidateEvents (imds);
     strokeIndices = getStrokeIndices(imds);

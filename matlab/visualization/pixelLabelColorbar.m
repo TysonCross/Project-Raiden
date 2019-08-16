@@ -1,6 +1,11 @@
-function pixelLabelColorbar(cmap, classNames)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                         PIXELLABELCOLORBAR.M
 % Add a colorbar to the current axis. The colorbar is formatted
 % to display the class names with the color.
+% INPUT: cmap       = Colour map
+%        classNames = 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function pixelLabelColorbar(cmap, classNames)
 
 colormap(gca,cmap)
 

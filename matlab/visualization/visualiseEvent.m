@@ -1,3 +1,13 @@
+% ToDo(Tyson) please change the function name or the script name to match
+% CREATEVOLUME.M
+% strokeArray = createVolume(imdsInput, imdsLabel, chosenLabel)
+% The function creates 
+%
+%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function strokeArray = createVolume(imdsInput, imdsLabel, chosenLabel)
     for i=1:imdsInput
         inputImage = imdsInput.readimage(i);

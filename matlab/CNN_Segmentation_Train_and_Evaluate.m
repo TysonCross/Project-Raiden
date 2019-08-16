@@ -1,3 +1,30 @@
+%% CNN_SEGMENTATION_TRAIN_AND_EVALUATE.M
+% This script implements transfer learninng on a pre-trained network that
+% is provided by supplying the name of the pre-trained network. Variables
+% that should be changed include:
+% Network and rootPath
+% The following binary options are avliable
+% forceConvert                % Resize/process new data ?
+% preProcess                  % Constrast + median on input data ?
+% partitionData               % Re-split Test/Training ?(warning)
+% resplitValidation           % Re-split Training/Validation ?
+% useCachedNet                % Use a cached network ?
+% doTraining                  % Perform training ?
+% recoverCheckpoint           % If training did not finish, use checkpoint ?
+% archiveNet                  % Archive NN, data and figures to subfolder ?
+% saveImages                  % Generate performance figures ?
+% sendNotification            % Send email notification on completion ?
+% evaluateNet                 % Evaluate performance on test set ?
+%
+%
+%
+%
+%
+%
+%ToDo(Tyson): Expand on the above as is required
+%NOTE: Should this not perhaps be changed to be either a self-standing app
+%       or rather a smaller script that calls the component scripts?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figHandle = findall(groot, 'Type', 'Figure');
 close(figHandle(:))
 setenv('NVIDIA_CUDNN', '/usr/local/cuda');

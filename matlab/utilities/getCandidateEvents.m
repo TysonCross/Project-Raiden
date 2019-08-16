@@ -1,7 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                          GETCANDIDATEEVENTS.M
+% Finds the events that are surrounded by 2 gaps or a gap and a 
+% start/end of the seqeunce of frames. For example the input could look like
+%   [ ... gap EVENT gap ... ]
+%   [Event gap ...]
+%   [... gap Event]
+%
+% OUTPUT:
+%        Array where the first column is the startFrames and the 
+%        second column is the number of frames that contain the event
+%        ie,  [startFrame Duration]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function candidateEvents = getCandidateEvents (imds)
-% Finds the events that are surrounded by gaps or a gap and a 
-% start/end of the seq
-% Output [startFrame Duration]
+
     indexedLightning = getLightningIndices(imds);
     indexedStrokes = getStrokeIndices(imds);
     totalIndices = indexedLightning + indexedStrokes;
