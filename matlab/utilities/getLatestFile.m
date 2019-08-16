@@ -1,5 +1,10 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                           GETLATESTFILE.M
+%
+% This function returns the latest file from the passed folder argument
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function latestfile = getLatestFile(folder)
-%This function returns the latest file from the passed folder argument
 
 %Get the directory contents
 dirc = dir(folder);
