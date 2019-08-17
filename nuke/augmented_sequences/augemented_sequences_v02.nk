@@ -2,15 +2,15 @@
 version 11.3 v4
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="170" y="58" w="2229" h="910" screen="0">
+    <window x="67" y="27" w="2493" h="1023" maximized="1" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="835" stretch="1"/>
+            <split size="1099" stretch="1"/>
             <splitter orientation="2">
-                <split size="864"/>
+                <split size="977"/>
                 <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
@@ -126,7 +126,7 @@ BackdropNode {
 BackdropNode {
  inputs 0
  name BackdropNode5
- label 2017-09-25_183210
+ label 2017-02-10_164141
  xpos 1948
  ypos -571
  bdwidth 587
@@ -144,7 +144,7 @@ BackdropNode {
 BackdropNode {
  inputs 0
  name BackdropNode7
- label 2017-02-10_164141
+ label 2017-09-25_183210
  xpos -1892
  ypos -78
  bdwidth 590
@@ -178,7 +178,7 @@ Dot {
  xpos -1748
  ypos -373
 }
-set N6aefc60 [stack 0]
+set N71a9590 [stack 0]
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -198,11 +198,14 @@ Write {
  last 481
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq
  xpos -1782
  ypos -227
 }
-push $N6aefc60
+push $N71a9590
 EXPTool {
  mode Stops
  red -2
@@ -221,6 +224,9 @@ Write {
  last 481
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq
  xpos -1712
  ypos -307
@@ -244,7 +250,7 @@ Dot {
  xpos -1098
  ypos -371
 }
-set N88ff650 [stack 0]
+set N7156480 [stack 0]
 EXPTool {
  mode Stops
  red -2
@@ -263,6 +269,9 @@ Write {
  last 387
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq1
  xpos -1062
  ypos -295
@@ -286,7 +295,7 @@ Dot {
  xpos -504
  ypos -383
 }
-set N14f47300 [stack 0]
+set N8e54ed0 [stack 0]
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -305,11 +314,14 @@ Write {
  last 590
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq2
  xpos -538
  ypos -221
 }
-push $N14f47300
+push $N8e54ed0
 EXPTool {
  mode Stops
  red -2
@@ -328,6 +340,9 @@ Write {
  last 590
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq2
  xpos -468
  ypos -304
@@ -351,7 +366,7 @@ Dot {
  xpos 76
  ypos -386
 }
-set N1514bea0 [stack 0]
+set N70b0de0 [stack 0]
 EXPTool {
  mode Stops
  red 2
@@ -370,11 +385,14 @@ Write {
  last 328
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq3
  xpos -30
  ypos -318
 }
-push $N1514bea0
+push $N70b0de0
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -393,11 +411,14 @@ Write {
  last 328
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq3
  xpos 42
  ypos -224
 }
-push $N1514bea0
+push $N70b0de0
 EXPTool {
  mode Stops
  red -2
@@ -416,6 +437,9 @@ Write {
  last 328
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq3
  xpos 112
  ypos -309
@@ -439,7 +463,7 @@ Dot {
  xpos 664
  ypos -394
 }
-set N158138c0 [stack 0]
+set N9b1f380 [stack 0]
 EXPTool {
  mode Stops
  red 2
@@ -458,11 +482,14 @@ Write {
  last 741
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq4
  xpos 558
  ypos -326
 }
-push $N158138c0
+push $N9b1f380
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -481,11 +508,14 @@ Write {
  last 741
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq4
  xpos 630
  ypos -232
 }
-push $N158138c0
+push $N9b1f380
 EXPTool {
  mode Stops
  red -2
@@ -504,11 +534,14 @@ Write {
  last 741
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq4
  xpos 700
  ypos -319
 }
-push $N14f47300
+push $N8e54ed0
 EXPTool {
  mode Stops
  red 2
@@ -527,11 +560,14 @@ Write {
  last 590
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq2
  xpos -610
  ypos -315
 }
-push $N88ff650
+push $N7156480
 EXPTool {
  mode Stops
  red 2
@@ -550,11 +586,14 @@ Write {
  last 387
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq1
  xpos -1204
  ypos -303
 }
-push $N88ff650
+push $N7156480
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -574,11 +613,14 @@ Write {
  last 387
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq1
  xpos -1132
  ypos -209
 }
-push $N6aefc60
+push $N71a9590
 EXPTool {
  mode Stops
  red 2
@@ -597,7 +639,9 @@ Write {
  last 481
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq
  xpos -1854
  ypos -305
@@ -638,7 +682,9 @@ Write {
  last 10239
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq8
  xpos -1863
  ypos 169
@@ -679,7 +725,9 @@ Write {
  last 1118
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq10
  xpos -600
  ypos 176
@@ -720,7 +768,9 @@ Write {
  last 3481
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq11
  xpos -11
  ypos 184
@@ -744,7 +794,7 @@ Dot {
  xpos -1736
  ypos 555
 }
-set N8a02690 [stack 0]
+set N7071570 [stack 0]
 EXPTool {
  mode Stops
  red 2
@@ -762,12 +812,14 @@ Write {
  last 3143
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq12
  xpos -1842
  ypos 623
 }
-push $N8a02690
+push $N7071570
 EXPTool {
  mode Stops
  red -2
@@ -786,11 +838,14 @@ Write {
  last 3143
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq12
  xpos -1700
  ypos 621
 }
-push $N8a02690
+push $N7071570
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -810,6 +865,9 @@ Write {
  last 3143
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq12
  xpos -1770
  ypos 701
@@ -833,7 +891,7 @@ Dot {
  xpos -1089
  ypos 548
 }
-set N15dd1420 [stack 0]
+set N8279980 [stack 0]
 EXPTool {
  mode Stops
  red 2
@@ -851,12 +909,14 @@ Write {
  last 3738
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_seq13
  xpos -1195
  ypos 616
 }
-push $N15dd1420
+push $N8279980
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -876,11 +936,14 @@ Write {
  last 3738
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq13
  xpos -1123
  ypos 694
 }
-push $N15dd1420
+push $N8279980
 EXPTool {
  mode Stops
  red -2
@@ -899,74 +962,12 @@ Write {
  last 3738
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq13
  xpos -1053
  ypos 614
-}
-Read {
- inputs 0
- file_type tiff
- file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_010/tif/2017-02-10_164114_010.########.tif
- format "512 256 0 0 512 256 1 "
- first 157
- last 777
- origfirst 157
- origlast 777
- origset true
- name Read7
- xpos 1457
- ypos -516
-}
-Dot {
- name Dot11
- xpos 1491
- ypos -364
-}
-set N1576d6d0 [stack 0]
-EXPTool {
- mode Stops
- red 2
- green 2
- blue 2
- name Exposure_up5
- xpos 1385
- ypos -320
-}
-Write {
- file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_013/tif/2017-02-10_164114_013.########.tiff/2017-02-10_163916_013.########.tif
- file_type tiff
- datatype "16 bit"
- create_directories true
- first 157
- last 777
- use_limit true
- checkHashOnRead false
- name Write_13_seq5
- xpos 1385
- ypos -296
-}
-push $N1576d6d0
-EXPTool {
- mode Stops
- red -2
- green -2
- blue -2
- name Exposure_down5
- xpos 1527
- ypos -322
-}
-Write {
- file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_017/tif/2017-02-10_164114_017.########.tif
- file_type tiff
- datatype "16 bit"
- create_directories true
- first 157
- last 777
- use_limit true
- checkHashOnRead false
- name Write_17_seq5
- xpos 1527
- ypos -293
 }
 Read {
  inputs 0
@@ -987,30 +988,7 @@ Dot {
  xpos 2088
  ypos -363
 }
-set N156bf3d0 [stack 0]
-EXPTool {
- mode Stops
- red 2
- green 2
- blue 2
- name Exposure_up6
- xpos 1982
- ypos -319
-}
-Write {
- file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_013/tif/2017-02-10_164141_013.########.tif
- file_type tiff
- datatype "16 bit"
- create_directories true
- first 191
- last 600
- use_limit true
- checkHashOnRead false
- name Write_13_seq6
- xpos 1982
- ypos -295
-}
-push $N156bf3d0
+set N8392a60 [stack 0]
 EXPTool {
  mode Stops
  red -2
@@ -1029,11 +1007,14 @@ Write {
  last 600
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq6
  xpos 2124
  ypos -292
 }
-push $N156bf3d0
+push $N8392a60
 RolloffContrast {
  contrast 1.5
  center 0.25
@@ -1052,6 +1033,9 @@ Write {
  last 600
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_seq6
  xpos 2054
  ypos -201
@@ -1075,7 +1059,7 @@ Dot {
  xpos 2704
  ypos -353
 }
-set N15a89350 [stack 0]
+set N84344c0 [stack 0]
 EXPTool {
  mode Stops
  red -2
@@ -1094,11 +1078,14 @@ Write {
  last 2223
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_seq7
  xpos 2740
  ypos -287
 }
-push $N15a89350
+push $N84344c0
 EXPTool {
  mode Stops
  red 2
@@ -1117,15 +1104,14 @@ Write {
  last 2223
  use_limit true
  checkHashOnRead false
+ version 1
  name Write_13_seq7
  xpos 2598
  ypos -285
 }
 Viewer {
  inputs 2
- frame 2139
  frame_range 74-10239
- input_number 1
  gain 45
  colour_sample_bbox {0.8125 -0.2265625 0.8203125 -0.21875}
  name Viewer1
@@ -1151,7 +1137,7 @@ Dot {
  xpos -1469
  ypos -360
 }
-set N8697bf0 [stack 0]
+set N84cbf10 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_015/mask/2017-02-10_162903_015_mask.########.tif
  file_type tiff
@@ -1160,11 +1146,14 @@ Write {
  last 481
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask
  xpos -1503
  ypos -216
 }
-push $N8697bf0
+push $N84cbf10
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_013/mask/2017-02-10_162903_013_mask.########.tif
  file_type tiff
@@ -1173,11 +1162,14 @@ Write {
  last 481
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask
  xpos -1578
  ypos -309
 }
-push $N8697bf0
+push $N84cbf10
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_017/mask/2017-02-10_162903_017_mask.########.tif
  file_type tiff
@@ -1186,6 +1178,9 @@ Write {
  last 481
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask
  xpos -1420
  ypos -310
@@ -1209,7 +1204,7 @@ Dot {
  xpos -821
  ypos -350
 }
-set N14ec1960 [stack 0]
+set N85436b0 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_015/mask/2017-02-10_163357_015_mask.########.tif
  file_type tiff
@@ -1219,11 +1214,14 @@ Write {
  last 387
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask1
  xpos -855
  ypos -215
 }
-push $N14ec1960
+push $N85436b0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_017/mask/2017-02-10_163357_017_mask.########.tif
  file_type tiff
@@ -1233,11 +1231,14 @@ Write {
  last 387
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask1
  xpos -763
  ypos -292
 }
-push $N14ec1960
+push $N85436b0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_013/mask/2017-02-10_163357_013_mask.########.tif
  file_type tiff
@@ -1247,6 +1248,9 @@ Write {
  last 387
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask1
  xpos -935
  ypos -296
@@ -1278,6 +1282,9 @@ Write {
  last 10239
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask8
  xpos -1598
  ypos 171
@@ -1301,7 +1308,7 @@ Dot {
  xpos -220
  ypos -359
 }
-set N1500e600 [stack 0]
+set N85fb280 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_013/mask/2017-02-10_163553_013_mask.########.tif
  file_type tiff
@@ -1311,11 +1318,14 @@ Write {
  last 590
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask2
  xpos -343
  ypos -301
 }
-push $N1500e600
+push $N85fb280
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_015/mask/2017-02-10_163553_015_mask.########.tif
  file_type tiff
@@ -1325,11 +1335,14 @@ Write {
  last 590
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask2
  xpos -254
  ypos -215
 }
-push $N1500e600
+push $N85fb280
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_017/mask/2017-02-10_163553_017_mask.########.tif
  file_type tiff
@@ -1339,6 +1352,9 @@ Write {
  last 590
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask2
  xpos -176
  ypos -297
@@ -1362,7 +1378,7 @@ Dot {
  xpos 341
  ypos -333
 }
-set N15146db0 [stack 0]
+set N8672920 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_013/mask/2017-02-10_163907_013_mask.########.tif
  file_type tiff
@@ -1372,12 +1388,14 @@ Write {
  last 328
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask3
  xpos 238
  ypos -274
 }
-push $N15146db0
+push $N8672920
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_017/mask/2017-02-10_163907_017_mask.########.tif
  file_type tiff
@@ -1387,11 +1405,14 @@ Write {
  last 328
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask3
  xpos 379
  ypos -266
 }
-push $N15146db0
+push $N8672920
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_015/mask/2017-02-10_163907_015_mask.########.tif
  file_type tiff
@@ -1401,6 +1422,9 @@ Write {
  last 328
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask3
  xpos 307
  ypos -206
@@ -1424,7 +1448,7 @@ Dot {
  xpos 966
  ypos -366
 }
-set N15087c20 [stack 0]
+set N86e9fc0 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_013/mask/2017-02-10_163916_013_mask.########.tif
  file_type tiff
@@ -1434,12 +1458,14 @@ Write {
  last 741
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask4
  xpos 837
  ypos -306
 }
-push $N15087c20
+push $N86e9fc0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_015/mask/2017-02-10_163916_015_mask.########.tif
  file_type tiff
@@ -1449,11 +1475,14 @@ Write {
  last 741
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask4
  xpos 932
  ypos -224
 }
-push $N15087c20
+push $N86e9fc0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_017/mask/2017-02-10_163916_017_mask.########.tif
  file_type tiff
@@ -1463,6 +1492,9 @@ Write {
  last 741
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask4
  xpos 1019
  ypos -298
@@ -1486,7 +1518,7 @@ Dot {
  xpos 1775
  ypos -359
 }
-set N1580f3e0 [stack 0]
+set N8761e70 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_013/mask/2017-02-10_164114_013_mask.########.tif
  file_type tiff
@@ -1496,12 +1528,14 @@ Write {
  last 777
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask5
  xpos 1672
  ypos -289
 }
-push $N1580f3e0
+push $N8761e70
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_017/mask/2017-02-10_164114_017_mask.########.tif
  file_type tiff
@@ -1511,6 +1545,9 @@ Write {
  last 777
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask5
  xpos 1823
  ypos -290
@@ -1534,7 +1571,7 @@ Dot {
  xpos 2385
  ypos -343
 }
-set N158d5470 [stack 0]
+set N87bd7d0 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_015/mask/2017-02-10_164141_015_mask.########.tif
  file_type tiff
@@ -1544,11 +1581,14 @@ Write {
  last 600
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask6
  xpos 2351
  ypos -193
 }
-push $N158d5470
+push $N87bd7d0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_017/mask/2017-02-10_164141_017_mask.########.tif
  file_type tiff
@@ -1558,11 +1598,14 @@ Write {
  last 600
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask6
  xpos 2435
  ypos -283
 }
-push $N158d5470
+push $N87bd7d0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_013/mask/2017-02-10_164141_013_mask.########.tif
  file_type tiff
@@ -1572,7 +1615,9 @@ Write {
  last 600
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask6
  xpos 2256
  ypos -292
@@ -1596,7 +1641,7 @@ Dot {
  xpos 3005
  ypos -294
 }
-set N159f65b0 [stack 0]
+set N8834e70 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_013/mask/2017-02-10_164441_013_mask.########.tif
  file_type tiff
@@ -1606,12 +1651,14 @@ Write {
  last 2223
  use_limit true
  checkHashOnRead false
- version 1
+ version 2
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask7
  xpos 2859
  ypos -253
 }
-push $N159f65b0
+push $N8834e70
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_017/mask/2017-02-10_164441_017_mask.########.tif
  file_type tiff
@@ -1621,6 +1668,9 @@ Write {
  last 2223
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask7
  xpos 3055
  ypos -253
@@ -1652,6 +1702,9 @@ Write {
  last 1118
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask10
  xpos -345
  ypos 152
@@ -1683,6 +1736,9 @@ Write {
  last 3481
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask11
  xpos 237
  ypos 191
@@ -1706,7 +1762,7 @@ Dot {
  xpos -1450
  ypos 552
 }
-set N15c3fe50 [stack 0]
+set N8910010 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_015/mask/2017-11-22_144117_015_mask.########.tif
  file_type tiff
@@ -1715,11 +1771,14 @@ Write {
  last 3143
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask12
  xpos -1484
  ypos 707
 }
-push $N15c3fe50
+push $N8910010
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_017/mask/2017-11-22_144117_017_mask.########.tif
  file_type tiff
@@ -1728,11 +1787,14 @@ Write {
  last 3143
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask12
  xpos -1398
  ypos 635
 }
-push $N15c3fe50
+push $N8910010
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_013/mask/2017-11-22_144117_013_mask.########.tif
  file_type tiff
@@ -1741,6 +1803,9 @@ Write {
  last 3143
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask12
  xpos -1565
  ypos 618
@@ -1764,7 +1829,7 @@ Dot {
  xpos -827
  ypos 575
 }
-set N15b5da10 [stack 0]
+set N89876b0 [stack 0]
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_015/mask/2017-11-22_144155_015_mask.########.tif
  file_type tiff
@@ -1773,11 +1838,14 @@ Write {
  last 3738
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_15_mask13
  xpos -861
  ypos 720
 }
-push $N15b5da10
+push $N89876b0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_013/mask/2017-11-22_144155_013_mask.########.tif
  file_type tiff
@@ -1786,11 +1854,14 @@ Write {
  last 3738
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_13_mask13
  xpos -928
  ypos 615
 }
-push $N15b5da10
+push $N89876b0
 Write {
  file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_017/mask/2017-11-22_144155_017_mask.########.tif
  file_type tiff
@@ -1799,7 +1870,101 @@ Write {
  last 3738
  use_limit true
  checkHashOnRead false
+ version 1
+ in_colorspace linear
+ out_colorspace linear
  name Write_17_mask13
  xpos -775
  ypos 605
+}
+push $N8392a60
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up6
+ xpos 1982
+ ypos -319
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_013/tif/2017-02-10_164141_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq6
+ xpos 1982
+ ypos -295
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_010/tif/2017-02-10_164114_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 157
+ last 777
+ origfirst 157
+ origlast 777
+ origset true
+ name Read7
+ xpos 1457
+ ypos -516
+}
+Dot {
+ name Dot11
+ xpos 1491
+ ypos -364
+}
+set N831b3e0 [stack 0]
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down5
+ xpos 1527
+ ypos -322
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_017/tif/2017-02-10_164114_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_17_seq5
+ xpos 1527
+ ypos -293
+}
+push $N831b3e0
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up5
+ xpos 1385
+ ypos -320
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_013/tif/2017-02-10_164114_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ version 2
+ name Write_13_seq5
+ xpos 1385
+ ypos -296
 }
