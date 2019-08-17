@@ -1,6 +1,6 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration file="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/Lightningfootagesegmentation.prj" location="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps" name="Lightningfootagesegmentation" target="target.ezdeploy.standalone" target-name="Application Compiler">
-    <param.appname>Segment</param.appname>
+  <configuration file="/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation.prj" location="/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps" name="Lightningfootagesegmentation" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>Segmentation</param.appname>
     <param.icon />
     <param.icons />
     <param.version>1.0</param.version>
@@ -11,7 +11,7 @@
     <param.description />
     <param.screenshot />
     <param.guid />
-    <param.installpath.string>/Raiden/Segment/</param.installpath.string>
+    <param.installpath.string>/Raiden/Segmentation/</param.installpath.string>
     <param.installpath.combo>option.installpath.userlocal</param.installpath.combo>
     <param.logo />
     <param.install.notes />
@@ -91,26 +91,24 @@ ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa
     <fileset.resources />
     <fileset.package />
     <fileset.depfun>
-      <file>/home/tyson/Documents/MATLAB/progressbar.m</file>
-      <file>${PROJECT_ROOT}/folder.png</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/loadLabels.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/resizeImages.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/resizePixelLabels.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/segmentResults.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/setupColors.m</file>
+      <file>/home/jason/MATLAB Add-Ons/Apps/Lightningfootagesegmentation/folder.png</file>
+      <file>/home/jason/MATLAB Add-Ons/Apps/Lightningfootagesegmentation/progress.mlapp</file>
     </fileset.depfun>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="run_Segment.sh" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/run_Segment.sh</file>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="splash.png" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/splash.png</file>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="readme.txt" optional="true">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/readme.txt</file>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="Segment" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/Segment</file>
+      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="readme.txt" optional="true">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="Segmentation" optional="false">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/Segmentation</file>
+      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="run_Segmentation.sh" optional="false">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/run_Segmentation.sh</file>
+      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="splash.png" optional="false">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/splash.png</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/usr/local/MATLAB/R2019a</root>
+      <root>/mnt/share/Matlab-linux</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
         <toolbox name="gpucoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabhdlcoder" />
         <toolbox name="neuralnetwork" />
       </toolboxes>
       <toolbox>
@@ -119,9 +117,24 @@ ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa
         </matlabcoder>
       </toolbox>
       <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
         <gpucoder>
           <enabled>true</enabled>
         </gpucoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
       </toolbox>
       <toolbox>
         <neuralnetwork>

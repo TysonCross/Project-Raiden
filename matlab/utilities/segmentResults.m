@@ -1,32 +1,24 @@
 
 %% Import variables
-fromApp = true;
-if ~fromApp
-    load('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/networks/cache/deeplabv3_2019-08-08_073519/network.mat');
-    sequenceDir = '/mnt/Shield/Raiden/data/sequences/test/full_seq/tif';
-    outputDir = '~/Desktop/test';
+function segmentResults(networkFile, sequenceDir, outputDir, doOverlay, doCompare, labelDir)
+    load(networkFile);
     % labelDir = '/home/jason/Desktop/reduced/mask';
-    doOverlay = true;
-    doCompare = false;
-else
-    load(app.Networkfile_Edit.Value); 
-    sequenceDir = app.Inputfolder_Edit.Value;
-    outputDir = app.Outputpath_Edit.Value;
-
-    doOverlay = app.Makeoverlay_CheckBox.Value;
-    doCompare = app.Comparewithexpected_CheckBox.Value;
-end
-
+    if nargin == 3
+        doOverlay = false;
+        doCompare = false;
+        labelDir = '';
+    elseif nargin == 4
+        doCompare = false;
+        labelDir = '';
+    elseif nargin ==5 
+        error('All options and labelDir needs to be supplied if doCompare is requested')
+    end
 if ~exist('net','var')
     if exist('lgraph','var')
         net =lgraph;
     else
         error('No network defined')
     end
-end
-
-if doCompare
-    labelDir = app.Pixellabels_Edit.Value;
 end
 
 loadLabels;
@@ -126,3 +118,4 @@ clear actual ans cmap diffImage expected expectedResult I ...
 
 disp('Done.')
 msgbox('Operation Completed');
+end
