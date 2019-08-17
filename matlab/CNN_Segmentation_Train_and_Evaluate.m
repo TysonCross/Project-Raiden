@@ -17,7 +17,7 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'u-net'
+network = 'deeplabv3'
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -28,8 +28,8 @@ network = 'u-net'
 %}
 
 % Phases to run
-forceConvert        = 0         % if true, resize/process new data (slow)
-preProcess          = 1         % if true, median filter on input data
+forceConvert        = 1         % if true, resize/process new data (slow)
+preProcess          = 0         % if true, median filter on input data
 partitionData       = 1         % if true, re-split Test/Training (optionally with percentage)
 resplitValidation   = 1         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
@@ -40,8 +40,8 @@ saveImages          = 1         % generate performance figures
 sendNotification    = 1         % send email notification on completion
 evaluateNet         = 1         % if true, evaluate performance on test set
 
-% percentage of each sequence
-percentage = 0.5;
+% percentage of each sequence (strokes will not be culled)
+percentage = 1.0;
 
 % resolution setup
 imageSize = getResolution(network)
@@ -538,12 +538,14 @@ if (doTraining==true)
         'Plots','training-progress')
 
     % Define augmenting methods
-    pixelRange = [-32 32];
-    scaleRange = [0.5 1.5];
+    pixelRange = [-16 16];
+    scaleRange = [0.9 1.1];
     augmenter = imageDataAugmenter( ...
         'RandXReflection',true, ...
         'RandXTranslation',pixelRange, ...
-        'RandXScale',scaleRange);
+        'RandYTranslation',pixelRange, ...
+        'RandXScale',scaleRange, ...
+        'RandYScale',scaleRange);
 
     pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
         'DataAugmentation', augmenter);

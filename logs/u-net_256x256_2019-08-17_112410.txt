@@ -70,4 +70,38 @@ Training on single GPU.
 |       1 |         170 |       02:04:38 |       54.31% |       58.96% |       1.5071 |       1.2560 |          0.0100 |
 |       1 |         180 |       02:11:33 |       55.37% |       59.13% |       1.2226 |       1.2416 |          0.0100 |
 |       1 |         190 |       02:18:30 |       45.01% |       61.23% |       1.2001 |       1.2455 |          0.0100 |
-|       1 |         200 |       02:25:25 |       59.01% |       61.36% |       1.1507 |       1
+|       1 |         200 |       02:25:25 |       59.01% |       61.36% |       1.1507 |       1.2326 |          0.0100 |
+|       1 |         210 |       02:32:32 |       11.96% |       10.03% |       1.1576 |       1.2486 |          0.0100 |
+|======================================================================================================================|
+Network created
+Evaluating network performance
+ans =
+  1×5 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+    <strong>GlobalAccuracy</strong>    <strong>MeanAccuracy</strong>     <strong>MeanIoU</strong>      <strong>WeightedIoU</strong>    <strong>MeanBFScore</strong>
+    <strong>______________</strong>    <strong>____________</strong>    <strong>__________</strong>    <strong>___________</strong>    <strong>___________</strong>
+      9.7847e-02       2.2319e-01     6.0171e-02    4.2237e-02     2.2967e-01 
+ans =
+  6×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+               <strong>Accuracy</strong>        <strong>IoU</strong>        <strong>MeanBFScore</strong>
+              <strong>__________</strong>    <strong>__________</strong>    <strong>___________</strong>
+    <strong>leader</strong>    4.9704e-01    1.1620e-03    9.0197e-03 
+    <strong>stroke</strong>    2.5115e-04    2.5109e-04    3.9170e-04 
+    <strong>sky   </strong>    3.7139e-03    3.7014e-03    1.7160e-01 
+    <strong>cloud </strong>    0.0000e+00    0.0000e+00           NaN 
+    <strong>ground</strong>    8.3816e-01    3.5591e-01    4.0201e-01 
+    <strong>other </strong>    0.0000e+00    0.0000e+00           NaN 
+Network created
+Saving data, please wait...
+Network and data archived
+[Warning: export_fig currently supports transparent patches/areas only in PNG output.
+To export transparent patches/areas to PDF, use the print command:
+ print(gcf, '-dpdf',
+ '/home/tyson/Raiden/networks/cache/u-net_256x256_2019-08-17_112410/Training_Progress_17-Aug-2019_112447.pdf');] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 449)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',449,0)">line 449</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 630)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',630,0)">line 630</a>)] 
+[Warning: exporting images to PDF/EPS may result in blurry images on some viewers. If so, try to change viewer, or increase the
+image's CData resolution, or use -opengl renderer, or export via the print function. See <a href="matlab:web('https://github.com/altmany/export_fig/issues/206','-browser');">issue #206</a> for details.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 852)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',852,0)">line 852</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 630)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',630,0)">line 630</a>)] 
+1 figures exported to /home/tyson/Raiden/networks/cache/u-net_256x256_2019-08-17_112410
+Figure archived

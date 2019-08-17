@@ -44,8 +44,8 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
                 Im16 = noise_removal(Im16, 2);  
             end
             
-            % convert to 8-bit
-            I = uint8(Im16/255);
+            % convert to single precision
+            I = single(Im16);
             
             % Resize image.
             I = imresize(I,[y x]);

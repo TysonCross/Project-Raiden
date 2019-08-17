@@ -21,16 +21,12 @@ function [imds, pxds] = randomSubset(imds_full, pxds_full, percentage)
 
   % Set initial random state
   rng(now);
-%   strokeSetIndx = strokeSetIndx(randperm(length(strokeSetIndx)));
   leaderSetIndx = leaderSetIndx(randperm(length(leaderSetIndx)));
   otherSetIndx = otherSetIndx(randperm(length(otherSetIndx)));
 
-  % Use the same percentage of each subset of images
-%   N_stroke = round(percentage * length(strokeSetIndx));
-  N_stroke = length(strokeSetIndx);
+  % Use the same percentage of each subset of non-stroke images
   N_leader = round(percentage * length(leaderSetIndx));
   N_other = round(percentage * length(otherSetIndx));
-%   strokeSetIndx = strokeSetIndx(1:N_stroke);
   leaderSetIndx = leaderSetIndx(1:N_leader);
   otherSetIndx = otherSetIndx(1:N_other);
   idx = cat(1,strokeSetIndx(:),leaderSetIndx(:),otherSetIndx(:));
