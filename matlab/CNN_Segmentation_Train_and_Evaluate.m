@@ -7,7 +7,7 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'deeplabv3'; 
+network = 'u-net'; 
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -18,7 +18,7 @@ network = 'deeplabv3';
 %}
 
 % Phases to run
-forceConvert        = 1         % if true, resize/process new data (slow)
+forceConvert        = 0         % if true, resize/process new data (slow)
 preProcess          = 0         % if true, median filter on input data
 partitionData       = 1         % if true, re-split Test/Training (warning)
 resplitValidation   = 1         % if true, re-split Training/Validation
@@ -29,6 +29,9 @@ archiveNet          = 1         % archive NN, data and figures to subfolder
 saveImages          = 1         % generate performance figures
 sendNotification    = 1         % send email notification on completion
 evaluateNet         = 1         % if true, evaluate performance on test set
+
+% percentage of each sequence
+percentage = 1.0;
 
 % resolution setup
 imageSize = getResolution(network)
@@ -202,7 +205,7 @@ end
 
 if (partitionData==true)
     disp("Partitioning test and training Data...")
-
+    
     % [split training and test]
     splitPercent = 0.15;
     [trainIndex, testIndex] = splitData(resizedImageFolders, splitPercent);
@@ -223,6 +226,11 @@ if (partitionData==true)
         labelNames,labelIDs_scalar,'FileExtensions','.tif');
     assert(numel(imdsTest.Files)==numel(pxdsTest.Files))
 
+    if percentage < 1
+        [imdsTrain, pxdsTrain] = randomSubset(imdsTrain, pxdsTrain, percentage);
+        [imdsTest, pxdsTest] = randomSubset(imdsTest, pxdsTest, percentage);
+    end
+    
     % Calculate the class weights 
     disp("Counting per-label pixel distribution...")  % ToDo: This is slow!
     labelTable = pxdsTrain.countEachLabel;
@@ -251,7 +259,7 @@ diary off; diary on;
 if (resplitValidation==true)
     disp("Splitting training/validation data...")
    
-    splitPercentage = 0.80;
+    splitPercentage = 0.8;
     % Split training and validation
     [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
         partitionTrainingData(imdsTrain, pxdsTrain, splitPercentage);
@@ -366,11 +374,37 @@ else
                 clear lgraph
                 
             case 'u-net'
-                lgraph = unetLayers([imageSize 3], numClasses);
-                lgraph = replaceLayer(lgraph,"pixelLabels", pxLayer);
-                net = lgraph;
+                % load pretrained unet
+                pretrainedNet = load('/home/tyson/Raiden/networks/pretrainedNetwork/multispectralUnet.mat');
+                pretrainedNet = layerGraph(pretrainedNet.net);
                 
-                clear lgraph
+                % create a new unet
+                encoderDepth = 4;
+                lgraph = unetLayers([imageSize 3], numClasses, ...
+                    'EncoderDepth',encoderDepth);
+                lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
+                
+%                 imageInputLayerName = 'ImageInput';
+%                 newLayer = imageInputLayer([imageSize 3],'Name',imageInputLayerName,'Normalization','zerocenter');
+%                 lgraph = replaceLayer(lgraph,"ImageInputLayer",newLayer);
+%                 lgraph = connectLayers(lgraph,"ImageInput","Encoder-Section-1-Conv-1");
+                
+%                 lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
+%                 net = lgraph;
+
+                % transfer weights
+                for ii = 1:length(lgraph)
+                  if isprop(lgraph(ii), 'Weights') % Does layer l have weights?
+                    lgraph(ii).Weights = pretrainedNet.Layers(ii).Weights;
+                  end
+                  if isprop(lgraph(ii), 'Bias') % Does layer l have biases?
+                    lgraph(ii).Bias = pretrainedNet.Layers(ii).Bias;
+                  end
+                end
+               
+                net = lgraph;
+
+                clear lgraph layers pretrainedNet
                 
                 
             case 'vgg16'
@@ -471,12 +505,12 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 50, ...  
-        'MiniBatchSize', 100, ...
+        'MiniBatchSize', 32, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-3, ... % from 1e-3
+        'InitialLearnRate',1e-2, ... % from 1e-3
         'LearnRateSchedule','piecewise',...
-        'LearnRateDropPeriod',8,...
+        'LearnRateDropPeriod',10,...
         'LearnRateDropFactor',0.3,...
         'Momentum',0.9, ...
         'L2Regularization',0.005, ... % from 0.005
@@ -489,13 +523,13 @@ if (doTraining==true)
         'Plots','training-progress')
 
     % Define augmenting methods
-    pixelRangeH = [-32 32];
-    pixelRangeV = [-16 16];
+    pixelRange = [-32 32];
     scaleRange = [0.5 1.5];
+    rotRange = [-20 20];
     augmenter = imageDataAugmenter( ...
         'RandXReflection',true, ...
-        'RandXTranslation',pixelRangeH, ...
-        'RandYTranslation',pixelRangeV, ...
+        'RandRotation',rotRange, ...
+        'RandXTranslation',pixelRange, ...
         'RandXScale',scaleRange, ...
         'RandYScale',scaleRange);
 

@@ -1,9 +1,9 @@
 function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, pxds, splitPercentage)
-% Partition data by randomly selecting 80% of the data for training,
+% Partition data by randomly selecting a percentage of the data for training,
 % the rest is used for validation.
-    
+
 % Set initial random state for example reproducibility
-    rng(0); 
+    rng(0);
     numFiles = numel(imds.Files);
     shuffledIndices = randperm(numFiles);
 
@@ -23,7 +23,7 @@ function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, 
     % load class and label IDs info
     loadLabels;
 
-    % Create pixel label datastores for trainin and validation
+    % Create pixel label datastores for training and validation
     trainingLabels = pxds.Files(trainingIdx);
     validationLabels = pxds.Files(validationIdx);
     pxdsTrain = pixelLabelDatastore(trainingLabels, labelNames, labelIDs_scalar);

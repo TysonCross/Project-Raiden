@@ -1,0 +1,40 @@
+Checking sequences...
+Converting Data...
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('distcomp.remoteparfor/getCompleteIntervals', '/usr/local/MATLAB/R2019a/toolbox/distcomp/distcomp/+distcomp/remoteparfor.m', 374)" style="font-weight:bold">distcomp.remoteparfor/getCompleteIntervals</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/distcomp/+distcomp/remoteparfor.m',374,0)">line 374</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function>distributed_execution', '/usr/local/MATLAB/R2019a/toolbox/matlab/lang/parallel_function.p', 745)" style="font-weight:bold">parallel_function>distributed_execution</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/lang/parallel_function.p',745,0)">line 745</a>)
+        [tags, out] = P.getCompleteIntervals(chunkSize);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel_function', '/usr/local/MATLAB/R2019a/toolbox/matlab/lang/parallel_function.p', 577)" style="font-weight:bold">parallel_function</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/lang/parallel_function.p',577,0)">line 577</a>)
+    R = distributed_execution(...
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 133)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',133,0)">line 133</a>)
+    parfor i = 1:numel(imageFolders)} 
+CNN_Segmentation_Train_and_Evaluate
+forceConvert =
+     0
+preProcess =
+     0
+partitionData =
+     1
+resplitValidation =
+     1
+useCachedNet =
+     0
+doTraining =
+     1
+recoverCheckpoint =
+     0
+archiveNet =
+     1
+saveImages =
+     1
+sendNotification =
+     1
+evaluateNet =
+     1
+[Warning: Invalid network name: assuming resolution of 227x227] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('getResolution', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/getResolution.m', 30)" style="font-weight:bold">getResolution</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/getResolution.m',30,0)">line 30</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 34)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',34,0)">line 34</a>)] 
+imageSize =
+   227   227
+logFileFull = 
+    "/home/tyson/Raiden/logs/unet_227x227_2019-08-16_211950.txt"

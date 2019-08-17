@@ -1,0 +1,182 @@
+Converting Data...
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to the parallel pool (number of workers: 16).
+Resizing images & labels, converting labels RGB -> categorical ...
+Data converted successfully
+Metadata cached
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    5.1887e+06      1.4896e+09   
+    'stroke'    2.2857e+06      3.7683e+07   
+    'sky'       1.0191e+09      1.8609e+09   
+    'cloud'     6.2725e+08      1.1857e+09   
+    'ground'    2.0072e+08      1.8612e+09   
+    'other'     6.6311e+06      8.0262e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 22720 
+Validation images: 5680 
+Testing images: 5002 
+Data cached
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-03
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 5.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 50
+                MiniBatchSize: 100
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 10
+           ValidationPatience: 8
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'auto'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 0
+Beginning training...
+Training on single GPU.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+[Warning: GPU is low on memory, which can slow performance due to additional data transfers with main memory. Try
+reducing the 'MiniBatchSize' training option. This warning will not appear again unless you run the command:
+<a href="matlab:warning('on','nnet_cnn:warning:GPULowOnMemory')">warning('on','nnet_cnn:warning:GPULowOnMemory')</a>.] 
+|       1 |           1 |       00:06:51 |       30.48% |       30.52% |       1.9103 |       1.7964 |          0.0010 |
+|       1 |          10 |       00:14:33 |       59.06% |       77.70% |       0.7538 |       0.7373 |          0.0010 |
+|       1 |          20 |       00:22:14 |       64.31% |       84.24% |       0.5280 |       0.5980 |          0.0010 |
+|       1 |          30 |       00:29:51 |       65.18% |       83.10% |       0.4881 |       0.5785 |          0.0010 |
+|       1 |          40 |       00:37:33 |       63.92% |       88.02% |       0.4876 |       0.5095 |          0.0010 |
+|       1 |          50 |       00:45:12 |       66.36% |       87.84% |       0.3746 |       0.4493 |          0.0010 |
+|       1 |          60 |       00:52:52 |       67.55% |       88.11% |       0.3524 |       0.4345 |          0.0010 |
+|       1 |          70 |       01:00:31 |       65.96% |       87.51% |       0.3677 |       0.4157 |          0.0010 |
+|       1 |          80 |       01:08:11 |       69.36% |       89.20% |       0.3009 |       0.4026 |          0.0010 |
+|       1 |          90 |       01:15:55 |       70.43% |       88.66% |       0.3070 |       0.3945 |          0.0010 |
+|       1 |         100 |       01:23:36 |       67.21% |       87.91% |       0.3498 |       0.3971 |          0.0010 |
+|       1 |         110 |       01:31:18 |       69.68% |       89.24% |       0.2544 |       0.3859 |          0.0010 |
+|       1 |         120 |       01:39:01 |       66.32% |       89.60% |       0.2684 |       0.3806 |          0.0010 |
+|       1 |         130 |       01:46:49 |       69.62% |       90.00% |       0.3126 |       0.3842 |          0.0010 |
+|       1 |         140 |       01:54:28 |       67.51% |       89.71% |       0.2591 |       0.3575 |          0.0010 |
+|       1 |         150 |       02:02:12 |       67.66% |       90.13% |       0.2421 |       0.3760 |          0.0010 |
+|       1 |         160 |       02:09:53 |       68.79% |       89.44% |       0.2839 |       0.3643 |          0.0010 |
+|       1 |         170 |       02:17:36 |       70.08% |       90.04% |       0.2272 |       0.3564 |          0.0010 |
+|       1 |         180 |       02:25:46 |       67.44% |       90.85% |       0.2547 |       0.3765 |          0.0010 |
+|       1 |         190 |       02:33:31 |       67.35% |       89.48% |       0.2647 |       0.3417 |          0.0010 |
+|       1 |         200 |       02:41:17 |       69.78% |       90.89% |       0.2200 |       0.3762 |          0.0010 |
+|       1 |         210 |       02:48:55 |       69.01% |       89.60% |       0.2487 |       0.3298 |          0.0010 |
+|       1 |         220 |       02:56:37 |       66.02% |       90.66% |       0.2395 |       0.3408 |          0.0010 |
+|       2 |         230 |       03:04:23 |       70.78% |       90.84% |       0.2782 |       0.3313 |          0.0010 |
+|       2 |         240 |       03:12:06 |       67.60% |       89.45% |       0.2403 |       0.3182 |          0.0010 |
+|       2 |         250 |       03:19:49 |       67.37% |       90.95% |       0.3055 |       0.3210 |          0.0010 |
+|       2 |         260 |       03:27:30 |       67.18% |       90.11% |       0.2114 |       0.3088 |          0.0010 |
+|       2 |         270 |       03:35:14 |       66.53% |       90.45% |       0.2323 |       0.3134 |          0.0010 |
+|       2 |         280 |       03:42:57 |       67.99% |       91.22% |       0.2349 |       0.3155 |          0.0010 |
+|       2 |         290 |       03:50:40 |       68.55% |       89.53% |       0.2707 |       0.2970 |          0.0010 |
+|       2 |         300 |       03:58:28 |       67.22% |       89.50% |       0.2482 |       0.3112 |          0.0010 |
+|       2 |         310 |       04:06:15 |       68.61% |       90.28% |       0.2225 |       0.3073 |          0.0010 |
+|       2 |         320 |       04:13:59 |       67.91% |       89.61% |       0.2152 |       0.2909 |          0.0010 |
+|       2 |         330 |       04:21:41 |       68.45% |       90.77% |       0.2524 |       0.2999 |          0.0010 |
+|       2 |         340 |       04:29:26 |       68.81% |       90.76% |       0.2109 |       0.3004 |          0.0010 |
+|       2 |         350 |       04:37:07 |       67.44% |       89.30% |       0.2120 |       0.2770 |          0.0010 |
+|       2 |         360 |       04:44:54 |       66.41% |       89.71% |       0.2394 |       0.2853 |          0.0010 |
+|       2 |         370 |       04:52:46 |       64.80% |       90.46% |       0.1925 |       0.2911 |          0.0010 |
+|       2 |         380 |       05:00:28 |       70.09% |       90.27% |       0.2131 |       0.2779 |          0.0010 |
+|       2 |         390 |       05:08:09 |       69.85% |       90.53% |       0.1957 |       0.2813 |          0.0010 |
+|       2 |         400 |       05:15:47 |       71.06% |       90.03% |       0.1976 |       0.2850 |          0.0010 |
+|       2 |         410 |       05:23:27 |       70.40% |       90.39% |       0.2218 |       0.2727 |          0.0010 |
+|       2 |         420 |       05:31:06 |       67.60% |       89.77% |       0.1891 |       0.2684 |          0.0010 |
+|       2 |         430 |       05:38:47 |       71.04% |       90.82% |       0.2217 |       0.2652 |          0.0010 |
+|       2 |         440 |       05:46:28 |       71.30% |       89.94% |       0.2287 |       0.2685 |          0.0010 |
+|       2 |         450 |       05:54:07 |       68.90% |       89.83% |       0.2121 |       0.2691 |          0.0010 |
+|       3 |         460 |       06:01:56 |       68.73% |       90.77% |       0.1790 |       0.2751 |          0.0010 |
+|       3 |         470 |       06:09:37 |       67.51% |       90.59% |       0.2059 |       0.2764 |          0.0010 |
+|       3 |         480 |       06:17:22 |       69.73% |       90.75% |       0.1835 |       0.2630 |          0.0010 |
+|       3 |         490 |       06:25:08 |       68.87% |       90.10% |       0.1877 |       0.2569 |          0.0010 |
+|       3 |         500 |       06:32:52 |       70.68% |       90.65% |       0.1912 |       0.2643 |          0.0010 |
+|       3 |         510 |       06:40:36 |       67.19% |       90.53% |       0.2133 |       0.2730 |          0.0010 |
+|       3 |         520 |       06:48:21 |       70.93% |       90.91% |       0.1997 |       0.2664 |          0.0010 |
+|       3 |         530 |       06:56:01 |       69.42% |       90.51% |       0.2258 |       0.2516 |          0.0010 |
+|       3 |         540 |       07:03:43 |       73.39% |       90.97% |       0.2058 |       0.2585 |          0.0010 |
+|       3 |         550 |       07:11:22 |       69.57% |       90.57% |       0.1986 |       0.2474 |          0.0010 |
+|       3 |         560 |       07:19:00 |       72.13% |       90.47% |       0.1953 |       0.2577 |          0.0010 |
+|       3 |         570 |       07:26:39 |       72.03% |       91.67% |       0.2008 |       0.2637 |          0.0010 |
+|       3 |         580 |       07:34:23 |       66.51% |       90.05% |       0.1953 |       0.2487 |          0.0010 |
+|       3 |         590 |       07:42:02 |       69.07% |       90.90% |       0.1860 |       0.2586 |          0.0010 |
+|       3 |         600 |       07:49:43 |       69.29% |       90.91% |       0.1860 |       0.2471 |          0.0010 |
+|       3 |         610 |       07:57:26 |       70.92% |       90.50% |       0.1715 |       0.2498 |          0.0010 |
+|       3 |         620 |       08:05:14 |       69.47% |       91.48% |       0.2370 |       0.2516 |          0.0010 |
+|       3 |         630 |       08:12:58 |       72.04% |       90.30% |       0.1778 |       0.2476 |          0.0010 |
+|       3 |         640 |       08:20:38 |       70.15% |       90.91% |       0.1757 |       0.2449 |          0.0010 |
+|       3 |         650 |       08:28:18 |       70.73% |       91.43% |       0.1685 |       0.2508 |          0.0010 |
+|       3 |         660 |       08:36:01 |       72.02% |       91.34% |       0.1892 |       0.2458 |          0.0010 |
+|       3 |         670 |       08:43:45 |       69.34% |       91.09% |       0.1763 |       0.2454 |          0.0010 |
+|       3 |         680 |       08:51:29 |       70.96% |       91.27% |       0.1794 |       0.2393 |          0.0010 |
+|       4 |         690 |       08:59:13 |       66.27% |       90.84% |       0.2316 |       0.2353 |          0.0010 |
+|       4 |         700 |       09:06:56 |       69.30% |       91.38% |       0.2095 |       0.2485 |          0.0010 |
+|       4 |         710 |       09:14:39 |       71.41% |       90.30% |       0.1905 |       0.2350 |          0.0010 |
+|       4 |         720 |       09:22:19 |       70.50% |       90.66% |       0.1708 |       0.2249 |          0.0010 |
+|       4 |         730 |       09:30:04 |       66.73% |       90.67% |       0.1916 |       0.2317 |          0.0010 |
+|       4 |         740 |       09:37:41 |       67.66% |       90.75% |       0.2046 |       0.2351 |          0.0010 |
+|       4 |         750 |       09:45:23 |       69.50% |       90.70% |       0.1585 |       0.2315 |          0.0010 |
+|       4 |         760 |       09:53:03 |       67.87% |       90.41% |       0.1602 |       0.2359 |          0.0010 |
+|       4 |         770 |       10:00:44 |       66.49% |       90.58% |       0.1695 |       0.2372 |          0.0010 |
+|       4 |         780 |       10:08:27 |       71.07% |       90.92% |       0.1564 |       0.2368 |          0.0010 |
+|       4 |         790 |       10:16:08 |       72.56% |       91.33% |       0.1958 |       0.2325 |          0.0010 |
+|       4 |         800 |       10:23:48 |       68.95% |       90.59% |       0.1688 |       0.2215 |          0.0010 |
+|       4 |         810 |       10:31:29 |       68.63% |       90.92% |       0.1584 |       0.2240 |          0.0010 |
+|       4 |         820 |       10:39:09 |       69.66% |       90.97% |       0.1715 |       0.2301 |          0.0010 |
+|       4 |         830 |       10:46:51 |       69.23% |       91.20% |       0.1597 |       0.2227 |          0.0010 |
+|       4 |         840 |       10:54:35 |       69.55% |       90.88% |       0.2003 |       0.2251 |          0.0010 |
+|       4 |         850 |       11:02:18 |       68.90% |       91.08% |       0.1863 |       0.2232 |          0.0010 |
+|       4 |         860 |       11:09:58 |       69.69% |       91.37% |       0.1824 |       0.2218 |          0.0010 |
+|       4 |         870 |       11:17:42 |       70.37% |       91.30% |       0.1651 |       0.2234 |          0.0010 |
+|       4 |         880 |       11:25:28 |       71.71% |       91.13% |       0.1638 |       0.2252 |          0.0010 |
+|======================================================================================================================|
+Network created
+Evaluating network performance
+ans =
+  1×5 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+    <strong>GlobalAccuracy</strong>    <strong>MeanAccuracy</strong>     <strong>MeanIoU</strong>      <strong>WeightedIoU</strong>    <strong>MeanBFScore</strong>
+    <strong>______________</strong>    <strong>____________</strong>    <strong>__________</strong>    <strong>___________</strong>    <strong>___________</strong>
+      8.9641e-01       8.8064e-01     5.1742e-01    8.5081e-01     6.3594e-01 
+ans =
+  6×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+               <strong>Accuracy</strong>        <strong>IoU</strong>        <strong>MeanBFScore</strong>
+              <strong>__________</strong>    <strong>__________</strong>    <strong>___________</strong>
+    <strong>leader</strong>    9.6372e-01    5.3704e-02    6.2030e-01 
+    <strong>stroke</strong>    9.2309e-01    4.0870e-01    3.0961e-01 
+    <strong>sky   </strong>    8.4601e-01    8.1069e-01    5.7649e-01 
+    <strong>cloud </strong>    9.4398e-01    9.3299e-01    7.8910e-01 
+    <strong>ground</strong>    9.5628e-01    8.0235e-01    6.9987e-01 
+    <strong>other </strong>    6.5077e-01    9.6099e-02    2.8727e-01 
+Network created
+Saving data, please wait...
+Network and data archived
+[Warning: export_fig currently supports transparent patches/areas only in PNG output.
+To export transparent patches/areas to PDF, use the print command:
+ print(gcf, '-dpdf',
+ '/home/tyson/Raiden/networks/cache/deeplabv3_256x256_2019-08-16_055308/Training_Progress_16-Aug-2019_062316.pdf');] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 449)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',449,0)">line 449</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 585)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',585,0)">line 585</a>)] 
+[Warning: exporting images to PDF/EPS may result in blurry images on some viewers. If so, try to change viewer, or
+increase the image's CData resolution, or use -opengl renderer, or export via the print function. See <a href="matlab:web('https://github.com/altmany/export_fig/issues/206','-browser');">issue #206</a> for
+details.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 852)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',852,0)">line 852</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 585)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',585,0)">line 585</a>)] 
+1 figures exported to /home/tyson/Raiden/networks/cache/deeplabv3_256x256_2019-08-16_055308
+Figure archived

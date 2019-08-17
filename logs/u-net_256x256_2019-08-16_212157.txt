@@ -1,0 +1,63 @@
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 85)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',85,0)">line 85</a>)] 
+[Warning: Source and conversion folders match. Data will not converted. Enable forceConvert to override] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 96)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',96,0)">line 96</a>)] 
+Loaded metadata from cache...
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    5.4058e+06      1.4962e+09   
+    'stroke'    3.4159e+06      3.6635e+07   
+    'sky'       1.0555e+09      1.8602e+09   
+    'cloud'     5.7958e+08      1.1278e+09   
+    'ground'    2.0951e+08      1.8609e+09   
+    'other'     7.4361e+06      8.9109e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 22716 
+Validation images: 5679 
+Testing images: 5007 
+Data cached
+Setting up Network...
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph>iValidateLayerName', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 647)" style="font-weight:bold">nnet.cnn.LayerGraph>iValidateLayerName</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',647,0)">line 647</a>)
+Layer 'pixelLabels' does not exist.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph/replaceLayer', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 391)" style="font-weight:bold">nnet.cnn.LayerGraph/replaceLayer</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',391,0)">line 391</a>)
+            iValidateLayerName(layerName, directedGraph.Nodes.Layers);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 372)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',372,0)">line 372</a>)
+                lgraph = replaceLayer(lgraph,"pixelLabels", pxLayer);} 
+opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',647,0)
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',372,0)
+analyzeNetwork(net)
+{Undefined function or variable 'net'.} 
+analyzeNetwork(lgraph)
+lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
+analyzeNetwork(lgraph)
+CNN_Segmentation_Train_and_Evaluate
+forceConvert =
+     0
+preProcess =
+     0
+partitionData =
+     1
+resplitValidation =
+     1
+useCachedNet =
+     0
+doTraining =
+     1
+recoverCheckpoint =
+     0
+archiveNet =
+     1
+saveImages =
+     1
+sendNotification =
+     1
+evaluateNet =
+     1
+imageSize =
+   256   256
+logFileFull = 
+    "/home/tyson/Raiden/logs/u-net_256x256_2019-08-16_212443.txt"
