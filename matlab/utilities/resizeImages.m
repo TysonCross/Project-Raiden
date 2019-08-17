@@ -34,6 +34,7 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
     while hasdata(imds)
         [Im16,info] = read(imds);
         [~, filename, ext] = fileparts(info.Filename);
+        ext = '.png';
         
         if (~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') ...
                 || forceConvert)
@@ -44,14 +45,24 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
                 Im16 = noise_removal(Im16, 2);  
             end
             
-            % convert to single precision
-            I = single(Im16);
-            
             % Resize image.
-            I = imresize(I,[y x]);
+            Im16 = imresize(Im16,[y x]);
+            
+            % convert to single precision
+            I = im2single(Im16);
 
-            % Write to disk.
+            % Write image to disk.
             imwrite(I,fullfile(destinationPath,strcat(filename,ext)));
+%             t = Tiff(fullfile(destinationPath,strcat(filename,ext)),'w');  
+%             tagstruct.ImageLength = y; 
+%             tagstruct.ImageWidth = x;
+%             tagstruct.Photometric = Tiff.Photometric.RGB;
+%             tagstruct.BitsPerSample = 16;
+%             tagstruct.SamplesPerPixel = 3;
+%             tagstruct.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky; 
+%             tagstruct.Software = 'MATLAB';
+%             setTag(t,tagstruct);
+%             write(t,I);
         end
         
         imageList(r) = fullfile(destinationPath,strcat(filename,ext));

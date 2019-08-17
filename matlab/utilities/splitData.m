@@ -17,7 +17,7 @@ function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
     if (splitPercent==0)
         testIndex = [];
         trainIndex = 1:length(imageFolders);
-    else if (splitPercent==1)
+    elseif (splitPercent==1)
                 error('splitPercent = 1 means no images are used for training.')
     else
         numberOfSequences = length(imageFolders);

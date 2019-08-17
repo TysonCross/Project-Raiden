@@ -30,6 +30,7 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, forceConvert
     while hasdata(pxds)
         [C, info] = read(pxds);
         [~, filename, ext] = fileparts(info.Filename);
+        ext = ('.png');
         
         str = 'mask';
         maskIdx = strfind(filename, str);
