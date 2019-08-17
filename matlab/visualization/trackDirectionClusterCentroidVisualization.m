@@ -1,3 +1,9 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%          TRACKDIRECTIONCLUSTERCENTROIDVISUALIZATION.M
+% Given the output of the semantic segmentation this script produces and
+% tracks a centroid of the largest cluster of pixels. The centroids
+% movement is tracked across the frames and this process is plotted.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all;
 clc;
 close all;

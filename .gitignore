@@ -754,6 +754,7 @@ DerivedData/
 # MATLAB
 matlab/pathdef.m
 pathdef.m
+matlab/startup.m
 #matlab/Apps/**
 #!*.mlapp
 experiments/**
