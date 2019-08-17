@@ -1,0 +1,101 @@
+Checking sequences...
+Loaded metadata from cache...
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.6886e+06      7.4868e+08   
+    'stroke'    1.1331e+06      1.4680e+07   
+    'sky'       5.1445e+08      9.3041e+08   
+    'cloud'     3.0775e+08      5.8065e+08   
+    'ground'    1.0101e+08      9.3048e+08   
+    'other'     3.4508e+06      4.1098e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 11358 
+Validation images: 2840 
+Testing images: 2504 
+Data cached
+Setting up Network...
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph>iValidateLayerName', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 647)" style="font-weight:bold">nnet.cnn.LayerGraph>iValidateLayerName</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',647,0)">line 647</a>)
+Layer 'Encoder-Section-1-Conv-1' does not exist.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph>iGetDestinationInformation', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 571)" style="font-weight:bold">nnet.cnn.LayerGraph>iGetDestinationInformation</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',571,0)">line 571</a>)
+iValidateLayerName( endLayerName, layers );
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph/connectLayers', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 255)" style="font-weight:bold">nnet.cnn.LayerGraph/connectLayers</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',255,0)">line 255</a>)
+                iGetDestinationInformation(d, this.PrivateDirectedGraph.Nodes.Layers);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 401)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',401,0)">line 401</a>)
+                    lgraph = connectLayers(lgraph,"ImageInput","Encoder-Section-1-Conv-1");} 
+opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',647,0)
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',401,0)
+lgraph
+lgraph = 
+  <a href="matlab:helpPopup nnet.cnn.LayerGraph" style="font-weight:bold">LayerGraph</a> with properties:
+
+         Layers: [58×1 nnet.cnn.layer.Layer]
+    Connections: [61×2 table]
+encoderDepth = 4;
+                lgraph = unetLayers([imageSize 3], numClasses, ...
+                    'EncoderDepth',encoderDepth);
+                lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
+transferWeights = false;
+imageInputLayerName = 'ImageInput';
+analyzeNetwork(lgraph)
+encoderDepth = 4;
+                lgraph = unetLayers([imageSize 3], numClasses, ...
+                    'EncoderDepth',encoderDepth,'Normalization','none');
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('unetLayers>iParseInputs', '/usr/local/MATLAB/R2019a/toolbox/vision/vision/unetLayers.m', 224)" style="font-weight:bold">unetLayers>iParseInputs</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/vision/vision/unetLayers.m',224,0)">line 224</a>)
+'Normalization' is not a recognized parameter. For a list of valid name-value pair arguments, see the documentation for this
+function.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('unetLayers', '/usr/local/MATLAB/R2019a/toolbox/vision/vision/unetLayers.m', 154)" style="font-weight:bold">unetLayers</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/vision/vision/unetLayers.m',154,0)">line 154</a>)
+args = iParseInputs(imageSize, numClasses, varargin{:});} 
+imageInputLayerName = 'ImageInput';
+newLayer = imageInputLayer([imageSize 3],'Name',imageInputLayerName,'Normalization','none');
+lgraph = replaceLayer(lgraph,"ImageInputLayer",newLayer);
+lgraph = connectLayers(lgraph,"ImageInput","Encoder-Stage-1-Conv-1");
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph>iValidateThatConnectionDoesNotExist', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 746)" style="font-weight:bold">nnet.cnn.LayerGraph>iValidateThatConnectionDoesNotExist</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',746,0)">line 746</a>)
+Unable to add a connection that already exists.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph/connectLayers', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 281)" style="font-weight:bold">nnet.cnn.LayerGraph/connectLayers</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',281,0)">line 281</a>)
+                iValidateThatConnectionDoesNotExist( ...} 
+lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph>iValidateLayerName', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 647)" style="font-weight:bold">nnet.cnn.LayerGraph>iValidateLayerName</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',647,0)">line 647</a>)
+Layer 'Segmentation-Layer' does not exist.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.cnn.LayerGraph/replaceLayer', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m', 391)" style="font-weight:bold">nnet.cnn.LayerGraph/replaceLayer</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+cnn/LayerGraph.m',391,0)">line 391</a>)
+            iValidateLayerName(layerName, directedGraph.Nodes.Layers);} 
+doNormalisation = false;
+doNormalisation
+doNormalisation =
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+   0
+~doNormalisation
+ans =
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+   1
+CNN_Segmentation_Train_and_Evaluate
+network =
+    'u-net'
+forceConvert =
+     0
+preProcess =
+     1
+partitionData =
+     1
+resplitValidation =
+     1
+useCachedNet =
+     0
+doTraining =
+     1
+recoverCheckpoint =
+     0
+archiveNet =
+     1
+saveImages =
+     1
+sendNotification =
+     1
+evaluateNet =
+     1
+imageSize =
+   256   256
+logFileFull = 
+    "/home/tyson/Raiden/logs/u-net_256x256_2019-08-17_112410.txt"

@@ -1,32 +1,15 @@
 %% CNN_SEGMENTATION_TRAIN_AND_EVALUATE.M
-% This script implements transfer learninng on a pre-trained network that
-% is provided by supplying the name of the pre-trained network. Variables
-% that should be changed include:
-% Network and rootPath
-% The following binary options are avliable
-% forceConvert                % Resize/process new data ?
-% preProcess                  % Constrast + median on input data ?
-% partitionData               % Re-split Test/Training ?(warning)
-% resplitValidation           % Re-split Training/Validation ?
-% useCachedNet                % Use a cached network ?
-% doTraining                  % Perform training ?
-% recoverCheckpoint           % If training did not finish, use checkpoint ?
-% archiveNet                  % Archive NN, data and figures to subfolder ?
-% saveImages                  % Generate performance figures ?
-% sendNotification            % Send email notification on completion ?
-% evaluateNet                 % Evaluate performance on test set ?
+% This script implements data preperation, training and evaluation of 
+% various deep learning models, mainly using transfer learning on known
+% netowork topologys.
+% ToDo: Variables that should be changed include 'network' and 'rootPath'
 %
-%
-%
-%
-%
-%
-%ToDo(Tyson): Expand on the above as is required
-%NOTE: Should this not perhaps be changed to be either a self-standing app
-%       or rather a smaller script that calls the component scripts?
+% ToDo(Tyson): Expand on the above as is required
+% NOTE: Should this perhaps be changed to be a smaller script that calls the component scripts?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figHandle = findall(groot, 'Type', 'Figure');
-close(figHandle(:))
+
+% prescript clean-up and reset:
+figHandle = findall(groot, 'Type', 'Figure'); close(figHandle(:))
 setenv('NVIDIA_CUDNN', '/usr/local/cuda');
 setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 % results = coder.checkGpuInstall('full')
@@ -34,7 +17,7 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'u-net'; 
+network = 'u-net'
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -46,8 +29,8 @@ network = 'u-net';
 
 % Phases to run
 forceConvert        = 0         % if true, resize/process new data (slow)
-preProcess          = 0         % if true, median filter on input data
-partitionData       = 1         % if true, re-split Test/Training (warning)
+preProcess          = 1         % if true, median filter on input data
+partitionData       = 1         % if true, re-split Test/Training (optionally with percentage)
 resplitValidation   = 1         % if true, re-split Training/Validation
 useCachedNet        = 0         % if false, generate new neural network
 doTraining         	= 1         % if true, perform training
@@ -58,7 +41,7 @@ sendNotification    = 1         % send email notification on completion
 evaluateNet         = 1         % if true, evaluate performance on test set
 
 % percentage of each sequence
-percentage = 1.0;
+percentage = 0.5;
 
 % resolution setup
 imageSize = getResolution(network)
@@ -401,9 +384,7 @@ else
                 clear lgraph
                 
             case 'u-net'
-                % load pretrained unet
-                pretrainedNet = load('/home/tyson/Raiden/networks/pretrainedNetwork/multispectralUnet.mat');
-                pretrainedNet = layerGraph(pretrainedNet.net);
+
                 
                 % create a new unet
                 encoderDepth = 4;
@@ -411,22 +392,29 @@ else
                     'EncoderDepth',encoderDepth);
                 lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
                 
-%                 imageInputLayerName = 'ImageInput';
-%                 newLayer = imageInputLayer([imageSize 3],'Name',imageInputLayerName,'Normalization','zerocenter');
-%                 lgraph = replaceLayer(lgraph,"ImageInputLayer",newLayer);
-%                 lgraph = connectLayers(lgraph,"ImageInput","Encoder-Section-1-Conv-1");
+                transferWeights = false;
+                doNormalisation = false;
                 
-%                 lgraph = replaceLayer(lgraph,"Segmentation-Layer", pxLayer);
-%                 net = lgraph;
+                if ~doNormalisation
+                    imageInputLayerName = 'ImageInput';
+                    newLayer = imageInputLayer([imageSize 3],'Name',imageInputLayerName,'Normalization','none');
+                    lgraph = replaceLayer(lgraph,"ImageInputLayer",newLayer);
+                end
 
-                % transfer weights
-                for ii = 1:length(lgraph)
-                  if isprop(lgraph(ii), 'Weights') % Does layer l have weights?
-                    lgraph(ii).Weights = pretrainedNet.Layers(ii).Weights;
-                  end
-                  if isprop(lgraph(ii), 'Bias') % Does layer l have biases?
-                    lgraph(ii).Bias = pretrainedNet.Layers(ii).Bias;
-                  end
+                if transferWeights
+                    % load pretrained unet
+                    pretrainedNet = load('/home/tyson/Raiden/networks/pretrainedNetwork/multispectralUnet.mat');
+                    pretrainedNet = layerGraph(pretrainedNet.net);
+                    
+                    % transfer weights
+                    for ii = 1:length(lgraph)
+                      if isprop(lgraph(ii), 'Weights') % Does layer l have weights?
+                        lgraph(ii).Weights = pretrainedNet.Layers(ii).Weights;
+                      end
+                      if isprop(lgraph(ii), 'Bias') % Does layer l have biases?
+                        lgraph(ii).Bias = pretrainedNet.Layers(ii).Bias;
+                      end
+                    end
                 end
                
                 net = lgraph;
@@ -532,7 +520,7 @@ if (doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 50, ...  
-        'MiniBatchSize', 32, ...
+        'MiniBatchSize', 24, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
@@ -552,18 +540,14 @@ if (doTraining==true)
     % Define augmenting methods
     pixelRange = [-32 32];
     scaleRange = [0.5 1.5];
-    rotRange = [-20 20];
     augmenter = imageDataAugmenter( ...
         'RandXReflection',true, ...
-        'RandRotation',rotRange, ...
         'RandXTranslation',pixelRange, ...
-        'RandXScale',scaleRange, ...
-        'RandYScale',scaleRange);
+        'RandXScale',scaleRange);
 
     pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
         'DataAugmentation', augmenter);
 
-    
     % shuffle the data
     pximds = pximds.shuffle;
     
@@ -576,7 +560,7 @@ if (doTraining==true)
     clear labelTable labelWeights network sequences
     clear maskFolders imageFolders resizedImageFolders resizedLabelFolders
     clear fingerprint newHash 
-    clear pixelRange scaleRange 
+    clear pixelRange scaleRange
     
     disp("Beginning training...")
     tic;

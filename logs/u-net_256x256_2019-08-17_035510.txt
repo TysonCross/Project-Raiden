@@ -1,0 +1,106 @@
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 115)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',115,0)">line 115</a>)] 
+[Warning: Source and conversion folders match. Data will not converted. Enable forceConvert to override] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 126)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',126,0)">line 126</a>)] 
+Loaded metadata from cache...
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    5.2248e+06      1.4833e+09   
+    'stroke'    3.0817e+06      3.6897e+07   
+    'sky'       1.0381e+09      1.8601e+09   
+    'cloud'     5.9899e+08      1.1496e+09   
+    'ground'    2.0820e+08      1.8608e+09   
+    'other'     7.2209e+06      8.7897e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 22715 
+Validation images: 5679 
+Testing images: 5008 
+Data cached
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-02
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 5.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 50
+                MiniBatchSize: 24
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 10
+           ValidationPatience: 8
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'auto'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 0
+Beginning training...
+Training on single GPU.
+Initializing input data normalization.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+|       1 |           1 |       00:24:50 |        8.44% |       59.84% |      11.2412 |      10.8876 |          0.0100 |
+|       1 |          10 |       00:49:37 |       43.31% |       51.19% |      11.2025 |       8.4608 |          0.0100 |
+|       1 |          20 |       01:14:07 |        9.36% |       28.52% |       3.9546 |       5.0439 |          0.0100 |
+|       1 |          30 |       01:38:30 |       44.18% |       55.85% |       1.8282 |       1.7480 |          0.0100 |
+|       1 |          40 |       02:03:07 |       47.75% |       55.98% |       1.6201 |       1.6445 |          0.0100 |
+|       1 |          50 |       02:27:48 |       44.01% |       55.98% |       1.6243 |       1.6304 |          0.0100 |
+|       1 |          60 |       02:52:18 |       49.28% |       55.98% |       1.5819 |       1.6185 |          0.0100 |
+|       1 |          70 |       03:16:50 |       42.05% |       55.98% |       1.5840 |       1.6148 |          0.0100 |
+|       1 |          80 |       03:41:10 |       50.14% |       55.99% |       1.5584 |       1.6126 |          0.0100 |
+|       1 |          90 |       04:05:50 |       47.14% |       55.99% |       1.5407 |       1.6118 |          0.0100 |
+|       1 |         100 |       04:30:30 |       40.83% |       55.99% |       1.6099 |       1.6116 |          0.0100 |
+|       1 |         110 |       04:55:07 |       42.73% |       55.99% |       1.5432 |       1.6105 |          0.0100 |
+|       1 |         120 |       05:19:36 |       49.80% |       55.99% |       1.5645 |       1.6097 |          0.0100 |
+|       1 |         130 |       05:44:07 |       55.54% |       55.99% |       1.5372 |       1.6058 |          0.0100 |
+|       1 |         140 |       06:09:19 |       49.56% |       55.99% |       1.5265 |       1.6042 |          0.0100 |
+|       1 |         150 |       06:34:44 |       46.80% |       55.99% |       1.5477 |       1.6039 |          0.0100 |
+|======================================================================================================================|
+Network created
+Evaluating network performance
+ans =
+  1×5 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+    <strong>GlobalAccuracy</strong>    <strong>MeanAccuracy</strong>     <strong>MeanIoU</strong>      <strong>WeightedIoU</strong>    <strong>MeanBFScore</strong>
+    <strong>______________</strong>    <strong>____________</strong>    <strong>__________</strong>    <strong>___________</strong>    <strong>___________</strong>
+      4.3175e-01       1.6667e-01     7.1959e-02    1.8641e-01     2.0495e-01 
+ans =
+  6×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+               <strong>Accuracy</strong>        <strong>IoU</strong>        <strong>MeanBFScore</strong>
+              <strong>__________</strong>    <strong>__________</strong>    <strong>___________</strong>
+    <strong>leader</strong>    0.0000e+00    0.0000e+00    0.0000e+00 
+    <strong>stroke</strong>    0.0000e+00    0.0000e+00           NaN 
+    <strong>sky   </strong>    9.9999e-01    4.3175e-01    2.0568e-01 
+    <strong>cloud </strong>    0.0000e+00    0.0000e+00           NaN 
+    <strong>ground</strong>    1.2957e-06    1.2956e-06    9.5465e-03 
+    <strong>other </strong>    0.0000e+00    0.0000e+00    0.0000e+00 
+Network created
+Saving data, please wait...
+Network and data archived
+[Warning: export_fig currently supports transparent patches/areas only in PNG output.
+To export transparent patches/areas to PDF, use the print command:
+ print(gcf, '-dpdf',
+ '/home/tyson/Raiden/networks/cache/u-net_256x256_2019-08-17_035510/Training_Progress_17-Aug-2019_035716.pdf');] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 449)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',449,0)">line 449</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 645)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',645,0)">line 645</a>)] 
+[Warning: exporting images to PDF/EPS may result in blurry images on some viewers. If so, try to change viewer, or increase the
+image's CData resolution, or use -opengl renderer, or export via the print function. See <a href="matlab:web('https://github.com/altmany/export_fig/issues/206','-browser');">issue #206</a> for details.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 852)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',852,0)">line 852</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 645)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',645,0)">line 645</a>)] 
+1 figures exported to /home/tyson/Raiden/networks/cache/u-net_256x256_2019-08-17_035510
+Figure archived

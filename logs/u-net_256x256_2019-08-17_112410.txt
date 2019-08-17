@@ -1,0 +1,73 @@
+Checking sequences...
+Loaded metadata from cache...
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.6484e+06      7.5969e+08   
+    'stroke'    1.2358e+06      1.5925e+07   
+    'sky'       5.0831e+08      9.3035e+08   
+    'cloud'     3.1392e+08      6.0031e+08   
+    'ground'    1.0113e+08      9.3055e+08   
+    'other'     3.2873e+06      3.9977e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 11359 
+Validation images: 2840 
+Testing images: 2504 
+Data cached
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-02
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 5.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 50
+                MiniBatchSize: 24
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 10
+           ValidationPatience: 8
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'auto'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 0
+Beginning training...
+Training on single GPU.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+|       1 |           1 |       00:06:31 |        2.35% |        0.30% |      14.0989 |      12.3066 |          0.0100 |
+|       1 |          10 |       00:13:29 |        9.80% |       55.95% |       5.0814 |       9.7187 |          0.0100 |
+|       1 |          20 |       00:20:27 |       10.64% |       54.71% |       1.7481 |       1.6987 |          0.0100 |
+|       1 |          30 |       00:27:22 |       47.28% |       57.82% |       1.5562 |       1.6115 |          0.0100 |
+|       1 |          40 |       00:34:20 |       57.03% |       60.07% |       1.4588 |       1.5128 |          0.0100 |
+|       1 |          50 |       00:41:20 |       50.00% |       58.09% |       1.3735 |       1.4240 |          0.0100 |
+|       1 |          60 |       00:48:18 |       46.66% |       59.12% |       1.2791 |       1.3557 |          0.0100 |
+|       1 |          70 |       00:55:12 |       53.37% |       61.06% |       1.2417 |       1.3273 |          0.0100 |
+|       1 |          80 |       01:02:11 |       46.98% |       60.43% |       1.2111 |       1.3269 |          0.0100 |
+|       1 |          90 |       01:09:07 |       54.04% |       61.35% |       1.2487 |       1.3093 |          0.0100 |
+|       1 |         100 |       01:16:05 |       48.81% |       60.94% |       1.2076 |       1.3078 |          0.0100 |
+|       1 |         110 |       01:22:59 |       63.83% |       59.51% |       1.3090 |       1.2934 |          0.0100 |
+|       1 |         120 |       01:29:54 |       59.13% |        9.37% |       1.1917 |       1.2880 |          0.0100 |
+|       1 |         130 |       01:36:47 |       63.23% |       59.46% |       1.2496 |       1.2818 |          0.0100 |
+|       1 |         140 |       01:43:46 |       59.51% |       60.03% |       1.2283 |       1.2759 |          0.0100 |
+|       1 |         150 |       01:50:43 |       40.80% |       60.05% |       1.2636 |       1.2886 |          0.0100 |
+|       1 |         160 |       01:57:41 |       49.77% |       60.01% |       1.2367 |       1.2665 |          0.0100 |
+|       1 |         170 |       02:04:38 |       54.31% |       58.96% |       1.5071 |       1.2560 |          0.0100 |
+|       1 |         180 |       02:11:33 |       55.37% |       59.13% |       1.2226 |       1.2416 |          0.0100 |
+|       1 |         190 |       02:18:30 |       45.01% |       61.23% |       1.2001 |       1.2455 |          0.0100 |
+|       1 |         200 |       02:25:25 |       59.01% |       61.36% |       1.1507 |       1
