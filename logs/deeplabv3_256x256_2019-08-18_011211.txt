@@ -1,0 +1,41 @@
+forceConvert is on 
+preProcess is on 
+recoverCheckpoint is on 
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 101)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',101,0)">line 101</a>)] 
+Converting Data...
+Resizing images & labels, converting labels RGB -> categorical ...
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('readtif', '/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/private/readtif.m', 48)" style="font-weight:bold">readtif</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/private/readtif.m',48,0)">line 48</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('imread/call_format_specific_reader', '/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p', 445)" style="font-weight:bold">imread/call_format_specific_reader</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p',445,0)">line 445</a>)
+            [varargout{1:nargout}] = feval(fmt_s.read, fullname, extraArgs{:});
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('imread', '/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p', 438)" style="font-weight:bold">imread</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p',438,0)">line 438</a>)
+    [X, map] = call_format_specific_reader();
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('readDatastoreImage', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/private/readDatastoreImage.m', 12)" style="font-weight:bold">readDatastoreImage</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/private/readDatastoreImage.m',12,0)">line 12</a>)
+data = imread(filename);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.splitreader.WholeFileCustomReadSplitReader/getNext', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/+splitreader/WholeFileCustomReadSplitReader.m', 49)" style="font-weight:bold">matlab.io.datastore.splitreader.WholeFileCustomReadSplitReader/getNext</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/+splitreader/WholeFileCustomReadSplitReader.m',49,0)">line 49</a>)
+                data = rdr.ReadFcn(remote2Local.LocalFileName);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/readUsingSplitReader', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m', 524)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/readUsingSplitReader</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m',524,0)">line 524</a>)
+            [data, info] = getNext(splitReader);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/readUsingPreFetcher', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m', 651)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/readUsingPreFetcher</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m',651,0)">line 651</a>)
+                        data{errIdx} = readUsingSplitReader(imds, splitIdx + errIdx);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/preFetchRead', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m', 500)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/preFetchRead</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m',500,0)">line 500</a>)
+            [data, imds.BatchReader] = readUsingPreFetcher(imds, filesToRead, idxes, imds.BatchReader, readSize);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/read', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/read.m', 68)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/read</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/read.m',68,0)">line 68</a>)
+        [data, info] = preFetchRead(imds);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('resizeImages', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m', 35)" style="font-weight:bold">resizeImages</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m',35,0)">line 35</a>)
+        [Im16,info] = read(imds);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 168)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',168,0)">line 168</a>)
+        imds{j} = resizeImages(imds{j}, imageSize, ...} 
+resizeImages
+{Not enough input arguments.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('resizeImages', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m', 16)" style="font-weight:bold">resizeImages</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m',16,0)">line 16</a>)
+    if ~exist(destinationPath,'dir')} 
+CNN_Segmentation_Train_and_Evaluate
+networkName =
+    'deeplabv3'
+imageSize =
+   256   256
+logFileFull = 
+    "~/Raiden/logs/deeplabv3_256x256_2019-08-18_012003.txt"

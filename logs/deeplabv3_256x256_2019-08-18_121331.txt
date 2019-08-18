@@ -1,0 +1,53 @@
+partitionData is on 
+forceConvert is off 
+preProcess is off 
+resplitValidation is off 
+useCachedNet is off 
+doTraining is off 
+recoverCheckpoint is off 
+archiveNet is off 
+saveImages is off 
+sendNotification is off 
+evaluateNet is off 
+Checking sequences...
+Loaded (meta)data from cache...
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    3.7331e+06      7.7621e+08   
+    'stroke'    7.6366e+05      1.3107e+07   
+    'sky'       6.3403e+08      9.1010e+08   
+    'cloud'     1.4615e+08      2.8987e+08   
+    'ground'    1.1952e+08      9.1010e+08   
+    'other'     5.8821e+06      6.8085e+08   
+Datastores cached
+Using training/validation split from cache...
+Training images: 13887 
+{Undefined variable "imdsVal" or class "imdsVal.Files".
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 296)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',296,0)">line 296</a>)
+    fprintf('Validation images: %d \n', numel(imdsVal.Files));} 
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',296,0)
+imdsTrain
+imdsTrain = 
+  <a href="matlab:helpPopup matlab.io.datastore.ImageDatastore" style="font-weight:bold">ImageDatastore</a> with properties:
+
+                       Files: {
+                              ' .../2017-02-10_162903_010/image/2017-02-10_162903_010.00000159.png';
+                              ' .../2017-02-10_162903_010/image/2017-02-10_162903_010.00000189.png';
+                              ' .../2017-02-10_162903_010/image/2017-02-10_162903_010.00000206.png'
+                               ... and 13884 more
+                              }
+    AlternateFileSystemRoots: {}
+                    ReadSize: 1
+                      Labels: {}
+                     ReadFcn: @readDatastoreImage
+imdsVal
+{Undefined function or variable 'imdsVal'.} 
+CNN_Segmentation_Train_and_Evaluate
+networkName =
+    'deeplabv3'
+imageSize =
+   256   256
+logFileFull = 
+    "~/Raiden/logs/deeplabv3_256x256_2019-08-18_121453.txt"

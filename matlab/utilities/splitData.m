@@ -14,6 +14,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
 
+    ext = '.png';
     if (splitPercent==0)
         testIndex = [];
         trainIndex = 1:length(imageFolders);
@@ -25,9 +26,13 @@ function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
 
         % get the number of tif files in each folder
         parfor i = 1:numberOfSequences
-            sequenceLengths(i) = numel(dir([imageFolders{i} '/*.tif']));
+            sequenceLengths(i) = numel(dir([imageFolders{i},'/*',ext]));
         end
 
+        if ~min(sequenceLengths(:))
+            error(['No files found! Check file format: images must be ',ext])
+        end
+        
         totalFrames = sum(sequenceLengths);
         framesToFill = round(splitPercent * totalFrames);
 

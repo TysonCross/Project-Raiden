@@ -46,23 +46,15 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
             end
             
             % Resize image.
-            Im16 = imresize(Im16,[y x]);
+            Im16 = imresize(Im16,[y x],'bicubic');
             
-            % convert to single precision
-            I = im2single(Im16);
-
+            % convert to 8-bit
+            I = uint8(Im16/256 -1);
+            
             % Write image to disk.
+%             compression = 0;
+%             savepng(I,fullfile(destinationPath,strcat(filename,ext)),compression,imageSize);
             imwrite(I,fullfile(destinationPath,strcat(filename,ext)));
-%             t = Tiff(fullfile(destinationPath,strcat(filename,ext)),'w');  
-%             tagstruct.ImageLength = y; 
-%             tagstruct.ImageWidth = x;
-%             tagstruct.Photometric = Tiff.Photometric.RGB;
-%             tagstruct.BitsPerSample = 16;
-%             tagstruct.SamplesPerPixel = 3;
-%             tagstruct.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky; 
-%             tagstruct.Software = 'MATLAB';
-%             setTag(t,tagstruct);
-%             write(t,I);
         end
         
         imageList(r) = fullfile(destinationPath,strcat(filename,ext));
