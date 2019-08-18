@@ -1,0 +1,170 @@
+partitionData is on 
+resplitValidation is on 
+doTraining is on 
+archiveNet is on 
+saveImages is on 
+sendNotification is on 
+evaluateNet is on 
+forceConvert is off 
+preProcess is off 
+useCachedNet is off 
+recoverCheckpoint is off 
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 100)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',100,0)">line 100</a>)] 
+Converting Data...
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to the parallel pool (number of workers: 16).
+Resizing images & labels, converting labels RGB -> categorical ...
+Data converted successfully
+Metadata cached
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.8531e+06      6.3149e+08   
+    'stroke'    7.7115e+05      1.2676e+07   
+    'sky'       5.0953e+08      7.4887e+08   
+    'cloud'     1.2880e+08      2.6342e+08   
+    'ground'    1.0198e+08      7.4897e+08   
+    'other'     5.0236e+06      5.3363e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 11628 
+Validation images: 2907 
+Testing images: 2451 
+Data cached
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-02
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 3.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 30
+                MiniBatchSize: 50
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 25
+           ValidationPatience: 6
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'auto'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 0
+Beginning training...
+Training on single GPU.
+Initializing input data normalization.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+|       1 |           1 |       00:02:32 |       16.88% |       18.59% |       1.7917 |       1.7910 |          0.0100 |
+|       1 |          25 |       00:05:21 |       38.82% |       40.33% |       1.7251 |       1.7215 |          0.0100 |
+|       1 |          50 |       00:08:04 |       43.39% |       41.57% |       1.6338 |       1.6437 |          0.0100 |
+|       1 |          75 |       00:10:47 |       41.80% |       38.89% |       1.2326 |       1.3082 |          0.0100 |
+|       1 |         100 |       00:13:30 |       50.03% |       49.05% |       0.9651 |       0.9270 |          0.0100 |
+|       1 |         125 |       00:16:14 |       61.26% |       61.89% |       0.6496 |       0.6066 |          0.0100 |
+|       1 |         150 |       00:18:58 |       77.50% |       78.68% |       0.4492 |       0.3984 |          0.0100 |
+|       1 |         175 |       00:21:42 |       82.41% |       82.77% |       0.3481 |       0.3633 |          0.0100 |
+|       1 |         200 |       00:24:25 |       81.28% |       82.41% |       0.3281 |       0.3059 |          0.0100 |
+|       1 |         225 |       00:27:09 |       84.34% |       85.65% |       0.2997 |       0.2696 |          0.0100 |
+|       2 |         250 |       00:29:55 |       87.52% |       76.96% |       1.1356 |       0.3890 |          0.0100 |
+|       2 |         275 |       00:32:38 |       87.47% |       86.83% |       0.2533 |       0.2618 |          0.0100 |
+|       2 |         300 |       00:35:22 |       88.24% |       86.83% |       0.2045 |       0.2260 |          0.0100 |
+|       2 |         325 |       00:38:05 |       89.67% |       90.04% |       0.2118 |       0.2101 |          0.0100 |
+|       2 |         350 |       00:40:48 |       90.56% |       89.94% |       0.1694 |       0.2048 |          0.0100 |
+|       2 |         375 |       00:43:32 |       89.83% |       90.38% |       0.1962 |       0.1916 |          0.0100 |
+|       2 |         400 |       00:46:16 |       90.98% |       88.83% |       0.1897 |       0.1960 |          0.0100 |
+|       2 |         425 |       00:49:00 |       90.76% |       89.46% |       0.1776 |       0.1865 |          0.0100 |
+|       2 |         450 |       00:51:43 |       90.76% |       89.42% |       0.1971 |       0.1885 |          0.0100 |
+|       3 |         475 |       00:54:30 |       88.35% |       89.26% |       0.2596 |       0.1970 |          0.0100 |
+|       3 |         500 |       00:57:14 |       90.25% |       91.00% |       0.2182 |       0.1846 |          0.0100 |
+|       3 |         525 |       00:59:58 |       92.42% |       91.51% |       0.1601 |       0.1691 |          0.0100 |
+|       3 |         550 |       01:02:41 |       88.65% |       89.30% |       0.2509 |       0.2122 |          0.0100 |
+|       3 |         575 |       01:05:24 |       91.86% |       91.96% |       0.1476 |       0.1697 |          0.0100 |
+|       3 |         600 |       01:08:08 |       92.15% |       92.19% |       0.2868 |       0.1552 |          0.0100 |
+|       3 |         625 |       01:10:52 |       90.49% |       90.70% |       0.1945 |       0.1581 |          0.0100 |
+|       3 |         650 |       01:13:37 |       91.72% |       91.75% |       0.2289 |       0.1551 |          0.0100 |
+|       3 |         675 |       01:16:23 |       92.33% |       91.68% |       0.1335 |       0.1488 |          0.0100 |
+|       4 |         700 |       01:19:13 |       92.42% |       92.89% |       0.1485 |       0.1445 |          0.0100 |
+|       4 |         725 |       01:21:58 |       92.51% |       92.23% |       0.1534 |       0.1370 |          0.0100 |
+|       4 |         750 |       01:24:42 |       92.59% |       91.55% |       0.1234 |       0.1444 |          0.0100 |
+|       4 |         775 |       01:27:26 |       92.21% |       93.18% |       0.1363 |       0.1326 |          0.0100 |
+|       4 |         800 |       01:30:10 |       92.23% |       93.40% |       0.2069 |       0.1279 |          0.0100 |
+|       4 |         825 |       01:32:54 |       93.56% |       92.89% |       0.1179 |       0.1282 |          0.0100 |
+|       4 |         850 |       01:35:38 |       93.87% |       92.24% |       0.1185 |       0.1284 |          0.0100 |
+|       4 |         875 |       01:38:22 |       94.44% |       94.32% |       0.1233 |       0.1264 |          0.0100 |
+|       4 |         900 |       01:41:06 |       92.76% |       92.77% |       0.1828 |       0.1245 |          0.0100 |
+|       4 |         925 |       01:43:49 |       93.15% |       93.11% |       0.1219 |       0.1202 |          0.0100 |
+|       5 |         950 |       01:46:37 |       93.77% |       93.97% |       0.0964 |       0.1168 |          0.0100 |
+|       5 |         975 |       01:49:21 |       93.25% |       94.16% |       0.0964 |       0.1123 |          0.0100 |
+|       5 |        1000 |       01:52:05 |       93.62% |       93.99% |       0.1167 |       0.1179 |          0.0100 |
+|       5 |        1025 |       01:54:49 |       94.44% |       93.64% |       0.0998 |       0.1117 |          0.0100 |
+|       5 |        1050 |       01:57:33 |       93.69% |       94.07% |       0.1500 |       0.1208 |          0.0100 |
+|       5 |        1075 |       02:00:16 |       95.24% |       94.71% |       0.1010 |       0.1125 |          0.0100 |
+|       5 |        1100 |       02:03:00 |       93.96% |       93.21% |       0.0988 |       0.1154 |          0.0100 |
+|       5 |        1125 |       02:05:43 |       94.77% |       93.94% |       0.0916 |       0.1065 |          0.0100 |
+|       5 |        1150 |       02:08:27 |       94.75% |       93.85% |       0.1316 |       0.1171 |          0.0100 |
+|       6 |        1175 |       02:11:14 |       93.21% |       93.58% |       0.1512 |       0.1209 |          0.0100 |
+|       6 |        1200 |       02:13:58 |       94.85% |       93.71% |       0.0941 |       0.1082 |          0.0100 |
+|       6 |        1225 |       02:16:41 |       94.79% |       93.89% |       0.0992 |       0.1048 |          0.0100 |
+|       6 |        1250 |       02:19:25 |       94.85% |       95.06% |       0.0941 |       0.1043 |          0.0100 |
+|       6 |        1275 |       02:22:09 |       94.38% |       94.78% |       0.1185 |       0.1023 |          0.0100 |
+|       6 |        1300 |       02:24:53 |       93.79% |       94.35% |       0.1367 |       0.1100 |          0.0100 |
+|       6 |        1325 |       02:27:37 |       94.61% |       94.93% |       0.1240 |       0.0988 |          0.0100 |
+|       6 |        1350 |       02:30:21 |       93.84% |       94.05% |       0.1079 |       0.1002 |          0.0100 |
+|       6 |        1375 |       02:33:05 |       93.14% |       94.11% |       0.1228 |       0.0992 |          0.0100 |
+|       7 |        1400 |       02:35:53 |       93.04% |       93.40% |       0.1754 |       0.1103 |          0.0100 |
+|       7 |        1425 |       02:38:37 |       95.64% |       94.92% |       0.1031 |       0.0990 |          0.0100 |
+|       7 |        1450 |       02:41:20 |       92.09% |       93.53% |       0.1282 |       0.1047 |          0.0100 |
+|       7 |        1475 |       02:44:04 |       92.25% |       93.73% |       0.1636 |       0.1164 |          0.0100 |
+|======================================================================================================================|
+Network created
+Evaluating network performance
+Running semantic segmentation network
+-------------------------------------
+* Processing 2451 images.
+* Progress: 0.04%* Progress: 0.65%* Progress: 1.31%* Progress: 1.96%* Progress: 2.61%* Progress: 3.26%* Progress: 3.92%* Progress: 4.57%* Progress: 5.22%* Progress: 5.88%* Progress: 6.53%* Progress: 7.18%* Progress: 7.83%* Progress: 8.49%* Progress: 9.14%* Progress: 9.79%* Progress: 10.44%* Progress: 11.10%* Progress: 11.75%* Progress: 12.40%* Progress: 13.06%* Progress: 13.71%* Progress: 14.36%* Progress: 15.01%* Progress: 15.67%* Progress: 16.32%* Progress: 16.97%* Progress: 17.63%* Progress: 18.28%* Progress: 18.93%* Progress: 19.58%* Progress: 20.24%* Progress: 20.89%* Progress: 21.54%* Progress: 22.20%* Progress: 22.85%* Progress: 23.50%* Progress: 24.15%* Progress: 24.81%* Progress: 25.46%* Progress: 26.11%* Progress: 26.76%* Progress: 27.42%* Progress: 28.07%* Progress: 28.72%* Progress: 29.38%* Progress: 30.03%* Progress: 30.68%* Progress: 31.33%* Progress: 31.99%* Progress: 32.64%* Progress: 33.29%* Progress: 33.95%* Progress: 34.60%* Progress: 35.25%* Progress: 35.90%* Progress: 36.56%* Progress: 37.21%* Progress: 37.86%* Progress: 38.51%* Progress: 39.17%* Progress: 39.82%* Progress: 40.47%* Progress: 41.13%* Progress: 41.78%* Progress: 42.43%* Progress: 43.08%* Progress: 43.74%* Progress: 44.39%* Progress: 45.04%* Progress: 45.70%* Progress: 46.35%* Progress: 47.00%* Progress: 47.65%* Progress: 48.31%* Progress: 48.96%* Progress: 49.61%* Progress: 50.27%* Progress: 50.92%* Progress: 51.57%* Progress: 52.22%* Progress: 52.88%* Progress: 53.53%* Progress: 54.18%* Progress: 54.83%* Progress: 55.49%* Progress: 56.14%* Progress: 56.79%* Progress: 57.45%* Progress: 58.10%* Progress: 58.75%* Progress: 59.40%* Progress: 60.06%* Progress: 60.71%* Progress: 61.36%* Progress: 62.02%* Progress: 62.67%* Progress: 63.32%* Progress: 63.97%* Progress: 64.63%* Progress: 65.28%* Progress: 65.93%* Progress: 66.59%* Progress: 67.24%* Progress: 67.89%* Progress: 68.54%* Progress: 69.20%* Progress: 69.85%* Progress: 70.50%* Progress: 71.15%* Progress: 71.81%* Progress: 72.46%* Progress: 73.11%* Progress: 73.77%* Progress: 74.42%* Progress: 75.07%* Progress: 75.72%* Progress: 76.38%* Progress: 77.03%* Progress: 77.68%* Progress: 78.34%* Progress: 78.99%* Progress: 79.64%* Progress: 80.29%* Progress: 80.95%* Progress: 81.60%* Progress: 82.25%* Progress: 82.90%* Progress: 83.56%* Progress: 84.21%* Progress: 84.86%* Progress: 85.52%* Progress: 86.17%* Progress: 86.82%* Progress: 87.47%* Progress: 88.13%* Progress: 88.78%* Progress: 89.43%* Progress: 90.09%* Progress: 90.74%* Progress: 91.39%* Progress: 92.04%* Progress: 92.70%* Progress: 93.35%* Progress: 94.00%* Progress: 94.66%* Progress: 95.31%* Progress: 95.96%* Progress: 96.61%* Progress: 97.27%* Progress: 97.92%* Progress: 98.57%* Progress: 99.22%* Progress: 99.88%* Progress: 100.00%
+
+<a href="">================ Evaluation =================
+</a>ans =
+  1×5 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+    <strong>GlobalAccuracy</strong>    <strong>MeanAccuracy</strong>     <strong>MeanIoU</strong>      <strong>WeightedIoU</strong>    <strong>MeanBFScore</strong>
+    <strong>______________</strong>    <strong>____________</strong>    <strong>__________</strong>    <strong>___________</strong>    <strong>___________</strong>
+      8.3443e-01       7.1337e-01     4.5420e-01    7.3920e-01     5.1721e-01 
+ans =
+  6×3 <a href="matlab:helpPopup table" style="font-weight:bold">table</a>
+               <strong>Accuracy</strong>        <strong>IoU</strong>        <strong>MeanBFScore</strong>
+              <strong>__________</strong>    <strong>__________</strong>    <strong>___________</strong>
+    <strong>leader</strong>    5.2553e-01    3.2521e-02    1.6257e-01 
+    <strong>stroke</strong>    2.1789e-01    1.8182e-01    1.8193e-01 
+    <strong>sky   </strong>    8.4056e-01    7.4558e-01    4.5407e-01 
+    <strong>cloud </strong>    7.6269e-01    7.3924e-01    7.1422e-01 
+    <strong>ground</strong>    9.8655e-01    7.5302e-01    6.5895e-01 
+    <strong>other </strong>    9.4697e-01    2.7298e-01    6.6885e-01 
+Network created
+Saving data, please wait...
+Network and data archived
+[Warning: export_fig currently supports transparent patches/areas only in PNG output.
+To export transparent patches/areas to PDF, use the print command:
+ print(gcf, '-dpdf',
+ '/home/tyson/Raiden/networks/cache/alexnet_227x227_2019-08-18_161547/Training_Progress_18-Aug-2019_163308.pdf');] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 449)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',449,0)">line 449</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 638)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',638,0)">line 638</a>)] 
+[Warning: exporting images to PDF/EPS may result in blurry images on some viewers. If so, try to change viewer, or increase the
+image's CData resolution, or use -opengl renderer, or export via the print function. See <a href="matlab:web('https://github.com/altmany/export_fig/issues/206','-browser');">issue #206</a> for details.] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('export_fig', '/home/tyson/Documents/MATLAB/export_fig/export_fig.m', 852)" style="font-weight:bold">export_fig</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/export_fig/export_fig.m',852,0)">line 852</a>)
+  In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 638)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',638,0)">line 638</a>)] 
+1 figures exported to /home/tyson/Raiden/networks/cache/alexnet_227x227_2019-08-18_161547
+Figure archived

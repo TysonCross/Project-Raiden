@@ -16,7 +16,7 @@ clc;
 clearvars;
 
 %% SETUP
-networkName = 'deeplabv3'
+networkName = 'alexnet'
 
 %{
     Network choices are:
@@ -32,7 +32,7 @@ opt.forceConvert        = 0;         % if true, resize/process new data (slow)
 opt.preProcess          = 0;         % if true, median filter on input data
 opt.partitionData       = 1;         % if true, re-split Test/Training (optionally with percentage)
 opt.resplitValidation   = 1;         % if true, re-split Training/Validation
-opt.useCachedNet        = 1;         % if false, generate new neural network
+opt.useCachedNet        = 0;         % if false, generate new neural network
 opt.doTraining         	= 1;         % if true, perform training
 opt.recoverCheckpoint   = 0;         % if training did not finish, use checkpoint
 opt.archiveNet          = 1;         % archive NN, data and figures to subfolder
@@ -608,8 +608,23 @@ if (networkStatus.trained && opt.evaluateNet)
     metrics.DataSetMetrics
     metrics.ClassMetrics
     
-    save(fullfile(cachePath,'network'),...
-        'net','networkStatus','metrics');
+    jaccardMetric(numel(pxdsResults.Files))=0;
+    diceMetric(numel(pxdsResults.Files))=0;
+    for ii=1:numel(pxdsResults.Files)
+        resultIm = pxdsResults.readimage(ii);
+        testIm = pxdsTest.readimage(ii);
+        jaccardMetric(ii) = jaccard(resultIm, testIm);
+        diceMetric(ii) = dice(resultIm, testIm);
+    end
+    jaccardMean = mean(jaccardMetric);
+    diceMean = mean(diceMetric);
+    cprintf('Jaccard (mean): %d ', mean(jaccardMetric))
+    cprintf('Jaccard (dice): %d ', mean(diceMetric))
+    
+    save(fullfile(cachePath,'network'), ...
+        'net','networkStatus','metrics', ...
+        'jaccardMetric', 'diceMetric', ...
+        'jaccardMean', 'diceMean' );
     disp("Network created") 
 end
 
