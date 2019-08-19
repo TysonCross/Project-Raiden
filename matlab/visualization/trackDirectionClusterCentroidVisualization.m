@@ -9,8 +9,8 @@ clc;
 close all;
 
 fontSize = 16;
-frameStart = 7;
-frameEnd = 43;
+frameStart = 3;
+frameEnd = 37;
 
 %% Main
 % scr = get(groot,'ScreenSize');                              % screen resolution
@@ -33,8 +33,8 @@ while keepPlaying
     % Get the name of the image the user wants to use.
 %     folder = '/home/tyson/Documents/MATLAB/temp/deeplabv3_2019-08-10_171747/';
 %     folder = '/home/tyson/Documents/MATLAB/temp/deeplabv3_2019-08-09_202933/';
-    folder = '~/Desktop/test/output';
-    filename = sprintf('pixelLabel.%04d.png',jj);
+    folder = '~/Desktop/test_deeplabv3_256x256_2019-08-18_121943/2017-11-22_144155_010/output/';
+    filename = sprintf('pixelLabel.%03d.png',jj);
     fullFileName = fullfile(folder, filename);
 
     % [filename, folder] = uigetfile({'*.jpg';'*.bmp'},'Select image');

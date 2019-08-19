@@ -2,10 +2,10 @@
 %                            GETRESOLUTION.M
 % Return the resolution required at the input of the respective network
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function imageSize = getResolution(networkName)
+function imageSize = getResolution(networkType)
         % [ height x width ]
 
-    switch networkName
+    switch networkType
             case 'fcn8s'
                 imageSize = [227 227];
 
