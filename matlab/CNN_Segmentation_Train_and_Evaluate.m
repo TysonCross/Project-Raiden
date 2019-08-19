@@ -16,7 +16,7 @@ clc;
 clearvars;
 
 %% SETUP
-networkName = 'alexnet'
+networkName = 'fcn8s'
 
 %{
     Network choices are:
@@ -30,8 +30,8 @@ networkName = 'alexnet'
 % Phases to run
 opt.forceConvert        = 0;         % if true, resize/process new data (slow)
 opt.preProcess          = 0;         % if true, median filter on input data
-opt.partitionData       = 1;         % if true, re-split Test/Training (optionally with percentage)
-opt.resplitValidation   = 1;         % if true, re-split Training/Validation
+opt.partitionData       = 0;         % if true, re-split Test/Training (optionally with percentage)
+opt.splitValidation     = 0;       	 % if true, re-split Training/Validation
 opt.useCachedNet        = 0;         % if false, generate new neural network
 opt.doTraining         	= 1;         % if true, perform training
 opt.recoverCheckpoint   = 0;         % if training did not finish, use checkpoint
@@ -212,10 +212,13 @@ diary off; diary on;
 if opt.partitionData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
     warning(['No datastore cache found at: ', fullfile(cachePath,'data'), ...
         newline, '(Data will be repartitioned)'])
-    opt.partitionData=0;
 end
 
-if (opt.partitionData==true  || percentage < 1 || opt.forceConvert)
+if (opt.partitionData==false && percentage < 1)
+    warning('partitionData is off')
+end
+
+if (opt.partitionData==true  || opt.forceConvert)
     disp("Partitioning test and training Data...")
     
     % [split training and test]
@@ -266,7 +269,7 @@ diary off; diary on;
 
 %% Training partition phase 
 
-if (opt.resplitValidation==true)
+if (opt.splitValidation==true || ~exist('imdsVal','var'))
     disp("Splitting training/validation data...")
    
     splitTrainingPercentage = 0.8;
@@ -525,7 +528,7 @@ if (opt.doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 30, ...  
-        'MiniBatchSize', 50, ...
+        'MiniBatchSize', 10, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
@@ -608,23 +611,8 @@ if (networkStatus.trained && opt.evaluateNet)
     metrics.DataSetMetrics
     metrics.ClassMetrics
     
-    jaccardMetric(numel(pxdsResults.Files))=0;
-    diceMetric(numel(pxdsResults.Files))=0;
-    for ii=1:numel(pxdsResults.Files)
-        resultIm = pxdsResults.readimage(ii);
-        testIm = pxdsTest.readimage(ii);
-        jaccardMetric(ii) = jaccard(resultIm, testIm);
-        diceMetric(ii) = dice(resultIm, testIm);
-    end
-    jaccardMean = mean(jaccardMetric);
-    diceMean = mean(diceMetric);
-    cprintf('Jaccard (mean): %d ', mean(jaccardMetric))
-    cprintf('Jaccard (dice): %d ', mean(diceMetric))
-    
     save(fullfile(cachePath,'network'), ...
-        'net','networkStatus','metrics', ...
-        'jaccardMetric', 'diceMetric', ...
-        'jaccardMean', 'diceMean' );
+        'net','networkStatus','metrics');
     disp("Network created") 
 end
 

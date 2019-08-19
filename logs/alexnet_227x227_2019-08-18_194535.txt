@@ -1,0 +1,37 @@
+doTraining is on 
+saveImages is on 
+sendNotification is on 
+forceConvert is off 
+preProcess is off 
+partitionData is off 
+resplitValidation is off 
+useCachedNet is off 
+recoverCheckpoint is off 
+archiveNet is off 
+evaluateNet is off 
+Checking sequences...
+Loaded (meta)data from cache...
+[Warning: partitionData is off] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 218)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',218,0)">line 218</a>)] 
+Loaded datastores from cache...
+Per-label pixel distribution:
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.9884e+06      6.5483e+08   
+    'stroke'    7.7576e+05      1.4119e+07   
+    'sky'       5.4411e+08      7.9891e+08   
+    'cloud'     1.3659e+08      2.8454e+08   
+    'ground'    1.0904e+08      7.9891e+08   
+    'other'     5.3956e+06      5.8491e+08   
+Using training/validation split from cache...
+Training images: 15504 
+{Undefined variable "imdsVal" or class "imdsVal.Files".
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 299)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',299,0)">line 299</a>)
+    fprintf('Validation images: %d \n', numel(imdsVal.Files));} 
+CNN_Segmentation_Train_and_Evaluate
+networkName =
+    'alexnet'
+imageSize =
+   227   227
+logFileFull = 
+    "/home/tyson/Raiden/logs/alexnet_227x227_2019-08-18_194653.txt"
