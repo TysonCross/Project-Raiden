@@ -1,0 +1,35 @@
+Converting Data...
+Resizing images & labels, converting labels RGB -> categorical ...
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('resizeImages', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m', 71)" style="font-weight:bold">resizeImages</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m',71,0)">line 71</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 165)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',165,0)">line 165</a>)
+        imds{j} = resizeImages(imds{j}, imageSize, ...} 
+CNN_Segmentation_Train_and_Evaluate
+network =
+    'deeplabv3'
+forceConvert =
+     1
+preProcess =
+     0
+partitionData =
+     1
+resplitValidation =
+     1
+useCachedNet =
+     0
+doTraining =
+     1
+recoverCheckpoint =
+     0
+archiveNet =
+     1
+saveImages =
+     1
+sendNotification =
+     1
+evaluateNet =
+     1
+imageSize =
+   256   256
+logFileFull = 
+    "/home/tyson/Raiden/logs/deeplabv3_256x256_2019-08-17_182233.txt"

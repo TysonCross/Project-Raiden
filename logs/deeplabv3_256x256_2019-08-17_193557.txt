@@ -1,0 +1,140 @@
+Checking sequences...
+Loaded metadata from cache...
+Partitioning test and training Data...
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('pixelLabelDatastore>parseInputs', '/usr/local/MATLAB/R2019a/toolbox/vision/vision/pixelLabelDatastore.m', 261)" style="font-weight:bold">pixelLabelDatastore>parseInputs</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/vision/vision/pixelLabelDatastore.m',261,0)">line 261</a>)
+The value of 'location' is invalid. Expected location to be nonempty.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('pixelLabelDatastore', '/usr/local/MATLAB/R2019a/toolbox/vision/vision/pixelLabelDatastore.m', 207)" style="font-weight:bold">pixelLabelDatastore</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/vision/vision/pixelLabelDatastore.m',207,0)">line 207</a>)
+    [location, classes, values,params] = parseInputs(varargin{:});
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 233)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',233,0)">line 233</a>)
+    pxdsTest = pixelLabelDatastore(labelFolder(testIndex),...} 
+opentoline('/usr/local/MATLAB/R2019a/toolbox/vision/vision/pixelLabelDatastore.m',261,0)
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',233,0)
+testIndex
+testIndex =
+  1×0 empty <a href="matlab:helpPopup double" style="font-weight:bold">double</a> row vector
+labelFolder
+labelFolder =
+  1×109 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+  Columns 1 through 5
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 6 through 10
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 11 through 15
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 16 through 20
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 21 through 25
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 26 through 30
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 31 through 35
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 36 through 40
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 41 through 45
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 46 through 50
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 51 through 55
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 56 through 60
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 61 through 65
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 66 through 70
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 71 through 75
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 76 through 80
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 81 through 85
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 86 through 90
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 91 through 95
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 96 through 100
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 101 through 105
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+  Columns 106 through 109
+    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}    {'/home/tyson/Rai…'}
+testIndex
+testIndex =
+  1×0 empty <a href="matlab:helpPopup double" style="font-weight:bold">double</a> row vector
+imageFolders
+imageFolders =
+  1×109 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+  Columns 1 through 5
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 6 through 10
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 11 through 15
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 16 through 20
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 21 through 25
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 26 through 30
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 31 through 35
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 36 through 40
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 41 through 45
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 46 through 50
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 51 through 55
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 56 through 60
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 61 through 65
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 66 through 70
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 71 through 75
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 76 through 80
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 81 through 85
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 86 through 90
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 91 through 95
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 96 through 100
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 101 through 105
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+  Columns 106 through 109
+    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}    {'/mnt/Shield/Rai…'}
+CNN_Segmentation_Train_and_Evaluate
+network =
+    'deeplabv3'
+forceConvert =
+     0
+preProcess =
+     0
+partitionData =
+     1
+resplitValidation =
+     1
+useCachedNet =
+     0
+doTraining =
+     1
+recoverCheckpoint =
+     0
+archiveNet =
+     1
+saveImages =
+     1
+sendNotification =
+     1
+evaluateNet =
+     1
+imageSize =
+   256   256
+logFileFull = 
+    "/home/tyson/Raiden/logs/deeplabv3_256x256_2019-08-17_194059.txt"

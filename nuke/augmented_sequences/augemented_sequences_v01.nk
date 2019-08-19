@@ -1,0 +1,2294 @@
+#! /usr/local/Nuke11.3v4/libnuke-11.3.4.so -nx
+version 11.3 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="170" y="58" w="2229" h="910" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="835" stretch="1"/>
+            <splitter orientation="2">
+                <split size="864"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+            </splitter>
+            <split size="1346"/>
+            <dock id="" activePageId="DAG.1" focus="true">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/augmented_sequences/augemented_sequences_v01.nk"
+ frame 2139
+ first_frame 74
+ last_frame 10239
+ lock_range true
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy true
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ label 2017-02-10_163553
+ xpos -757
+ ypos -561
+ bdwidth 406
+ bdheight 392
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode10
+ label 2017-11-14_200626
+ xpos -318
+ ypos -91
+ bdwidth 436
+ bdheight 410
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode11
+ label 2017-11-22_144117
+ xpos -1732
+ ypos 356
+ bdwidth 437
+ bdheight 423
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode12
+ label 2017-11-22_144155
+ xpos -1236
+ ypos 349
+ bdwidth 443
+ bdheight 436
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode13
+ label 2017-02-10_163357
+ xpos -1749
+ ypos -566
+ bdwidth 445
+ bdheight 393
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode14
+ label 2017-02-10_162903
+ xpos -1237
+ ypos -564
+ bdwidth 435
+ bdheight 396
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ label 2017-02-10_163907
+ xpos -317
+ ypos -565
+ bdwidth 404
+ bdheight 390
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ label 2017-02-10_163916
+ xpos 110
+ ypos -567
+ bdwidth 451
+ bdheight 394
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode4
+ label 2017-02-10_164114
+ xpos 874
+ ypos -584
+ bdwidth 440
+ bdheight 425
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode5
+ label 2017-09-25_183210
+ xpos 1338
+ ypos -589
+ bdwidth 486
+ bdheight 428
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode6
+ label 2017-02-10_164441
+ xpos 1836
+ ypos -592
+ bdwidth 477
+ bdheight 432
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode7
+ label 2017-02-10_164141
+ xpos -1734
+ ypos -78
+ bdwidth 439
+ bdheight 384
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode8
+ label 2017-10-21_171820
+ xpos -1236
+ ypos -82
+ bdwidth 439
+ bdheight 383
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode9
+ label 2017-11-14_200513
+ xpos -769
+ ypos -90
+ bdwidth 416
+ bdheight 408
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_010/mask/2017-02-10_164114_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 157
+ last 777
+ origfirst 157
+ origlast 777
+ origset true
+ name Read8
+ xpos 1119
+ ypos -510
+}
+Dot {
+ name Dot12
+ xpos 1153
+ ypos -357
+}
+set N1580f3e0 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_013/mask/2017-02-10_164114_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_mask5
+ xpos 1188
+ ypos -366
+}
+push $N1580f3e0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_015/mask/2017-02-10_164114_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask5
+ xpos 1199
+ ypos -302
+}
+push $N1580f3e0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_017/mask/2017-02-10_164114_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask5
+ xpos 1119
+ ypos -239
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_010/mask/2017-02-10_164141_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 191
+ last 600
+ origfirst 191
+ origlast 600
+ origset true
+ name Read10
+ xpos 1597
+ ypos -526
+}
+Dot {
+ name Dot14
+ xpos 1631
+ ypos -365
+}
+set N158d5470 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_013/mask/2017-02-10_164141_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_mask6
+ xpos 1666
+ ypos -374
+}
+push $N158d5470
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_015/mask/2017-02-10_164141_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask6
+ xpos 1677
+ ypos -310
+}
+push $N158d5470
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_017/mask/2017-02-10_164141_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask6
+ xpos 1597
+ ypos -247
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_010/mask/2017-02-10_164441_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 2048
+ last 2223
+ origfirst 2048
+ origlast 2223
+ origset true
+ name Read12
+ xpos 2099
+ ypos -524
+}
+Dot {
+ name Dot16
+ xpos 2133
+ ypos -363
+}
+set N159f65b0 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_013/mask/2017-02-10_164441_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 2048
+ last 2223
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_mask7
+ xpos 2168
+ ypos -372
+}
+push $N159f65b0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_017/mask/2017-02-10_164441_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 2048
+ last 2223
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask7
+ xpos 2099
+ ypos -245
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_010/mask/2017-09-25_183210_010_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 2993
+ last 10239
+ origfirst 2993
+ origlast 10239
+ origset true
+ name Read14
+ xpos -1486
+ ypos -16
+}
+Dot {
+ name Dot18
+ xpos -1452
+ ypos 117
+}
+set N15ac5fc0 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_013/mask/2017-09-25_183210_013_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 2993
+ last 10239
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask8
+ xpos -1416
+ ypos 108
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_010/tif/2017-10-21_171820_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 237
+ last 252
+ origfirst 237
+ origlast 252
+ origset true
+ name Read15
+ xpos -1132
+ ypos -41
+ disable true
+}
+Dot {
+ name Dot19
+ xpos -1098
+ ypos 105
+}
+set N15767df0 [stack 0]
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast10
+ xpos -1132
+ ypos 227
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_015/tif/2017-10-21_171820_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 237
+ last 252
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq9
+ xpos -1132
+ ypos 251
+ disable true
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_010/mask/2017-10-21_171820_010_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 237
+ last 252
+ origfirst 237
+ origlast 252
+ origset true
+ name Read16
+ xpos -985
+ ypos -18
+ disable true
+}
+Dot {
+ name Dot20
+ xpos -951
+ ypos 121
+}
+set N1525f910 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_013/mask/2017-10-21_171820_013_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 237
+ last 252
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask9
+ xpos -915
+ ypos 112
+ disable true
+}
+push $N1525f910
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_015/mask/2017-10-21_171820_015_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 237
+ last 252
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask9
+ xpos -909
+ ypos 191
+ disable true
+}
+push $N1525f910
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_017/mask/2017-10-21_171820_017_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 237
+ last 252
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask9
+ xpos -985
+ ypos 251
+ disable true
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_010/mask/2017-11-22_144117_010_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 2931
+ last 3143
+ origfirst 2931
+ origlast 3143
+ origset true
+ name Read22
+ xpos -1479
+ ypos 435
+}
+Dot {
+ name Dot26
+ xpos -1445
+ ypos 571
+}
+set N15c3fe50 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_017/mask/2017-11-22_144117_017_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 2931
+ last 3143
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask12
+ xpos -1479
+ ypos 712
+}
+push $N15c3fe50
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_015/mask/2017-11-22_144117_015_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 2931
+ last 3143
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask12
+ xpos -1403
+ ypos 641
+}
+push $N15c3fe50
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_013/mask/2017-11-22_144117_013_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 2931
+ last 3143
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask12
+ xpos -1409
+ ypos 562
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_010/mask/2017-11-22_144155_010_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 3467
+ last 3738
+ origfirst 3467
+ origlast 3738
+ origset true
+ name Read24
+ xpos -959
+ ypos 430
+}
+Dot {
+ name Dot28
+ xpos -925
+ ypos 555
+}
+set N15b5da10 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_017/mask/2017-11-22_144155_017_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 3467
+ last 3738
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask13
+ xpos -959
+ ypos 696
+}
+push $N15b5da10
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_013/mask/2017-11-22_144155_013_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 3467
+ last 3738
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask13
+ xpos -889
+ ypos 546
+}
+push $N15b5da10
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_015/mask/2017-11-22_144155_015_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 3467
+ last 3738
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask13
+ xpos -883
+ ypos 625
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_010/tif/2017-02-10_162903_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 159
+ last 481
+ origfirst 159
+ origlast 481
+ origset true
+ name Read25
+ xpos -1651
+ ypos -527
+}
+Dot {
+ name Dot1
+ xpos -1617
+ ypos -375
+}
+set N6aefc60 [stack 0]
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast1
+ xpos -1651
+ ypos -253
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_015/tif/2017-02-10_162903_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 159
+ last 481
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq
+ xpos -1651
+ ypos -229
+}
+push $N6aefc60
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down
+ xpos -1581
+ ypos -333
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_017/tif/2017-02-10_162903_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 159
+ last 481
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq
+ xpos -1581
+ ypos -309
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_010/mask/2017-02-10_162903_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 159
+ last 481
+ origfirst 159
+ origlast 481
+ origset true
+ name Read26
+ xpos -1504
+ ypos -512
+}
+Dot {
+ name Dot2
+ xpos -1470
+ ypos -359
+}
+set N8697bf0 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_017/mask/2017-02-10_162903_017_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 159
+ last 481
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask
+ xpos -1504
+ ypos -229
+}
+push $N8697bf0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_015/mask/2017-02-10_162903_015_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 159
+ last 481
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask
+ xpos -1428
+ ypos -289
+}
+push $N8697bf0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_013/mask/2017-02-10_162903_013_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 159
+ last 481
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask
+ xpos -1434
+ ypos -368
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_010/tif/2017-02-10_163357_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 74
+ last 387
+ origfirst 74
+ origlast 387
+ origset true
+ name Read27
+ xpos -1132
+ ypos -524
+}
+Dot {
+ name Dot3
+ xpos -1098
+ ypos -371
+}
+set N88ff650 [stack 0]
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down1
+ xpos -1062
+ ypos -329
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_017/tif/2017-02-10_163357_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 74
+ last 387
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq1
+ xpos -1062
+ ypos -295
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_010/mask/2017-02-10_163357_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 74
+ last 387
+ origfirst 74
+ origlast 387
+ origset true
+ name Read28
+ xpos -983
+ ypos -507
+}
+Dot {
+ name Dot4
+ xpos -945
+ ypos -355
+}
+set N14ec1960 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_017/mask/2017-02-10_163357_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 74
+ last 387
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask1
+ xpos -979
+ ypos -238
+}
+push $N14ec1960
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_015/mask/2017-02-10_163357_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 74
+ last 387
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask1
+ xpos -900
+ ypos -284
+}
+push $N14ec1960
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_013/mask/2017-02-10_163357_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 74
+ last 387
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask1
+ xpos -892
+ ypos -364
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_010/tif/2017-02-10_163553_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 168
+ last 590
+ origfirst 168
+ origlast 590
+ origset true
+ name Read1
+ xpos -673
+ ypos -517
+}
+Dot {
+ name Dot5
+ xpos -639
+ ypos -385
+}
+set N14f47300 [stack 0]
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast3
+ xpos -673
+ ypos -263
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_015/tif/2017-02-10_163553_015.########.tif
+ file_type tiff
+ create_directories true
+ first 168
+ last 590
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq2
+ xpos -673
+ ypos -223
+}
+push $N14f47300
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down2
+ xpos -603
+ ypos -343
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_017/tif/2017-02-10_163553_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 168
+ last 590
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq2
+ xpos -603
+ ypos -306
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_010/mask/2017-02-10_163553_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 168
+ last 590
+ origfirst 168
+ origlast 590
+ origset true
+ name Read2
+ xpos -520
+ ypos -517
+}
+Dot {
+ name Dot6
+ xpos -486
+ ypos -369
+}
+set N1500e600 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_013/mask/2017-02-10_163553_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 168
+ last 590
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask2
+ xpos -451
+ ypos -378
+}
+push $N1500e600
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_017/mask/2017-02-10_163553_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 168
+ last 590
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask2
+ xpos -520
+ ypos -251
+}
+push $N1500e600
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_015/mask/2017-02-10_163553_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 168
+ last 590
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask2
+ xpos -445
+ ypos -302
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_010/tif/2017-02-10_163907_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 242
+ last 328
+ origfirst 242
+ origlast 328
+ origset true
+ name Read3
+ xpos -233
+ ypos -517
+}
+Dot {
+ name Dot7
+ xpos -199
+ ypos -389
+}
+set N1514bea0 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up3
+ xpos -305
+ ypos -345
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_013/tif/2017-02-10_163907_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 242
+ last 328
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq3
+ xpos -305
+ ypos -321
+}
+push $N1514bea0
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast4
+ xpos -233
+ ypos -267
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_015/tif/2017-02-10_163907_015.########.tif
+ file_type tiff
+ create_directories true
+ first 242
+ last 328
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq3
+ xpos -233
+ ypos -227
+}
+push $N1514bea0
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down3
+ xpos -163
+ ypos -347
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_017/tif/2017-02-10_163907_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 242
+ last 328
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq3
+ xpos -163
+ ypos -312
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_010/mask/2017-02-10_163907_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 242
+ last 328
+ origfirst 242
+ origlast 328
+ origset true
+ name Read4
+ xpos -80
+ ypos -502
+}
+Dot {
+ name Dot8
+ xpos -46
+ ypos -373
+}
+set N15146db0 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_017/mask/2017-02-10_163907_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 242
+ last 328
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask3
+ xpos -80
+ ypos -255
+}
+push $N15146db0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_015/mask/2017-02-10_163907_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 242
+ last 328
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask3
+ xpos 0
+ ypos -301
+}
+push $N15146db0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163907/2017-02-10_163907_013/mask/2017-02-10_163907_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 242
+ last 328
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_mask3
+ xpos -11
+ ypos -382
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_010/tif/2017-02-10_163916_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 230
+ last 741
+ origfirst 230
+ origlast 741
+ origset true
+ name Read5
+ xpos 216
+ ypos -522
+}
+Dot {
+ name Dot9
+ xpos 250
+ ypos -383
+}
+set N158138c0 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up4
+ xpos 144
+ ypos -339
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_013/tif/2017-02-10_163916_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 230
+ last 741
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq4
+ xpos 144
+ ypos -315
+}
+push $N158138c0
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast5
+ xpos 216
+ ypos -261
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_015/tif/2017-02-10_163916_015.########.tif
+ file_type tiff
+ create_directories true
+ first 230
+ last 741
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq4
+ xpos 216
+ ypos -221
+}
+push $N158138c0
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down4
+ xpos 286
+ ypos -341
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_017/tif/2017-02-10_163916_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 230
+ last 741
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq4
+ xpos 286
+ ypos -308
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_010/mask/2017-02-10_163916_010_mask.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 230
+ last 741
+ origfirst 230
+ origlast 741
+ origset true
+ name Read6
+ xpos 369
+ ypos -500
+}
+Dot {
+ name Dot10
+ xpos 403
+ ypos -367
+}
+set N15087c20 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_017/mask/2017-02-10_163916_017_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 230
+ last 741
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask4
+ xpos 369
+ ypos -249
+}
+push $N15087c20
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_013/mask/2017-02-10_163916_013_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 230
+ last 741
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_mask4
+ xpos 438
+ ypos -376
+}
+push $N15087c20
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163916/2017-02-10_163916_015/mask/2017-02-10_163916_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 230
+ last 741
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask4
+ xpos 449
+ ypos -296
+}
+push $N14f47300
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up2
+ xpos -745
+ ypos -341
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163553/2017-02-10_163553_013/tif/2017-02-10_163553_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 168
+ last 590
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq2
+ xpos -745
+ ypos -317
+}
+push $N88ff650
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up1
+ xpos -1204
+ ypos -327
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_013/tif/2017-02-10_163357_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 74
+ last 387
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq1
+ xpos -1204
+ ypos -303
+}
+push $N88ff650
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast2
+ xpos -1132
+ ypos -249
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_163357/2017-02-10_163357_015/tif/2017-02-10_163357_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 74
+ last 387
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq1
+ xpos -1132
+ ypos -209
+}
+push $N6aefc60
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up
+ xpos -1723
+ ypos -331
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_013/tif/2017-02-10_162903_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 159
+ last 481
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq
+ xpos -1723
+ ypos -307
+}
+push $N15767df0
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up9
+ xpos -1204
+ ypos 149
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_013/tif/2017-10-21_171820_013.########.tif
+ file_type tiff
+ create_directories true
+ first 237
+ last 252
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq9
+ xpos -1204
+ ypos 173
+ disable true
+}
+push $N15767df0
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down9
+ xpos -1062
+ ypos 147
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-10-21_171820/2017-10-21_171820_017/tif/2017-10-21_171820_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 237
+ last 252
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq9
+ xpos -1062
+ ypos 171
+ disable true
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_010/mask/2017-11-14_200513_010_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 915
+ last 1118
+ origfirst 915
+ origlast 1118
+ origset true
+ name Read18
+ xpos -521
+ ypos -28
+}
+Dot {
+ name Dot22
+ xpos -487
+ ypos 122
+}
+set N15c01410 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_017/mask/2017-11-14_200513_017_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 915
+ last 1118
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask10
+ xpos -521
+ ypos 252
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_010/tif/2017-11-14_200513_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 915
+ last 1118
+ origfirst 915
+ origlast 1118
+ origset true
+ name Read17
+ xpos -668
+ ypos -48
+}
+Dot {
+ name Dot21
+ xpos -634
+ ypos 106
+}
+set N8fd91e0 [stack 0]
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down10
+ xpos -598
+ ypos 148
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_017/tif/2017-11-14_200513_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 915
+ last 1118
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq10
+ xpos -598
+ ypos 172
+ disable true
+}
+push $N8fd91e0
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast11
+ xpos -668
+ ypos 228
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_015/tif/2017-11-14_200513_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 915
+ last 1118
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq10
+ xpos -668
+ ypos 252
+ disable true
+}
+push $N15c01410
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_013/mask/2017-11-14_200513_013_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 915
+ last 1118
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask10
+ xpos -451
+ ypos 113
+ disable true
+}
+push $N15c01410
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_015/mask/2017-11-14_200513_015_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 915
+ last 1118
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask10
+ xpos -445
+ ypos 192
+ disable true
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_010/tif/2017-09-25_183210_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 2993
+ last 10239
+ origfirst 2993
+ origlast 10239
+ origset true
+ name Read13
+ xpos -1633
+ ypos -45
+}
+Dot {
+ name Dot17
+ xpos -1599
+ ypos 101
+}
+set N15921310 [stack 0]
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast9
+ xpos -1633
+ ypos 223
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_015/tif/2017-09-25_183210_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 2993
+ last 10239
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq8
+ xpos -1633
+ ypos 247
+ disable true
+}
+push $N15ac5fc0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_015/mask/2017-09-25_183210_015_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 2993
+ last 10239
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask8
+ xpos -1410
+ ypos 184
+ disable true
+}
+push $N159f65b0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_015/mask/2017-02-10_164441_015_mask.########.tif
+ file_type tiff
+ compression none
+ create_directories true
+ first 2048
+ last 2223
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask7
+ xpos 2179
+ ypos -308
+ disable true
+}
+push $N15921310
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up8
+ xpos -1705
+ ypos 145
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_013/tif/2017-09-25_183210_013.########.tif
+ file_type tiff
+ create_directories true
+ first 2993
+ last 10239
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq8
+ xpos -1705
+ ypos 169
+}
+push $N15921310
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down8
+ xpos -1563
+ ypos 143
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_017/tif/2017-09-25_183210_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 2993
+ last 10239
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq8
+ xpos -1563
+ ypos 167
+ disable true
+}
+push $N15ac5fc0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_017/mask/2017-09-25_183210_017_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 2993
+ last 10239
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask8
+ xpos -1486
+ ypos 258
+ disable true
+}
+push $N8fd91e0
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up10
+ xpos -740
+ ypos 150
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200513/2017-11-14_200513_013/tif/2017-11-14_200513_013.########.tif
+ file_type tiff
+ create_directories true
+ first 915
+ last 1118
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq10
+ xpos -740
+ ypos 174
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_020/mask/2017-11-14_200626_020_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 3282
+ last 3481
+ origfirst 3282
+ origlast 3481
+ origset true
+ name Read20
+ xpos -73
+ ypos -21
+}
+Dot {
+ name Dot24
+ xpos -39
+ ypos 123
+}
+set N15b647f0 [stack 0]
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_023/mask/2017-11-14_200626_023_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 3282
+ last 3481
+ use_limit true
+ checkHashOnRead false
+ name Write_13_mask11
+ xpos -3
+ ypos 114
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_020/tif/2017-11-14_200626_020.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 3282
+ last 3481
+ origfirst 3282
+ origlast 3481
+ origset true
+ name Read19
+ xpos -220
+ ypos -40
+}
+Dot {
+ name Dot23
+ xpos -186
+ ypos 107
+}
+set N15c9b4c0 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up11
+ xpos -292
+ ypos 151
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_023/tif/2017-11-14_200626_023.########.tif
+ file_type tiff
+ create_directories true
+ first 3282
+ last 3481
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq11
+ xpos -292
+ ypos 175
+}
+push $N15c9b4c0
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down11
+ xpos -150
+ ypos 149
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_027/tif/2017-11-14_200626_027.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 3282
+ last 3481
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq11
+ xpos -150
+ ypos 173
+ disable true
+}
+push $N15c9b4c0
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast12
+ xpos -220
+ ypos 229
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_025/tif/2017-11-14_200626_025.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 3282
+ last 3481
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq11
+ xpos -220
+ ypos 253
+ disable true
+}
+push $N15b647f0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_025/mask/2017-11-14_200626_025_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 3282
+ last 3481
+ use_limit true
+ checkHashOnRead false
+ name Write_15_mask11
+ xpos 4
+ ypos 193
+ disable true
+}
+push $N15b647f0
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_200626/2017-11-14_200626_027/mask/2017-11-14_200626_027_mask.########.tif
+ file_type tiff
+ create_directories true
+ first 3282
+ last 3481
+ use_limit true
+ checkHashOnRead false
+ name Write_17_mask11
+ xpos -73
+ ypos 253
+ disable true
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_010/tif/2017-11-22_144117_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 2931
+ last 3143
+ origfirst 2931
+ origlast 3143
+ origset true
+ name Read21
+ xpos -1626
+ ypos 407
+}
+Dot {
+ name Dot25
+ xpos -1592
+ ypos 555
+}
+set N8a02690 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up12
+ xpos -1698
+ ypos 599
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_013/tif/2017-11-22_144117_013.########.tif
+ file_type tiff
+ create_directories true
+ first 2931
+ last 3143
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq12
+ xpos -1698
+ ypos 623
+}
+push $N8a02690
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down12
+ xpos -1556
+ ypos 597
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_017/tif/2017-11-22_144117_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 2931
+ last 3143
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq12
+ xpos -1556
+ ypos 621
+}
+push $N8a02690
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast13
+ xpos -1626
+ ypos 677
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144117/2017-11-22_144117_015/tif/2017-11-22_144117_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 2931
+ last 3143
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq12
+ xpos -1626
+ ypos 701
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_010/tif/2017-11-22_144155_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 3467
+ last 3738
+ origfirst 3467
+ origlast 3738
+ origset true
+ name Read23
+ xpos -1106
+ ypos 403
+}
+Dot {
+ name Dot27
+ xpos -1072
+ ypos 539
+}
+set N15dd1420 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up13
+ xpos -1178
+ ypos 583
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_013/tif/2017-11-22_144155_013.########.tif
+ file_type tiff
+ create_directories true
+ first 3467
+ last 3738
+ use_limit true
+ checkHashOnRead false
+ version 1
+ name Write_13_seq13
+ xpos -1178
+ ypos 607
+}
+push $N15dd1420
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast14
+ xpos -1106
+ ypos 661
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_015/tif/2017-11-22_144155_015.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 3467
+ last 3738
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq13
+ xpos -1106
+ ypos 685
+}
+push $N15dd1420
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down13
+ xpos -1036
+ ypos 581
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_017/tif/2017-11-22_144155_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 3467
+ last 3738
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq13
+ xpos -1036
+ ypos 605
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_010/tif/2017-02-10_164114_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 157
+ last 777
+ origfirst 157
+ origlast 777
+ origset true
+ name Read7
+ xpos 966
+ ypos -525
+}
+Dot {
+ name Dot11
+ xpos 1000
+ ypos -373
+}
+set N1576d6d0 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up5
+ xpos 894
+ ypos -329
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_013/tif/2017-02-10_164114_013.########.tiff/2017-02-10_163916_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq5
+ xpos 894
+ ypos -305
+}
+push $N1576d6d0
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down5
+ xpos 1036
+ ypos -331
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_017/tif/2017-02-10_164114_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq5
+ xpos 1036
+ ypos -302
+}
+push $N1576d6d0
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast6
+ xpos 966
+ ypos -251
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164114/2017-02-10_164114_015/tif/2017-02-10_164114_015.########.tif
+ file_type tiff
+ create_directories true
+ first 157
+ last 777
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq5
+ xpos 966
+ ypos -212
+ disable true
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_010/tif/2017-02-10_164141_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 191
+ last 600
+ origfirst 191
+ origlast 600
+ origset true
+ name Read9
+ xpos 1444
+ ypos -544
+}
+Dot {
+ name Dot13
+ xpos 1478
+ ypos -381
+}
+set N156bf3d0 [stack 0]
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up6
+ xpos 1372
+ ypos -337
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_013/tif/2017-02-10_164141_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq6
+ xpos 1372
+ ypos -313
+}
+push $N156bf3d0
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down6
+ xpos 1514
+ ypos -339
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_017/tif/2017-02-10_164141_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq6
+ xpos 1514
+ ypos -310
+}
+push $N156bf3d0
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast7
+ xpos 1444
+ ypos -259
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164141/2017-02-10_164141_015/tif/2017-02-10_164141_015.########.tif
+ file_type tiff
+ create_directories true
+ first 191
+ last 600
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq6
+ xpos 1444
+ ypos -219
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_010/tif/2017-02-10_164441_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 2048
+ last 2223
+ origfirst 2048
+ origlast 2223
+ origset true
+ name Read11
+ xpos 1946
+ ypos -547
+}
+Dot {
+ name Dot15
+ xpos 1980
+ ypos -379
+}
+set N15a89350 [stack 0]
+EXPTool {
+ mode Stops
+ red -2
+ green -2
+ blue -2
+ name Exposure_down7
+ xpos 2016
+ ypos -337
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_017/tif/2017-02-10_164441_017.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 2048
+ last 2223
+ use_limit true
+ checkHashOnRead false
+ name Write_17_seq7
+ xpos 2016
+ ypos -313
+}
+push $N15a89350
+EXPTool {
+ mode Stops
+ red 2
+ green 2
+ blue 2
+ name Exposure_up7
+ xpos 1874
+ ypos -335
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_013/tif/2017-02-10_164441_013.########.tif
+ file_type tiff
+ datatype "16 bit"
+ create_directories true
+ first 2048
+ last 2223
+ use_limit true
+ checkHashOnRead false
+ name Write_13_seq7
+ xpos 1874
+ ypos -311
+}
+Viewer {
+ inputs 2
+ frame 2139
+ frame_range 74-10239
+ input_number 1
+ gain 45
+ colour_sample_bbox {0.8125 -0.2265625 0.8203125 -0.21875}
+ name Viewer1
+ xpos -121
+ ypos 420
+}
+push $N15a89350
+RolloffContrast {
+ contrast 1.5
+ center 0.25
+ soft_clip 1
+ slope_mag_low1 0.1999999881
+ slope_mag_high2 0.1999999881
+ name RolloffContrast8
+ xpos 1946
+ ypos -257
+ disable true
+}
+Write {
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_164441/2017-02-10_164441_015/tif/2017-02-10_164441_015.########.tif
+ file_type tiff
+ create_directories true
+ first 2048
+ last 2223
+ use_limit true
+ checkHashOnRead false
+ name Write_15_seq7
+ xpos 1946
+ ypos -217
+ disable true
+}

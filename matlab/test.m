@@ -1,3 +1,14 @@
+trainedUnet_url = 'https://www.mathworks.com/supportfiles/vision/data/multispectralUnet.mat';
+downloadTrainedUnet(trainedUnet_url,'/home/tyson/Raiden/networks/pretrainedNetwork/');
+
+
+modelfile = '~/Raiden/networks/unet.onnx';
+loadLabels;
+net = importONNXNetwork(modelfile,'OutputLayerType','pixelclassification','Classes',labelIDs_scalar)
+protofile = '/home/tyson/Raiden/networks/pretrainedNetwork/u-net-release/phseg_v5-train.prototxt';
+datafile = '/home/tyson/Raiden/networks/pretrainedNetwork/u-net-release/phseg_v5.caffemodel';
+net = importCaffeNetwork(protofile,datafile) 
+layers = importCaffeLayers(protofile)
 sz = imageSize;
 
 y = sz(1);
@@ -64,3 +75,4 @@ title('Output image', 'FontSize', 20);
     spectrumPlot(image)
     sfPlot(image)
     
+unetLayers

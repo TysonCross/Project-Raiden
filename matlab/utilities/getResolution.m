@@ -1,3 +1,7 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                            GETRESOLUTION.M
+% Return the resolution required at the input of the respective network
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function imageSize = getResolution(network)
         % [ height x width ]
 
@@ -10,7 +14,6 @@ function imageSize = getResolution(network)
                 
             case 'deeplabv3'
                 imageSize = [256 256];
-%                 imageSize = [256 512];
                 
             case 'segnet'
                 imageSize = [256 256];
@@ -27,8 +30,7 @@ function imageSize = getResolution(network)
             case 'inceptionresnetv2'
                 imageSize = [299 299];
 
-            otherwise
-                warning('Invalid network name: assuming resolution of 227x227')
-                imageSize = [227 227];
+        otherwise
+                 error('Invalid network name!')
     end
 end

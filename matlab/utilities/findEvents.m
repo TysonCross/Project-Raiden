@@ -1,3 +1,21 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             FINDEVENTS.M
+% This function is the underlying function for any find* function and returns 
+% the frames that contained the requested label. The blankFramesToIgnore option
+% determines the number of frames between frames with labels to accept as part 
+% of an event.
+% INPUT:
+%         IMDS: Pixel label datastore normally the output of semantic segmentor
+%         EVENTID: The event ID to look for in a frame 
+%         BLANKFRAMESTOIGNORE: The number of blank frames before the event is 
+%                              deemed to have ended 
+% OUTPUT: 
+%         OUTPUT: array containing events, where the first column is the start
+%                 frame and the second column is the frame duration
+%
+%                 eg, [startFrame frameDuration]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function output = findEvents(imds, eventID, blankFramesToIgnore)
 %#ok<*AGROW>
 output = [];

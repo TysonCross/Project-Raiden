@@ -1,3 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                            GETSTROKECOUNT.M
+% This function determines the number of strokes present in the datastore 
+% presented to it. The gap option allows for manipulating the space empty frames
+% allowable between frames with the stroke label for it to be counted as part 
+% of the same stroke. The default value is 2.
+% INPUT:
+%        imds: A datastore that has the segmented images
+%        gap: The number of frames to ignore between frames containing the label
+% OUTPUT:
+%        strokeCount: The number of stoke events in the given dataStore.
+%        strokeInfo: Is an array that has the start frame number as the first
+%                    column and the number of frames in that event as the second
+%                    column. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
     %#ok<*AGROW>
     strokeIndices = getStrokeIndices(imds);
@@ -41,7 +56,7 @@ function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
             end
         end
     else
-        %Return an message indicating no stroke and a 0 value
+        %Return a message indicating no stroke and a 0 value
         strokeCount = 0;
         strokesInfo = [];
     end
