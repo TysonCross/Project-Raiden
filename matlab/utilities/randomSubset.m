@@ -34,11 +34,11 @@ function [imds, pxds] = randomSubset(imds_full, pxds_full, percentage)
 
   % Create image datastores from subsets
   imageFileSubSet = imds_full.Files(idx);
-  imds = imageDatastore(imageFileSubSet,'FileExtensions','.tif');
+  imds = imageDatastore(imageFileSubSet);
 
   % Create pixel label datastores from subset
   labelFileSubSet = pxds_full.Files(idx);
   pxds = pixelLabelDatastore(labelFileSubSet, labelNames, ...
-    labelIDs_scalar,'FileExtensions','.tif'); % alternative: labelIDs
+    labelIDs_scalar); % alternative: labelIDs
 
 end

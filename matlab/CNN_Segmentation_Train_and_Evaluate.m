@@ -1,8 +1,7 @@
 %% CNN_SEGMENTATION_TRAIN_AND_EVALUATE.M
 % This script implements data preperation, training and evaluation of 
 % various deep learning models, mainly using transfer learning on known
-% netowork topologys.
-% ToDo: Variables that should be changed include 'network' and 'rootPath'
+% network topologys.
 %
 % ToDo(Tyson): Expand on the above as is required
 % NOTE: Should this perhaps be changed to be a smaller script that calls the component scripts?
@@ -17,7 +16,8 @@ clc;
 clearvars;
 
 %% SETUP
-network = 'deeplabv3'
+networkName = 'fcn8s'
+
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
@@ -28,46 +28,48 @@ network = 'deeplabv3'
 %}
 
 % Phases to run
-forceConvert        = 1         % if true, resize/process new data (slow)
-preProcess          = 0         % if true, median filter on input data
-partitionData       = 1         % if true, re-split Test/Training (optionally with percentage)
-resplitValidation   = 1         % if true, re-split Training/Validation
-useCachedNet        = 0         % if false, generate new neural network
-doTraining         	= 1         % if true, perform training
-recoverCheckpoint   = 0         % if training did not finish, use checkpoint
-archiveNet          = 1         % archive NN, data and figures to subfolder
-saveImages          = 1         % generate performance figures
-sendNotification    = 1         % send email notification on completion
-evaluateNet         = 1         % if true, evaluate performance on test set
+opt.forceConvert        = 0;         % if true, resize/process new data (slow)
+opt.preProcess          = 0;         % if true, median filter on input data
+opt.partitionData       = 0;         % if true, re-split Test/Training (optionally with percentage)
+opt.splitValidation     = 0;       	 % if true, re-split Training/Validation
+opt.useCachedNet        = 0;         % if false, generate new neural network
+opt.doTraining         	= 1;         % if true, perform training
+opt.recoverCheckpoint   = 0;         % if training did not finish, use checkpoint
+opt.archiveNet          = 1;         % archive NN, data and figures to subfolder
+opt.saveImages          = 1;         % generate performance figures
+opt.sendNotification    = 1;         % send email notification on completion
+opt.evaluateNet         = 1;         % if true, evaluate performance on test set
 
 % percentage of each sequence (strokes will not be culled)
-percentage = 1.0;
+percentage = 0.1;
 
 % resolution setup
-imageSize = getResolution(network)
+imageSize = getResolution(networkName)
 y = imageSize(1);
 x = imageSize(2);
 rez = strcat(string(x),'x',string(y));
 
 % global setup
-rootPath = '/home/tyson/Raiden/';
-scriptPath = fullfile(rootPath,'matlab');
+projectPath = '/home/tyson/Raiden/';
+scriptPath = fullfile(projectPath,'matlab');
 setupColors;
-networkStatus.name = strcat(network,'_', rez, '_', ...
+networkStatus.name = strcat(networkName,'_', rez, '_', ...
     strrep(strrep(datestr(datetime('now'),31), ' ', '_'), ':', ''));
 
 cachePath = fullfile(scriptPath,'cache');
 if ~exist(cachePath,'dir')
     mkdir(cachePath);
 end
-checkpointPath = fullfile(rootPath,'networks','checkpoints');
+checkpointPath = fullfile(projectPath,'networks','checkpoints');
 if ~exist(checkpointPath,'dir')
     mkdir(checkpointPath);
 end
 
 logFile = strcat(networkStatus.name,'.txt');
-logFileFull = fullfile(rootPath,'logs',logFile)
+logFileFull = fullfile(projectPath,'logs',logFile)
 diary(logFileFull)
+
+displayConfiguration(opt);
 
 %% Data Conversion Phase 
 
@@ -79,15 +81,15 @@ diary(logFileFull)
 loadLabels;
 loadSequences;
 
-if (forceConvert==false)
+if (opt.forceConvert==false)
     disp('Checking sequences...')
     % hashCheck:
-    if (exist(fullfile(rootPath,'data','resized',rez,...
+    if (exist(fullfile(projectPath,'data','resized',rez,...
             'fingerprint.mat'),'file')) ...
          
         hashString = strcat(sequences{:},rez);
         newHash = mlreportgen.utils.hash(hashString);
-        load(fullfile(rootPath,'data','resized',rez, ...
+        load(fullfile(projectPath,'data','resized',rez, ...
             'fingerprint.mat'),'fingerprint');
         if (fingerprint==newHash)
             convertData=false;
@@ -96,22 +98,22 @@ if (forceConvert==false)
         end
     else % hashCheck is missing, but maybe the sequences are correct
         warning('Hash file not found. Comparing converted and specified sequences')
-        converted = listConvertedSequences(rootPath, imageSize);
+        converted = listConvertedSequences(projectPath, imageSize);
         if length(sequences)==length(converted)
             converted = sort(converted);
             sequences = sort(sequences);
             for i=1:numel(converted)
                 if strcmpi(converted(i),sequences(i))
-                    if ~forceConvert
+                    if ~opt.forceConvert
                         str = strcat({'Source and conversion folders '}, ...
                             {'match. Data will not converted. Enable '}, ...
-                            {'forceConvert to override'});
+                            {'opt.forceConvert to override'});
                         warning(char(str))
                         convertData=false;
                         break
                     else
                         str = strcat({'Source and conversion folders '},...
-                            {'match but forceConvert is on'});
+                            {'match but opt.forceConvert is on'});
                         warning(char(str))
                         convertData=true;
                     end
@@ -130,15 +132,15 @@ else
     convertData=true;
 end
     
-if ( (convertData==true) || (forceConvert==true) )
+if ( (convertData==true) || (opt.forceConvert==true) )
     disp("Converting Data...")
     
     % [Get list of sequences]
     loadSequences;
 
-    resizedImageFolders = fullfile(rootPath,'data','resized', ...
+    resizedImageFolders = fullfile(projectPath,'data','resized', ...
         rez,sequences,'image');
-    resizedLabelFolders = fullfile(rootPath,'data','resized', ...
+    resizedLabelFolders = fullfile(projectPath,'data','resized', ...
         rez,sequences,'label');
     
     % create default datastores
@@ -154,7 +156,7 @@ if ( (convertData==true) || (forceConvert==true) )
     y = imageSize(1);
     x = imageSize(2);
     rez = strcat(string(x),'x',string(y));
-    if preProcess
+    if opt.preProcess
         str = char(strcat('Processing images, resizing to ',{' '},rez));
     else
         str = char(strcat('Resizing images to ',{' '},rez));
@@ -163,7 +165,7 @@ if ( (convertData==true) || (forceConvert==true) )
     for j = 1:numel(imageFolders)
         % [Convert all 'tifs' to imageSize]
         imds{j} = resizeImages(imds{j}, imageSize, ...
-            resizedImageFolders{j}, forceConvert, true, preProcess);
+            resizedImageFolders{j}, opt.forceConvert, true, opt.preProcess);
         progressbar(j/numel(imageFolders),[])
     end
     str = char(strcat('Converting labels to ',{' '},rez));
@@ -171,12 +173,12 @@ if ( (convertData==true) || (forceConvert==true) )
     for j = 1:numel(imageFolders)
         % [Convert all 'mask' to imageSize, and RGB -> categorical]
         pxds{j} = resizePixelLabels(pxds{j}, imageSize, ...
-            resizedLabelFolders{j},forceConvert, true);
+            resizedLabelFolders{j},opt.forceConvert, true);
         progressbar(j/numel(imageFolders),[])
     end
  progressbar(1)
     
-    converted = listConvertedSequences(rootPath, imageSize);
+    converted = listConvertedSequences(projectPath, imageSize);
     if numel(converted)~=numel(sequences)
         disp('Conversion failed for sequences:');
         disp(setdiff(sequences,converted));
@@ -185,12 +187,12 @@ if ( (convertData==true) || (forceConvert==true) )
         disp("Data converted successfully")
         hashString = strcat(converted{:},rez);
         fingerprint = mlreportgen.utils.hash(hashString);
-        save(fullfile(rootPath,'data','resized',rez, ...
+        save(fullfile(projectPath,'data','resized',rez, ...
             'fingerprint'),'fingerprint');
     end
     
     clear imds pxds resolutionList fingerprint newHash hashString
-    clear imageFolders maskFolders forceConvert convertData
+    clear imageFolders maskFolders opt.forceConvert convertData
 
     save(fullfile(cachePath,'metadata'), ...
     'resizedImageFolders','resizedLabelFolders', ...
@@ -199,7 +201,7 @@ if ( (convertData==true) || (forceConvert==true) )
     disp("Metadata cached") 
 else
     load(fullfile(cachePath,'metadata'));
-    disp('Loaded metadata from cache...')
+    disp('Loaded (meta)data from cache...')
 end
 
 diary off; diary on;
@@ -207,33 +209,34 @@ diary off; diary on;
 %% Test partition phase
 
 % Check to see if cache exists
-if partitionData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
+if opt.partitionData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
     warning(['No datastore cache found at: ', fullfile(cachePath,'data'), ...
         newline, '(Data will be repartitioned)'])
-    partitionData=0;
 end
 
-if (partitionData==true)
+if (opt.partitionData==false && percentage < 1)
+    warning('partitionData is off')
+end
+
+if (opt.partitionData==true  || opt.forceConvert)
     disp("Partitioning test and training Data...")
     
     % [split training and test]
-    splitPercent = 0.15;
-    [trainIndex, testIndex] = splitData(resizedImageFolders, splitPercent);
+    splitTestPercent = 0.15;
+    [trainIndex, testIndex] = splitData(resizedImageFolders, splitTestPercent);
     
     imageFolder = cellstr(resizedImageFolders);
     labelFolder = cellstr(resizedLabelFolders);
 
     % Create datastores
-    imdsTrain = imageDatastore(imageFolder(trainIndex),...
-        'FileExtensions','.tif');
+    imdsTrain = imageDatastore(imageFolder(trainIndex));
     pxdsTrain = pixelLabelDatastore(labelFolder(trainIndex),...
-        labelNames,labelIDs_scalar,'FileExtensions','.tif');
+        labelNames,labelIDs_scalar);
     assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
     
-    imdsTest = imageDatastore(imageFolder(testIndex),...
-        'FileExtensions','.tif');
+    imdsTest = imageDatastore(imageFolder(testIndex));
     pxdsTest = pixelLabelDatastore(labelFolder(testIndex),...
-        labelNames,labelIDs_scalar,'FileExtensions','.tif');
+        labelNames,labelIDs_scalar);
     assert(numel(imdsTest.Files)==numel(pxdsTest.Files))
 
     if percentage < 1
@@ -266,13 +269,13 @@ diary off; diary on;
 
 %% Training partition phase 
 
-if (resplitValidation==true)
+if (opt.splitValidation==true || ~exist('imdsVal','var'))
     disp("Splitting training/validation data...")
    
-    splitPercentage = 0.8;
+    splitTrainingPercentage = 0.8;
     % Split training and validation
     [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
-        partitionTrainingData(imdsTrain, pxdsTrain, splitPercentage);
+        partitionTrainingData(imdsTrain, pxdsTrain, splitTrainingPercentage);
 
     assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
     assert(numel(imdsVal.Files)==numel(pxdsVal.Files));
@@ -301,7 +304,7 @@ diary off; diary on;
 
 %% Network setup phase
 
-if recoverCheckpoint
+if opt.recoverCheckpoint
     disp("Attempting to load checkpoint for network...")
     filename = fullfile(checkpointPath,getLatestFile(checkpointPath));
     if exist(filename,'file')
@@ -310,12 +313,12 @@ if recoverCheckpoint
         net = layerGraph(net);
         networkStatus.trained = 0;
     else
-        error(strcat({'Error: User specified: recoverCheckpoint = 1, '},...
+        error(strcat({'Error: User specified: opt.recoverCheckpoint = 1, '},...
                 {'but no checkpoint found in '}, string(checkpointPath)));
     end
     clear filename
 else
-    if useCachedNet
+    if opt.useCachedNet
         disp("Loading cached Network...")
         if ~exist(fullfile(cachePath,strcat('network','.mat')),'file')
            msg = 'No Network Cache found. What would you like to do?';
@@ -327,7 +330,7 @@ else
             % Handle response
             switch q
                 case btn1
-                    useCachedNet=0;
+                    opt.useCachedNet=0;
                 case btn2
                     clear q msg title btn1 btn2
                     error(['Error: No network cache found at: ', ...
@@ -337,7 +340,7 @@ else
         end
     end
 
-    if (useCachedNet==false)
+    if (opt.useCachedNet==false)
         disp("Setting up Network...")
 
         % Balance class weightings
@@ -351,9 +354,10 @@ else
 
         numClasses = numel(labelNames);
 
-        switch network
+        switch networkName
             case 'fcn8s' % fully connected CNN, based on vgg16 weighting
                 lgraph = fcnLayers(imageSize, numClasses);   
+                
                 lgraph = removeLayers(lgraph,'pixelLabels');
                 lgraph = addLayers(lgraph, pxLayer);
                 lgraph = connectLayers(lgraph,'softmax','labels');
@@ -505,22 +509,26 @@ end
 diary off; diary on;
 
 %% Training
-if (doTraining==true) && (useCachedNet==true)
-    net = layerGraph(net);
+if (opt.doTraining==true) && (opt.useCachedNet==true)
+    load(fullfile(cachePath,'network'));
+    disp('Loaded Network from cache...')
+    if ~(contains(class(net),'LayerGraph'))
+        net = layerGraph(net);
+    end
 end
 
-if (doTraining==true)
+if (opt.doTraining==true)
     disp("Setting up Training...")
     
-    checkpointsFolder = fullfile(rootPath,'networks','checkpoints');
+    checkpointsFolder = fullfile(projectPath,'networks','checkpoints');
     close all;
     
     % Define training options.
 %     ToDo: trainingDefaults? With individual overrides?
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
-        'MaxEpochs', 50, ...  
-        'MiniBatchSize', 24, ...
+        'MaxEpochs', 30, ...  
+        'MiniBatchSize', 10, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
@@ -528,11 +536,11 @@ if (doTraining==true)
         'LearnRateDropPeriod',10,...
         'LearnRateDropFactor',0.3,...
         'Momentum',0.9, ...
-        'L2Regularization',0.005, ... % from 0.005
+        'L2Regularization',0.003, ... % from 0.005
         'GradientThreshold', 10, ...
         'ValidationData',pximdsVal, ...
-        'ValidationFrequency', 10,...
-        'ValidationPatience', 8, ...
+        'ValidationFrequency', 25,...
+        'ValidationPatience', 6, ...
         'Verbose', 1, ...
         'VerboseFrequency',50,...
         'Plots','training-progress')
@@ -547,8 +555,8 @@ if (doTraining==true)
         'RandXScale',scaleRange, ...
         'RandYScale',scaleRange);
 
-    pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
-        'DataAugmentation', augmenter);
+    pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain); %,...
+%         'DataAugmentation', augmenter);
 
     % shuffle the data
     pximds = pximds.shuffle;
@@ -556,8 +564,8 @@ if (doTraining==true)
     % Clear memory
 %     reset(gpuDevice(1));
     clear numTestingImages numTrainingImages numValidationImages
-    clear inputLayer convertData forceConvert partitionData
-    clear recoverCheckpoint resplitValidation
+    clear inputLayer convertData opt.forceConvert opt.partitionData
+    clear opt.recoverCheckpoint opt.resplitValidation
     clear imdsTrain imdsVal pxdsTrain pxdsVal labelIDs labelIDs_scalar
     clear labelTable labelWeights network sequences
     clear maskFolders imageFolders resizedImageFolders resizedLabelFolders
@@ -584,7 +592,7 @@ end
 diary off; diary on;
 
 %% EVALUATION
-if (networkStatus.trained && evaluateNet)
+if (networkStatus.trained && opt.evaluateNet)
     disp("Evaluating network performance");
     
     testDir = fullfile('~/Documents/MATLAB/temp',networkStatus.name);
@@ -595,14 +603,15 @@ if (networkStatus.trained && evaluateNet)
     pxdsResults = semanticseg(imdsTest,net, ...
         'MiniBatchSize',16, ...
         'WriteLocation',testDir, ...
-        'Verbose',false);
+        'Verbose',true);
 
+    cprintf(-[1,0,1], '================ Evaluation =================\n');
     metrics = evaluateSemanticSegmentation(pxdsResults,pxdsTest, ...
         'Verbose',false);
     metrics.DataSetMetrics
     metrics.ClassMetrics
     
-    save(fullfile(cachePath,'network'),...
+    save(fullfile(cachePath,'network'), ...
         'net','networkStatus','metrics');
     disp("Network created") 
 end
@@ -611,11 +620,11 @@ diary off; diary on;
 
 %% ARCHIVE network, images, and matlab script
 sendFileList = {''};
-if (archiveNet)
+if (opt.archiveNet)
    disp('Saving data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
    if exist(currentFileName,'file')
-        foldername = fullfile(rootPath,"networks","cache",networkStatus.name);
+        foldername = fullfile(projectPath,"networks","cache",networkStatus.name);
         mkdir(foldername);
         copyfile(currentFileName, foldername);
         copyfile(fullfile(cachePath,'data.mat'),foldername);
@@ -623,7 +632,7 @@ if (archiveNet)
         copyfile(fullfile(cachePath,'network.mat'),foldername);
         disp('Network and data archived')
         figHandle = findall(groot, 'Type', 'Figure');
-        if saveImages && (numel(figHandle)>0)
+        if opt.saveImages && (numel(figHandle)>0)
             fig_name = figHandle.Name;
             fig_name(isspace(fig_name)==1)='_';
             fig_name = regexprep(fig_name, '[ .,''!?():]', '');
@@ -656,7 +665,7 @@ diary off;
 
 %% NOTIFICATIONS
 
-if sendNotification
+if opt.sendNotification
     [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
     subject = strcat({'Training for '}, networkStatus.name, ...
         {' has completed at '}, ...

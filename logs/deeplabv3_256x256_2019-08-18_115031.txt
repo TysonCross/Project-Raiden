@@ -1,0 +1,30 @@
+partitionData is on 
+resplitValidation is on 
+doTraining is on 
+archiveNet is on 
+saveImages is on 
+sendNotification is on 
+evaluateNet is on 
+forceConvert is off 
+preProcess is off 
+useCachedNet is off 
+recoverCheckpoint is off 
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 100)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',100,0)">line 100</a>)] 
+Converting Data...
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('parallel.internal.pool.deserialize', '/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/deserialize.m', 45)" style="font-weight:bold">parallel.internal.pool.deserialize</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/cluster/+parallel/+internal/+pool/deserialize.m',45,0)">line 45</a>)
+Deserialization threw an exception.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('distcomp.remoteparfor/deserialize', '/usr/local/MATLAB/R2019a/toolbox/distcomp/distcomp/+distcomp/remoteparfor.m', 279)" style="font-weight:bold">distcomp.remoteparfor/deserialize</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/distcomp/+distcomp/remoteparfor.m',279,0)">line 279</a>)
+            data = parallel.internal.pool.deserialize(...
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('distcomp.remoteparfor/getCompleteIntervals', '/usr/local/MATLAB/R2019a/toolbox/distcomp/distcomp/+distcomp/remoteparfor.m', 402)" style="font-weight:bold">distcomp.remoteparfor/getCompleteIntervals</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/distcomp/+distcomp/remoteparfor.m',402,0)">line 402</a>)
+                    thisdata = obj.deserialize(data(2));
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 148)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',148,0)">line 148</a>)
+    parfor i = 1:numel(imageFolders)} 
+CNN_Segmentation_Train_and_Evaluate
+networkName =
+    'deeplabv3'
+imageSize =
+   256   256
+logFileFull = 
+    "~/Raiden/logs/deeplabv3_256x256_2019-08-18_115122.txt"

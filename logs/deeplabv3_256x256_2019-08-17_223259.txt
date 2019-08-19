@@ -1,0 +1,385 @@
+Checking sequences...
+[Warning: Hash file not found. Comparing converted and specified sequences] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 98)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',98,0)">line 98</a>)] 
+Converting Data...
+Resizing images & labels, converting labels RGB -> categorical ...
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('readtif', '/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/private/readtif.m', 48)" style="font-weight:bold">readtif</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/private/readtif.m',48,0)">line 48</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('imread/call_format_specific_reader', '/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p', 445)" style="font-weight:bold">imread/call_format_specific_reader</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p',445,0)">line 445</a>)
+            [varargout{1:nargout}] = feval(fmt_s.read, fullname, extraArgs{:});
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('imread', '/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p', 438)" style="font-weight:bold">imread</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/imagesci/imread.p',438,0)">line 438</a>)
+    [X, map] = call_format_specific_reader();
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('readDatastoreImage', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/private/readDatastoreImage.m', 12)" style="font-weight:bold">readDatastoreImage</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/private/readDatastoreImage.m',12,0)">line 12</a>)
+data = imread(filename);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.splitreader.WholeFileCustomReadSplitReader/getNext', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/+splitreader/WholeFileCustomReadSplitReader.m', 49)" style="font-weight:bold">matlab.io.datastore.splitreader.WholeFileCustomReadSplitReader/getNext</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/+splitreader/WholeFileCustomReadSplitReader.m',49,0)">line 49</a>)
+                data = rdr.ReadFcn(remote2Local.LocalFileName);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/readUsingSplitReader', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m', 524)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/readUsingSplitReader</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m',524,0)">line 524</a>)
+            [data, info] = getNext(splitReader);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/readUsingPreFetcher', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m', 651)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/readUsingPreFetcher</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m',651,0)">line 651</a>)
+                        data{errIdx} = readUsingSplitReader(imds, splitIdx + errIdx);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/preFetchRead', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m', 500)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/preFetchRead</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/ImageDatastore.m',500,0)">line 500</a>)
+            [data, imds.BatchReader] = readUsingPreFetcher(imds, filesToRead, idxes, imds.BatchReader, readSize);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('matlab.io.datastore.ImageDatastore/read', '/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/read.m', 68)" style="font-weight:bold">matlab.io.datastore.ImageDatastore/read</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/datastoreio/+matlab/+io/+datastore/@ImageDatastore/read.m',68,0)">line 68</a>)
+        [data, info] = preFetchRead(imds);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('resizeImages', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m', 35)" style="font-weight:bold">resizeImages</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m',35,0)">line 35</a>)
+        [Im16,info] = read(imds);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 165)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',165,0)">line 165</a>)
+        imds{j} = resizeImages(imds{j}, imageSize, ...} 
+cprintf;   % displays the demo
+cprintf displays formatted text in the Command Window.
+
+Syntax: count = cprintf(style,format,...);  click <a href="matlab:help cprintf">here</a> for details.
+
+Technical description: <a href="http://UndocumentedMatlab.com/blog/cprintf/">http://UndocumentedMatlab.com/blog/cprintf/</a>
+
+Demo:
+
+cprintf('text',    'regular black text ');
+cprintf('hyper',   'followed %s','by ');
+cprintf('key',     '%d colored ',5);
+cprintf('-comment','& underlined ');
+cprintf('err',     'elements:\n');
+cprintf('cyan',    'cyan ');
+cprintf('_green',  'underlined green ');
+cprintf(-[1,0,1],  'underlined magenta ');
+cprintf([1,0.5,0], 'and multi-\nline orange\n');
+cprintf('*blue',   'and *bold* (R2011b+ only)\n');
+
+regular black text <a href="">followed by </a>5 colored <a href="">& underlined </a>elements:
+cyan <a href="">underlined green </a><a href="">underlined magenta </a>and multi-
+line orange
+<strong>and *bold* (R2011b+ only)
+</strong>opt.forceConvert        = 0;         % if true, resize/process new data (slow)
+opt.preProcess          = 0;         % if true, median filter on input data
+opt.partitionData       = 1;         % if true, re-split Test/Training (optionally with percentage)
+opt.resplitValidation   = 1;         % if true, re-split Training/Validation
+opt.useCachedNet        = 1;         % if false, generate new neural network
+opt.doTraining         	= 1;         % if true, perform training
+opt.recoverCheckpoint   = 0;         % if training did not finish, use checkpoint
+opt.archiveNet          = 1;         % archive NN, data and figures to subfolder
+opt.saveImages          = 1;         % generate performance figures
+opt.sendNotification    = 1;         % send email notification on completion
+opt.evaluateNet         = 1;         % if true, evaluate performance on test set
+opt
+opt = 
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+         forceConvert: 0
+           preProcess: 0
+        partitionData: 1
+    resplitValidation: 1
+         useCachedNet: 1
+           doTraining: 1
+    recoverCheckpoint: 0
+           archiveNet: 1
+           saveImages: 1
+     sendNotification: 1
+          evaluateNet: 1
+disp(topt)
+{Undefined function or variable 'topt'.} 
+disp(opt)
+         forceConvert: 0
+           preProcess: 0
+        partitionData: 1
+    resplitValidation: 1
+         useCachedNet: 1
+           doTraining: 1
+    recoverCheckpoint: 0
+           archiveNet: 1
+           saveImages: 1
+     sendNotification: 1
+          evaluateNet: 1
+cprintf;   % displays the demo
+cprintf displays formatted text in the Command Window.
+
+Syntax: count = cprintf(style,format,...);  click <a href="matlab:help cprintf">here</a> for details.
+
+Technical description: <a href="http://UndocumentedMatlab.com/blog/cprintf/">http://UndocumentedMatlab.com/blog/cprintf/</a>
+
+Demo:
+
+cprintf('text',    'regular black text ');
+cprintf('hyper',   'followed %s','by ');
+cprintf('key',     '%d colored ',5);
+cprintf('-comment','& underlined ');
+cprintf('err',     'elements:\n');
+cprintf('cyan',    'cyan ');
+cprintf('_green',  'underlined green ');
+cprintf(-[1,0,1],  'underlined magenta ');
+cprintf([1,0.5,0], 'and multi-\nline orange\n');
+cprintf('*blue',   'and *bold* (R2011b+ only)\n');
+
+regular black text <a href="">followed by </a>5 colored <a href="">& underlined </a>elements:
+cyan <a href="">underlined green </a><a href="">underlined magenta </a>and multi-
+line orange
+<strong>and *bold* (R2011b+ only)
+</strong>cprintf('key',     '%d colored ',5);
+5 colored 
+cprintf('key','%d',opt);
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('fprintf')" style="font-weight:bold">fprintf</a>
+Function is not defined for 'struct' inputs.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cprintf', '/home/tyson/Documents/MATLAB/cprintf.m', 222)" style="font-weight:bold">cprintf</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/cprintf.m',222,0)">line 222</a>)
+      count1 = fprintf(2,format,varargin{:});} 
+opt
+opt = 
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+         forceConvert: 0
+           preProcess: 0
+        partitionData: 1
+    resplitValidation: 1
+         useCachedNet: 1
+           doTraining: 1
+    recoverCheckpoint: 0
+           archiveNet: 1
+           saveImages: 1
+     sendNotification: 1
+          evaluateNet: 1
+clasS(opt)
+{Undefined function or variable 'clasS'.} 
+class(opt)
+ans =
+    'struct'
+numel(opt)
+ans =
+     1
+size(opt)
+ans =
+     1     1
+opt(1)
+ans = 
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+         forceConvert: 0
+           preProcess: 0
+        partitionData: 1
+    resplitValidation: 1
+         useCachedNet: 1
+           doTraining: 1
+    recoverCheckpoint: 0
+           archiveNet: 1
+           saveImages: 1
+     sendNotification: 1
+          evaluateNet: 1
+opt(:)
+ans = 
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+         forceConvert: 0
+           preProcess: 0
+        partitionData: 1
+    resplitValidation: 1
+         useCachedNet: 1
+           doTraining: 1
+    recoverCheckpoint: 0
+           archiveNet: 1
+           saveImages: 1
+     sendNotification: 1
+          evaluateNet: 1
+fieldnames(opt)
+ans =
+  11×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+    {'forceConvert'     }
+    {'preProcess'       }
+    {'partitionData'    }
+    {'resplitValidation'}
+    {'useCachedNet'     }
+    {'doTraining'       }
+    {'recoverCheckpoint'}
+    {'archiveNet'       }
+    {'saveImages'       }
+    {'sendNotification' }
+    {'evaluateNet'      }
+fieldnames(opt)=0
+{Unable to use a value of type 'struct' as an index.} 
+opt==0
+{Undefined operator '==' for input arguments of type 'struct'.} 
+1:numel(fieldnames(opt))
+ans =
+     1     2     3     4     5     6     7     8     9    10    11
+fieldnames(opt)
+ans =
+  11×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+    {'forceConvert'     }
+    {'preProcess'       }
+    {'partitionData'    }
+    {'resplitValidation'}
+    {'useCachedNet'     }
+    {'doTraining'       }
+    {'recoverCheckpoint'}
+    {'archiveNet'       }
+    {'saveImages'       }
+    {'sendNotification' }
+    {'evaluateNet'      }
+size(fieldnames(opt))
+ans =
+    11     1
+ize(fieldnames(opt),1)
+{Undefined function or variable 'ize'.} 
+size(fieldnames(opt),1)
+ans =
+    11
+cprintf;   % displays the demo
+cprintf displays formatted text in the Command Window.
+
+Syntax: count = cprintf(style,format,...);  click <a href="matlab:help cprintf">here</a> for details.
+
+Technical description: <a href="http://UndocumentedMatlab.com/blog/cprintf/">http://UndocumentedMatlab.com/blog/cprintf/</a>
+
+Demo:
+
+cprintf('text',    'regular black text ');
+cprintf('hyper',   'followed %s','by ');
+cprintf('key',     '%d colored ',5);
+cprintf('-comment','& underlined ');
+cprintf('err',     'elements:\n');
+cprintf('cyan',    'cyan ');
+cprintf('_green',  'underlined green ');
+cprintf(-[1,0,1],  'underlined magenta ');
+cprintf([1,0.5,0], 'and multi-\nline orange\n');
+cprintf('*blue',   'and *bold* (R2011b+ only)\n');
+
+regular black text <a href="">followed by </a>5 colored <a href="">& underlined </a>elements:
+cyan <a href="">underlined green </a><a href="">underlined magenta </a>and multi-
+line orange
+<strong>and *bold* (R2011b+ only)
+</strong>fieldNames = fieldnames(opt);
+ii=1
+ii =
+     1
+fieldNames{ii}
+ans =
+    'forceConvert'
+cprintf('key',fieldNames{ii})
+forceConvertcprintf('key','/n',fieldNames{ii})
+/ncprintf('key','\n',fieldNames{ii})
+
+cprintf('key',fieldNames{ii},'\n')
+forceConvertcprintf('key',fieldNames{ii},'\n')
+forceConvertcprintf('\n','key',fieldNames{ii},'\n');
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cprintf>processStyleInfo', '/home/tyson/Documents/MATLAB/cprintf.m', 339)" style="font-weight:bold">cprintf>processStyleInfo</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/cprintf.m',339,0)">line 339</a>)
+Invalid style - see help section for a list of valid style values
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cprintf', '/home/tyson/Documents/MATLAB/cprintf.m', 156)" style="font-weight:bold">cprintf</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/cprintf.m',156,0)">line 156</a>)
+      [underlineFlag, boldFlag, style, debugFlag] = processStyleInfo(style);} 
+cprintf('key','\n',fieldNames{ii},'\n');
+
+cprintf;   % displays the demo
+cprintf displays formatted text in the Command Window.
+
+Syntax: count = cprintf(style,format,...);  click <a href="matlab:help cprintf">here</a> for details.
+
+Technical description: <a href="http://UndocumentedMatlab.com/blog/cprintf/">http://UndocumentedMatlab.com/blog/cprintf/</a>
+
+Demo:
+
+cprintf('text',    'regular black text ');
+cprintf('hyper',   'followed %s','by ');
+cprintf('key',     '%d colored ',5);
+cprintf('-comment','& underlined ');
+cprintf('err',     'elements:\n');
+cprintf('cyan',    'cyan ');
+cprintf('_green',  'underlined green ');
+cprintf(-[1,0,1],  'underlined magenta ');
+cprintf([1,0.5,0], 'and multi-\nline orange\n');
+cprintf('*blue',   'and *bold* (R2011b+ only)\n');
+
+regular black text <a href="">followed by </a>5 colored <a href="">& underlined </a>elements:
+cyan <a href="">underlined green </a><a href="">underlined magenta </a>and multi-
+line orange
+<strong>and *bold* (R2011b+ only)
+</strong>disp('');
+    cprintf('key',fieldNames{ii},'\n');
+forceConvertfprintf('\n');
+
+    cprintf('key',fieldNames{ii},'\n');
+forceConvertfprintf('\n');
+
+    cprintf('key',fieldNames{ii},'\n');
+forceConvertfieldNames{ii}
+ans =
+    'forceConvert'
+opt.ii
+{Reference to non-existent field 'ii'.} 
+ii
+ii =
+     1
+fieldNames{ii}
+ans =
+    'forceConvert'
+opt.fieldNames{ii}
+{Reference to non-existent field 'fieldNames'.} 
+opt{1}
+{Brace indexing is not supported for variables of this type.} 
+['opt.',fieldNames{ii}]
+ans =
+    'opt.forceConvert'
+eval(['opt.',fieldNames{ii}])
+ans =
+     0
+~(eval(['opt.',fieldNames{ii}]))
+ans =
+  <a href="matlab:helpPopup logical" style="font-weight:bold">logical</a>
+   1
+cprintf('key',fieldNames{ii},'\n');
+forceConvertcprintf('key','%s is on \n',fieldNames{ii});
+forceConvert is on 
+cprintf;
+cprintf displays formatted text in the Command Window.
+
+Syntax: count = cprintf(style,format,...);  click <a href="matlab:help cprintf">here</a> for details.
+
+Technical description: <a href="http://UndocumentedMatlab.com/blog/cprintf/">http://UndocumentedMatlab.com/blog/cprintf/</a>
+
+Demo:
+
+cprintf('text',    'regular black text ');
+cprintf('hyper',   'followed %s','by ');
+cprintf('key',     '%d colored ',5);
+cprintf('-comment','& underlined ');
+cprintf('err',     'elements:\n');
+cprintf('cyan',    'cyan ');
+cprintf('_green',  'underlined green ');
+cprintf(-[1,0,1],  'underlined magenta ');
+cprintf([1,0.5,0], 'and multi-\nline orange\n');
+cprintf('*blue',   'and *bold* (R2011b+ only)\n');
+
+regular black text <a href="">followed by </a>5 colored <a href="">& underlined </a>elements:
+cyan <a href="">underlined green </a><a href="">underlined magenta </a>and multi-
+line orange
+<strong>and *bold* (R2011b+ only)
+</strong>cprintf('green','%s is on \n',fieldNames{ii});
+forceConvert is on 
+displayConfiguration(opt);
+
+forceConvert is on 
+
+preProcess is on 
+
+
+
+
+
+recoverCheckpoint is on 
+
+
+
+
+displayConfiguration(opt);
+forceConvert is on 
+preProcess is on 
+recoverCheckpoint is on 
+logFile = strcat(networkStatus.name,'.txt');
+logFileFull = fullfile(projectPath,'logs',logFile)
+{Undefined function or variable 'projectPath'.} 
+projectPath = '~/Raiden/';
+logFile = strcat(networkStatus.name,'.txt');
+logFileFull = fullfile(projectPath,'logs',logFile)
+logFileFull = 
+    "~/Raiden/logs/deeplabv3_256x256_2019-08-17_223259.txt"
+diary(logFileFull)
+
+displayConfiguration(opt);
+forceConvert is on 
+preProcess is on 
+recoverCheckpoint is on 
+diary off

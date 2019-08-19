@@ -1,0 +1,48 @@
+partitionData is on 
+resplitValidation is on 
+useCachedNet is on 
+doTraining is on 
+archiveNet is on 
+saveImages is on 
+sendNotification is on 
+evaluateNet is on 
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cprintf>processStyleInfo', '/home/tyson/Documents/MATLAB/cprintf.m', 326)" style="font-weight:bold">cprintf>processStyleInfo</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/cprintf.m',326,0)">line 326</a>)
+Invalid style - see help section for a list of valid style values
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('cprintf', '/home/tyson/Documents/MATLAB/cprintf.m', 156)" style="font-weight:bold">cprintf</a> (<a href="matlab: opentoline('/home/tyson/Documents/MATLAB/cprintf.m',156,0)">line 156</a>)
+      [underlineFlag, boldFlag, style, debugFlag] = processStyleInfo(style);
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('displayConfiguration', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/displayConfiguration.m', 10)" style="font-weight:bold">displayConfiguration</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/displayConfiguration.m',10,0)">line 10</a>)
+            cprintf([0.9,0.2,2]','%s is on \n',fieldNames{ii});
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 73)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',73,0)">line 73</a>)
+displayConfiguration(opt);} 
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/displayConfiguration.m',10,0)
+cprintf
+cprintf displays formatted text in the Command Window.
+
+Syntax: count = cprintf(style,format,...);  click <a href="matlab:help cprintf">here</a> for details.
+
+Technical description: <a href="http://UndocumentedMatlab.com/blog/cprintf/">http://UndocumentedMatlab.com/blog/cprintf/</a>
+
+Demo:
+
+cprintf('text',    'regular black text ');
+cprintf('hyper',   'followed %s','by ');
+cprintf('key',     '%d colored ',5);
+cprintf('-comment','& underlined ');
+cprintf('err',     'elements:\n');
+cprintf('cyan',    'cyan ');
+cprintf('_green',  'underlined green ');
+cprintf(-[1,0,1],  'underlined magenta ');
+cprintf([1,0.5,0], 'and multi-\nline orange\n');
+cprintf('*blue',   'and *bold* (R2011b+ only)\n');
+
+regular black text <a href="">followed by </a>5 colored <a href="">& underlined </a>elements:
+cyan <a href="">underlined green </a><a href="">underlined magenta </a>and multi-
+line orange
+<strong>and *bold* (R2011b+ only)
+</strong>CNN_Segmentation_Train_and_Evaluate
+networkName =
+    'deeplabv3'
+imageSize =
+   256   256
+logFileFull = 
+    "~/Raiden/logs/deeplabv3_256x256_2019-08-18_023442.txt"

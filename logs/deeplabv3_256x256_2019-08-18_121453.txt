@@ -1,0 +1,35 @@
+partitionData is on 
+resplitValidation is on 
+forceConvert is off 
+preProcess is off 
+useCachedNet is off 
+doTraining is off 
+recoverCheckpoint is off 
+archiveNet is off 
+saveImages is off 
+sendNotification is off 
+evaluateNet is off 
+Checking sequences...
+Loaded (meta)data from cache...
+Partitioning test and training Data...
+Counting per-label pixel distribution...
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    3.8219e+06      8.0898e+08   
+    'stroke'    7.3437e+05      1.6122e+07   
+    'sky'       6.5289e+08      9.5604e+08   
+    'cloud'     1.6620e+08      3.4452e+08   
+    'ground'    1.2655e+08      9.5610e+08   
+    'other'     5.8920e+06      7.0615e+08   
+Datastores cached
+Splitting training/validation data...
+Training images: 11671 
+Validation images: 2918 
+Testing images: 2459 
+Data cached
+Setting up Network...
+Network created
+[Warning: Training skipped by user request] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 586)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',586,0)">line 586</a>)] 
+[Warning: Trained network not archived] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 658)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',658,0)">line 658</a>)] 

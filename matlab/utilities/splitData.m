@@ -14,10 +14,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
 
+    ext = '.png';
     if (splitPercent==0)
         testIndex = [];
         trainIndex = 1:length(imageFolders);
-    else if (splitPercent==1)
+    elseif (splitPercent==1)
                 error('splitPercent = 1 means no images are used for training.')
     else
         numberOfSequences = length(imageFolders);
@@ -25,9 +26,13 @@ function[trainIndex, testIndex] = splitData(imageFolders, splitPercent)
 
         % get the number of tif files in each folder
         parfor i = 1:numberOfSequences
-            sequenceLengths(i) = numel(dir([imageFolders{i} '/*.tif']));
+            sequenceLengths(i) = numel(dir([imageFolders{i},'/*',ext]));
         end
 
+        if ~min(sequenceLengths(:))
+            error(['No files found! Check file format: images must be ',ext])
+        end
+        
         totalFrames = sum(sequenceLengths);
         framesToFill = round(splitPercent * totalFrames);
 

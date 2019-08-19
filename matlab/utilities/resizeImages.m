@@ -34,6 +34,7 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
     while hasdata(imds)
         [Im16,info] = read(imds);
         [~, filename, ext] = fileparts(info.Filename);
+        ext = '.png';
         
         if (~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') ...
                 || forceConvert)
@@ -44,13 +45,15 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
                 Im16 = noise_removal(Im16, 2);  
             end
             
-            % convert to single precision
-            I = single(Im16);
-            
             % Resize image.
-            I = imresize(I,[y x]);
-
-            % Write to disk.
+            Im16 = imresize(Im16,[y x],'bicubic');
+            
+            % convert to 8-bit
+            I = uint8(Im16/256 -1);
+            
+            % Write image to disk.
+%             compression = 0;
+%             savepng(I,fullfile(destinationPath,strcat(filename,ext)),compression,imageSize);
             imwrite(I,fullfile(destinationPath,strcat(filename,ext)));
         end
         

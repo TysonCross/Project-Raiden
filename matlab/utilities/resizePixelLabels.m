@@ -30,6 +30,7 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, forceConvert
     while hasdata(pxds)
         [C, info] = read(pxds);
         [~, filename, ext] = fileparts(info.Filename);
+        ext = ('.png');
         
         str = 'mask';
         maskIdx = strfind(filename, str);
@@ -46,6 +47,8 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, forceConvert
                 L = imresize(L,[y x],'nearest');
 
                 % Write the data to disk.
+%                 compression = 0;
+%                 savepng(L,fullfile(destinationPath,strcat(filename,ext)),compression,imageSize)
                 imwrite(L,fullfile(destinationPath,strcat(filename,ext)));
             end
         end

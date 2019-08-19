@@ -1,0 +1,94 @@
+doTraining is on 
+saveImages is on 
+sendNotification is on 
+forceConvert is off 
+preProcess is off 
+partitionData is off 
+resplitValidation is off 
+useCachedNet is off 
+recoverCheckpoint is off 
+archiveNet is off 
+evaluateNet is off 
+Checking sequences...
+Loaded (meta)data from cache...
+[Warning: partitionData is off] 
+[> In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 218)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',218,0)">line 218</a>)] 
+Loaded datastores from cache...
+Per-label pixel distribution:
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.8531e+06      6.3149e+08   
+    'stroke'    7.7115e+05      1.2676e+07   
+    'sky'       5.0953e+08      7.4887e+08   
+    'cloud'     1.2880e+08      2.6342e+08   
+    'ground'    1.0198e+08      7.4897e+08   
+    'other'     5.0236e+06      5.3363e+08   
+Using training/validation split from cache...
+Training images: 11628 
+Validation images: 2907 
+Testing images: 2451 
+Setting up Network...
+Network created
+Setting up Training...
+options = 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-02
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 3.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 30
+                MiniBatchSize: 50
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 25
+           ValidationPatience: 6
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'parallel'
+                   WorkerLoad: 1
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 1
+Beginning training...
+Training across multiple GPUs.
+Initializing input data normalization.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.ui.TrainingPlotViewHG>iChangeCursorOnMouseOverObjects', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+ui/TrainingPlotViewHG.m', 495)" style="font-weight:bold">nnet.internal.cnn.ui.TrainingPlotViewHG>iChangeCursorOnMouseOverObjects</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+ui/TrainingPlotViewHG.m',495,0)">line 495</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.ui.TrainingPlotViewHG>@(fig,callbackdata)iChangeCursorOnMouseOverObjects(hHelpText,hHelpIcon,fig,callbackdata)', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+ui/TrainingPlotViewHG.m', 322)" style="font-weight:bold">nnet.internal.cnn.ui.TrainingPlotViewHG>@(fig,callbackdata)iChangeCursorOnMouseOverObjects(hHelpText,hHelpIcon,fig,callbackdata)</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+ui/TrainingPlotViewHG.m',322,0)">line
+322</a>)
+            parentFigure.WindowButtonMotionFcn = @(fig,callbackdata) iChangeCursorOnMouseOverObjects(hHelpText, hHelpIcon, fig,
+            callbackdata);} 
+Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.ui.TrainingPlotViewHG/set.PlotErrorMessageVisible', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+ui/TrainingPlotViewHG.m', 186)" style="font-weight:bold">nnet.internal.cnn.ui.TrainingPlotViewHG/set.PlotErrorMessageVisible</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/+ui/TrainingPlotViewHG.m',186,0)">line 186</a>)
+Interrupt while evaluating Figure WindowButtonMotionFcn.
+
+{Operation terminated by user during <a href="matlab:matlab.internal.language.introspective.errorDocCallback('spmdlang.RemoteSpmdExecutor/isComputationComplete', '/usr/local/MATLAB/R2019a/toolbox/distcomp/lang/+spmdlang/RemoteSpmdExecutor.m', 126)" style="font-weight:bold">spmdlang.RemoteSpmdExecutor/isComputationComplete</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/lang/+spmdlang/RemoteSpmdExecutor.m',126,0)">line 126</a>)
+
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('spmdlang.spmd_feval_impl', '/usr/local/MATLAB/R2019a/toolbox/distcomp/lang/+spmdlang/spmd_feval_impl.m', 21)" style="font-weight:bold">spmdlang.spmd_feval_impl</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/distcomp/lang/+spmdlang/spmd_feval_impl.m',21,0)">line 21</a>)
+            while ~blockExecutor.isComputationComplete()
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('spmd_feval', '/usr/local/MATLAB/R2019a/toolbox/matlab/lang/spmd_feval.m', 8)" style="font-weight:bold">spmd_feval</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/matlab/lang/spmd_feval.m',8,0)">line 8</a>)
+            spmdlang.spmd_feval_impl( varargin{:} );
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('nnet.internal.cnn.ParallelTrainer/train', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/ParallelTrainer.m', 95)" style="font-weight:bold">nnet.internal.cnn.ParallelTrainer/train</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/+nnet/+internal/+cnn/ParallelTrainer.m',95,0)">line 95</a>)
+            spmd
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('trainNetwork>doTrainNetwork', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m', 234)" style="font-weight:bold">trainNetwork>doTrainNetwork</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m',234,0)">line 234</a>)
+trainedNet = trainer.train(trainedNet, trainingDispatcher);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('trainNetwork', '/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m', 163)" style="font-weight:bold">trainNetwork</a> (<a href="matlab: opentoline('/usr/local/MATLAB/R2019a/toolbox/nnet/cnn/trainNetwork.m',163,0)">line 163</a>)
+    [trainedNet, info] = doTrainNetwork(layersOrGraph, opts, X, Y);
+In <a href="matlab:matlab.internal.language.introspective.errorDocCallback('CNN_Segmentation_Train_and_Evaluate', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m', 579)" style="font-weight:bold">CNN_Segmentation_Train_and_Evaluate</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/CNN_Segmentation_Train_and_Evaluate.m',579,0)">line 579</a>)
+    [net, networkStatus.info] = trainNetwork(pximds, net, options);} 
+CNN_Segmentation_Train_and_Evaluate
+networkName =
+    'alexnet'
+imageSize =
+   227   227
+logFileFull = 
+    "/home/tyson/Raiden/logs/alexnet_227x227_2019-08-18_195059.txt"
