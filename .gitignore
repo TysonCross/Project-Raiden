@@ -752,12 +752,16 @@ DerivedData/
 *.nk.autosave
 
 # MATLAB
+matlab/cache/**
+matlab/codegen/**
 matlab/pathdef.m
-pathdef.m
 matlab/startup.m
-#matlab/Apps/**
-#!*.mlapp
+matlab/test.m
 experiments/**
 data/**
 networks/**
-matlab/cache/**
+matlab/codegen/**
+pathdef.m
+
+# logs
+logs/**
