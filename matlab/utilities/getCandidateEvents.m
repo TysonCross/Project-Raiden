@@ -28,17 +28,19 @@ function candidateEvents = getCandidateEvents (imds)
         candidateEvents = [candidateStartFrame, diff];
     end
     for i =1 : size(gapLocations,1)-1
-        candidateStartFrame = gapLocations(i,1)+gapLocations(i,2)+1;
+        candidateStartFrame = gapLocations(i,1)+gapLocations(i,2);
         candidateStopFrame = gapLocations(i+1,1)-1;
         diff = candidateStopFrame - candidateStartFrame;
-        candidateEvents = [candidateEvents; candidateStartFrame, diff];
+        candidateEvents = [candidateEvents; candidateStartFrame, diff+1];
     end
     %handle the last gap
-    if ~(gapLocations(end,1)+gapLocations(end,2) == size(totalIndices))
-        candidateStartFrame = gapLocations(end,1)+gapLocations(end,2)+1;
-        candidateStopFrame = totalIndices(end);
-        diff = candidateStopFrame - candidateStartFrame;
-        candidateEvents = [candidateEvents; candidateStartFrame, diff];
+    if ~(gapLocations(end,1)+gapLocations(end,2) == size(totalIndices,2))
+        candidateStartFrame = gapLocations(end,1)+gapLocations(end,2);
+        if candidateStartFrame < length(totalIndices)
+            candidateStopFrame = length(totalIndices);
+            diff = candidateStopFrame - candidateStartFrame;
+            candidateEvents = [candidateEvents; candidateStartFrame, diff];
+        end
     end
          
        
