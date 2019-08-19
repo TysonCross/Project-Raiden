@@ -1,17 +1,17 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration file="/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation.prj" location="/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps" name="Lightningfootagesegmentation" target="target.ezdeploy.standalone" target-name="Application Compiler">
-    <param.appname>Segmentation</param.appname>
+  <configuration file="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning_standalone.prj" location="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps" name="labelLightning_standalone" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>labelLightning</param.appname>
     <param.icon />
     <param.icons />
-    <param.version>1.0</param.version>
-    <param.authnamewatermark>Jason Smit</param.authnamewatermark>
-    <param.email />
-    <param.company>Raiden</param.company>
-    <param.summary>Segment images from trained network</param.summary>
-    <param.description />
+    <param.version>2.0</param.version>
+    <param.authnamewatermark>Jason Smit, Tyson Cross</param.authnamewatermark>
+    <param.email>jason.smit@students.wits.ac.za, tyson.cross1@students.wits.ac.za</param.email>
+    <param.company>University of the Witwatersrand</param.company>
+    <param.summary>Segment lightning footage using a trained network</param.summary>
+    <param.description>This app segments an input sequence of images, using a chosen network, outputting the segmented labels as an image. Optionally, an overlay of the predicted labels on top of the original images can be generated as well. There is also an option to compare the predicted labels with the known ground truth, if the user provides an input label sequence.</param.description>
     <param.screenshot />
     <param.guid />
-    <param.installpath.string>/Raiden/Segmentation/</param.installpath.string>
+    <param.installpath.string>/University_of_the_Witwatersrand/labelLightning/</param.installpath.string>
     <param.installpath.combo>option.installpath.userlocal</param.installpath.combo>
     <param.logo />
     <param.install.notes />
@@ -29,10 +29,10 @@ MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa64:MR/v96/sys/openg
 If it is defined, set it to the following:
 
 ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa64:MR/v96/sys/opengl/lib/glnxa64</param.target.install.notes>
-    <param.intermediate>${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing</param.intermediate>
-    <param.files.only>${PROJECT_ROOT}/Lightningfootagesegmentation/for_redistribution_files_only</param.files.only>
-    <param.output>${PROJECT_ROOT}/Lightningfootagesegmentation/for_redistribution</param.output>
-    <param.logdir>${PROJECT_ROOT}/Lightningfootagesegmentation</param.logdir>
+    <param.intermediate>${PROJECT_ROOT}/labelLightning_standalone/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/labelLightning_standalone/for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}/labelLightning_standalone/for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}/labelLightning_standalone</param.logdir>
     <param.enable.clean.build>false</param.enable.clean.build>
     <param.user.defined.mcr.options />
     <param.target.type>subtarget.standalone</param.target.type>
@@ -58,9 +58,6 @@ ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa
     <unset>
       <param.icon />
       <param.icons />
-      <param.version />
-      <param.email />
-      <param.description />
       <param.screenshot />
       <param.guid />
       <param.installpath.string />
@@ -86,29 +83,34 @@ ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa
       <param.example />
     </unset>
     <fileset.main>
-      <file>${PROJECT_ROOT}/Segment_app.mlapp</file>
+      <file>${PROJECT_ROOT}/labelLightning.mlapp</file>
     </fileset.main>
     <fileset.resources />
     <fileset.package />
     <fileset.depfun>
-      <file>/home/jason/MATLAB Add-Ons/Apps/Lightningfootagesegmentation/folder.png</file>
-      <file>/home/jason/MATLAB Add-Ons/Apps/Lightningfootagesegmentation/progress.mlapp</file>
+      <file>/home/tyson/Documents/MATLAB/progressbar.m</file>
+      <file>${PROJECT_ROOT}/folder.png</file>
+      <file>${PROJECT_ROOT}/progress.mlapp</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/classes/Label.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/loadLabels.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/noise_removal.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizeImages.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/resizePixelLabels.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/segmentResults.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/setupColors.m</file>
     </fileset.depfun>
     <build-deliverables>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="readme.txt" optional="true">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/readme.txt</file>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="Segmentation" optional="false">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/Segmentation</file>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="run_Segmentation.sh" optional="false">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/run_Segmentation.sh</file>
-      <file location="${PROJECT_ROOT}/Lightningfootagesegmentation/for_testing" name="splash.png" optional="false">/mnt/home/jason/Public/Dropbox/Project/Project-Raiden/matlab/Apps/Lightningfootagesegmentation/for_testing/splash.png</file>
+      <file location="${PROJECT_ROOT}/labelLightning_standalone/for_testing" name="splash.png" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning_standalone/for_testing/splash.png</file>
+      <file location="${PROJECT_ROOT}/labelLightning_standalone/for_testing" name="labelLightning" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning_standalone/for_testing/labelLightning</file>
+      <file location="${PROJECT_ROOT}/labelLightning_standalone/for_testing" name="readme.txt" optional="true">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning_standalone/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/labelLightning_standalone/for_testing" name="run_labelLightning.sh" optional="false">/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning_standalone/for_testing/run_labelLightning.sh</file>
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/mnt/share/Matlab-linux</root>
+      <root>/usr/local/MATLAB/R2019a</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
-        <toolbox name="embeddedcoder" />
         <toolbox name="gpucoder" />
-        <toolbox name="fixedpoint" />
-        <toolbox name="matlabhdlcoder" />
         <toolbox name="neuralnetwork" />
       </toolboxes>
       <toolbox>
@@ -117,24 +119,9 @@ ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa
         </matlabcoder>
       </toolbox>
       <toolbox>
-        <embeddedcoder>
-          <enabled>true</enabled>
-        </embeddedcoder>
-      </toolbox>
-      <toolbox>
         <gpucoder>
           <enabled>true</enabled>
         </gpucoder>
-      </toolbox>
-      <toolbox>
-        <fixedpoint>
-          <enabled>true</enabled>
-        </fixedpoint>
-      </toolbox>
-      <toolbox>
-        <matlabhdlcoder>
-          <enabled>true</enabled>
-        </matlabhdlcoder>
       </toolbox>
       <toolbox>
         <neuralnetwork>
@@ -151,7 +138,7 @@ ${LD_LIBRARY_PATH}:MR/v96/runtime/glnxa64:MR/v96/bin/glnxa64:MR/v96/sys/os/glnxa
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>5.0.0-23-generic</osver>
+      <osver>5.0.0-25-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
