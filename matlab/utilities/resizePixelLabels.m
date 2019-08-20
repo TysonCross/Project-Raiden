@@ -45,10 +45,14 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, forceConvert
 
                 % Resize the data using 'nearest' interpolation to preserve labelIDs.
                 L = imresize(L,[y x],'nearest');
-
+                
+                %Create empty border
+                I(1,:,:) = 0;
+                I(end,:,:) = 0;
+                I(:,1,:) = 0;
+                I(:,end,:) = 0;
+                
                 % Write the data to disk.
-%                 compression = 0;
-%                 savepng(L,fullfile(destinationPath,strcat(filename,ext)),compression,imageSize)
                 imwrite(L,fullfile(destinationPath,strcat(filename,ext)));
             end
         end

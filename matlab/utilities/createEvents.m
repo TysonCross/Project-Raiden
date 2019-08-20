@@ -21,8 +21,10 @@ function eventsCellArray = createEvents(imds, minEventSize)
     candidateEvents = getCandidateEvents (imds);
     strokeIndices = getStrokeIndices(imds);
     % remove the 1 frame events (normally noise)
-    indices = candidateEvents(:,2)<= minEventSize;
-    candidateEvents(indices,:) = [];
+    if ~isempty(candidateEvents)
+        indices = candidateEvents(:,2)<= minEventSize;
+        candidateEvents(indices,:) = [];
+    end
     if ~isempty(candidateEvents) 
         for i=1:size(candidateEvents,1)
    
@@ -53,5 +55,7 @@ function eventsCellArray = createEvents(imds, minEventSize)
                 
             end
         end
+    else
+        eventsCellArray = [];
     end
 end
