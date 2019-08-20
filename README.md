@@ -20,13 +20,13 @@ unless otherwise stipulated in the work or the section below (*External licences
 A copy of the Intellectual Property Policy can be found on the university
 [website](https://libguides.wits.ac.za/ld.php?content_id=18737801).
 
-### External licences
+#### External licences
 The project makes use of external packages. These packages carry their own licences which are linked here or within
 the code that makes use of it. The code makes use of progressbar.m  which is covered by the licence found
-under [./matlab/Licences/progressbar.lic](https://github.com/TysonCross/Project-Raiden/matlab/Licences/progressbar.lic). This code is used to present a
+under [./matlab/Licences/progressbar.lic](./matlab/Licences/progressbar.lic). This code is used to present a
 visual representation of the progress during resizing of images as well as the overall progress when using the application.
 
-cprintf.m is covered by the licence found under [./matlab/Licences/cprintf.lic](https://github.com/TysonCross/Project-Raiden/matlab/Licences/progressbar.lic).
+cprintf.m is covered by the licence found under [./matlab/Licences/cprintf.lic](./matlab/Licences/progressbar.lic).
 This code is used to improve the readability of the output produced when training a network.
 
 ## Overview
