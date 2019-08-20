@@ -1,8 +1,8 @@
 
 %% Import variables
 function segmentResults(networkFile, sequenceDir, outputDir, doOverlay, doCompare, labelDir)
-    load(networkFile);
-    % labelDir = '/home/jason/Desktop/reduced/mask';
+progressbar('Total progress',[]);
+load(networkFile);
     if nargin == 3
         doOverlay = false;
         doCompare = false;
@@ -13,6 +13,7 @@ function segmentResults(networkFile, sequenceDir, outputDir, doOverlay, doCompar
     elseif nargin ==5 
         error('All options and labelDir needs to be supplied if doCompare is requested')
     end
+
 if ~exist('net','var')
     if exist('lgraph','var')
         net =lgraph;
@@ -38,31 +39,32 @@ end
 if ~exist(fullfile(outputDir,'tmp'),'dir')
     mkdir(fullfile(outputDir,'tmp'))
 end
-
+progressbar(0.1)
 disp("Resizing images...")
 
 y = sz(1);
 x = sz(2);
 rez = strcat(string(x),'x',string(y));
 str = char(strcat('Resizing images to ',{' '},rez));
-progressbar('Resizing image sequences',str)
-imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img') );
+progressbar([],str)
+imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img'),true, true, true);
 if doCompare
     pxds = pixelLabelDatastore(labelDir,...
     labelNames,labelIDs,'FileExtensions','.tif');
     disp("Resizing labels and converting to categorical label form...")
     str = char(strcat('Converting labels to ',{' '},rez));
-    progressbar('Resizing and converting label sequences',str)
-    pxds = resizePixelLabels(pxds, sz, fullfile(outputDir,'tmp','label'));
+    progressbar([],str)
+    disp(str);
+    pxds = resizePixelLabels(pxds, sz, fullfile(outputDir,'tmp','label'),true,true,true);
 end
-progressbar(1)
+progressbar(0.2)
 
 %% Segment data
 resultPixelLabels = semanticseg(imds, net, ...
-        'MiniBatchSize', 32, ...
+        'MiniBatchSize', 1, ...
         'WriteLocation', fullfile(outputDir, '/output'), ...
         'Verbose', true);
-
+progressbar(0.4)
 if doCompare
      if ~exist(fullfile(outputDir,'comparison'),'dir')
         mkdir(fullfile(outputDir,'comparison'))
@@ -99,12 +101,12 @@ for n = 1:length(imds.Files)
     end
     outImage = imresize(segImage,[originalSize(1) originalSize(2)]); 
     imwrite(outImage, strcat(outputDir,'/overlay/', name.insertAfter(21,'_out'),  '.tif'));
-    
+    progressbar(0.80)
     
 end
 
 disp('Clearing tmp folder...')
-
+progressbar(0.9)
 if exist(fullfile(outputDir,'tmp'),'dir')
     [~, msg] = rmdir(fullfile(outputDir,'tmp'), 's');
     disp(msg);
@@ -115,7 +117,8 @@ clear actual ans cmap diffImage expected expectedResult I ...
     msg n name net numClasses originalSize outputImage ...
     outputDir pxds resultPixelLabels segImage sequenceDir ...
     status str sz outImage;
-
+progressbar(0.999)
 disp('Done.')
 msgbox('Operation Completed');
+progressbar(1)
 end

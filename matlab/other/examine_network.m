@@ -30,10 +30,10 @@ im = imresize(im,[256 256]);
 %% Visualize activations
 % im = imIdx = randperm(numel(imdsTest.Files),2); %randi(length(imdsTest.Files)); 
 
-act1 = activations(net,im,'conv1');
+act1 = activations(net,im,'conv3_3');
 sz = size(act1);
 act1 = reshape(act1,[sz(1) sz(2) 1 sz(3)]);
-I_a = imtile(mat2gray(act1),'GridSize',[6 10]);
+I_a = imtile(mat2gray(act1),'GridSize',[16 16]);
 figure
 imshow(I_a)
 

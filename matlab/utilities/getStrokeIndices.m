@@ -1,3 +1,3 @@
 function output = getStrokeIndices(imds)
-    output = indexLabel(imds,2, 'logical');
+    output = indexLabel(imds,double(Label.stroke), 'logical');
 end
