@@ -1,0 +1,531 @@
+#! /usr/local/Nuke11.3v4/libnuke-11.3.4.so -nx
+version 11.3 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="67" y="27" w="2493" h="1023" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1099" stretch="1"/>
+            <splitter orientation="2">
+                <split size="676"/>
+                <splitter orientation="1">
+                    <split size="548"/>
+                    <dock id="" activePageId="Viewer.1">
+                        <page id="Viewer.1"/>
+                    </dock>
+                    <split size="547"/>
+                    <dock id="" activePageId="Viewer.2">
+                        <page id="Viewer.2"/>
+                    </dock>
+                </splitter>
+                <split size="297"/>
+                <dock id="" activePageId="Pixel Analyzer.1">
+                    <page id="Pixel Analyzer.1"/>
+                </dock>
+            </splitter>
+            <split size="1346"/>
+            <dock id="" activePageId="DAG.1" focus="true">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/trame_blending_noise_reduction.nk"
+ frame 259
+ last_frame 1000
+ lock_range true
+ fps 60
+ format "512 352 0 0 512 352 1 v31_512x352"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Reformat {
+ inputs 0
+ format "299 299 0 0 299 299 1 InceptionResnetv2_size"
+ resize distort
+ center false
+ name Reformat1
+ xpos -21
+ ypos 2461
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/test/dark/tif/2017-10-21_171820_000.########.tif
+ format "512 352 0 0 512 352 1 v31_512x352"
+ before loop
+ last 500
+ after loop
+ origlast 500
+ origset true
+ name Read1
+ xpos 110
+ ypos -1505
+}
+Dot {
+ name Dot9
+ xpos 326
+ ypos -1179
+}
+set Ne34a6f0 [stack 0]
+Dot {
+ name Dot13
+ xpos 128
+ ypos -1179
+}
+Dot {
+ name Dot24
+ xpos 128
+ ypos -1046
+}
+set Nc911d50 [stack 0]
+push $Nc911d50
+push $Ne34a6f0
+TimeOffset {
+ time_offset 2
+ time ""
+ name TimeOffset2
+ xpos 190
+ ypos -1103
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ expr0 r
+ expr1 b
+ expr2 g
+ expr3 "r > threshold ? 1 : 0"
+ name Expression2
+ xpos 190
+ ypos -1079
+}
+set N253b5850 [stack 0]
+Dissolve {
+ inputs 2
+ which 1
+ maskChannelInput rgba.alpha
+ name Dissolve2
+ xpos 190
+ ypos -1055
+}
+push 0
+push $Ne34a6f0
+Dot {
+ name Dot4
+ xpos 456
+ ypos -1179
+}
+set Ne338510 [stack 0]
+Dot {
+ name Dot33
+ xpos 456
+ ypos -1043
+}
+set N25188540 [stack 0]
+push $Ne34a6f0
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset1
+ xpos 292
+ ypos -1100
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ expr0 r
+ expr1 b
+ expr2 g
+ expr3 "r > threshold ? 1 : 0"
+ name Expression1
+ xpos 292
+ ypos -1076
+}
+Dissolve {
+ inputs 2
+ which 1
+ maskChannelInput rgba.alpha
+ name Dissolve1
+ xpos 292
+ ypos -1052
+}
+push $N25188540
+Merge2 {
+ inputs 3+1
+ operation plus
+ Achannels rgb
+ Bchannels rgb
+ output rgb
+ name Merge3
+ xpos 292
+ ypos -954
+}
+Multiply {
+ value 0.3333333333
+ name Multiply2
+ xpos 292
+ ypos -919
+}
+set Nbb49e30 [stack 0]
+Invert {
+ channels alpha
+ name Invert4
+ xpos 292
+ ypos -835
+}
+Merge2 {
+ inputs 2
+ operation atop
+ Achannels rgb
+ Bchannels rgb
+ name Merge6
+ xpos 292
+ ypos -659
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Threshold of color - > alpha mask"
+ xpos 80
+ ypos -1288
+}
+push $Ne338510
+Dot {
+ name Dot37
+ xpos 977
+ ypos -1211
+}
+set N2e163eb0 [stack 0]
+Dot {
+ name Dot36
+ xpos 977
+ ypos -1150
+}
+set N1f966350 [stack 0]
+TimeOffset {
+ time_offset 2
+ time ""
+ name TimeOffset3
+ xpos 717
+ ypos -1073
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 "r > threshold ? threshold : r"
+ name Expression3
+ xpos 717
+ ypos -1049
+}
+push 0
+push $N1f966350
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset4
+ xpos 831
+ ypos -1068
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 "r > threshold ? threshold : r"
+ name Expression4
+ xpos 831
+ ypos -1044
+}
+push $N1f966350
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 "r > threshold ?  (3*r)  : r"
+ expr1 0
+ expr2 0
+ name Expression5
+ xpos 943
+ ypos -1072
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ screen_alpha true
+ name Merge10
+ xpos 831
+ ypos -890
+}
+Multiply {
+ value 0.3333333333
+ name Multiply4
+ xpos 831
+ ypos -866
+}
+push $N2e163eb0
+Dot {
+ name Dot35
+ xpos 1737
+ ypos -1147
+ addUserKnob {20 User}
+ addUserKnob {7 Threshold R 0 0.02}
+ Threshold 0.001
+}
+set N1f65eec0 [stack 0]
+TimeOffset {
+ time_offset 2
+ time ""
+ name TimeOffset5
+ xpos 1589
+ ypos -1070
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 " r > threshold ? 0 : r"
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ channel2 {-rgba.red -rgba.green rgba.blue none}
+ expr3 "r > threshold ? 0 : 1"
+ name Expression6
+ xpos 1589
+ ypos -1046
+ cached true
+}
+push $N1f65eec0
+Shuffle {
+ alpha white
+ name Shuffle1
+ xpos 1426
+ ypos -1007
+}
+set N1fa31fc0 [stack 0]
+Merge2 {
+ inputs 2
+ operation atop
+ name Merge11
+ xpos 1589
+ ypos -1008
+}
+push 0
+push $N1f65eec0
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset6
+ xpos 1703
+ ypos -1065
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 " r > threshold ? 0 : r"
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ channel2 {-rgba.red -rgba.green rgba.blue none}
+ expr3 "r > threshold ? 0 : 1"
+ name Expression7
+ xpos 1703
+ ypos -1041
+ cached true
+}
+push $N1fa31fc0
+Merge2 {
+ inputs 2
+ operation atop
+ name Merge17
+ xpos 1703
+ ypos -1007
+}
+push $N1f65eec0
+Dot {
+ name Original1
+ xpos 1847
+ ypos -1147
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ screen_alpha true
+ Achannels rgb
+ Bchannels rgb
+ output rgb
+ name Merge21
+ xpos 1703
+ ypos -887
+}
+Multiply {
+ value 0.3333333333
+ name Multiply3
+ xpos 1703
+ ypos -863
+}
+NoOp {
+ inputs 0
+ name Threshold
+ xpos 761
+ ypos -1504
+ addUserKnob {20 User}
+ addUserKnob {16 Threshold l Theshold}
+ Threshold 0.006
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/test/black_noise/tif/2017-10-21_171820_000.########.tif
+ format "512 352 0 0 512 352 1 v31_512x352"
+ before loop
+ last 100
+ after loop
+ origlast 100
+ origset true
+ name Read4
+ xpos 504
+ ypos -1584
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/test/bright_afternoon/tif/2017-11-04_161413_000.########.tif
+ format "640 480 0 0 640 480 1 PC_Video"
+ first 379
+ before loop
+ last 565
+ after loop
+ origfirst 379
+ origlast 565
+ origset true
+ name Read5
+ xpos 400
+ ypos -1496
+}
+push $N2e163eb0
+Dot {
+ name Dot38
+ xpos 1280
+ ypos -983
+ addUserKnob {20 User}
+ addUserKnob {7 Threshold R 0 0.02}
+ Threshold 0.1
+}
+set N39e48b70 [stack 0]
+TimeOffset {
+ time_offset 2
+ time ""
+ name TimeOffset7
+ xpos 1132
+ ypos -906
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 "r > threshold ? 0 : r"
+ name Expression8
+ xpos 1132
+ ypos -882
+}
+push 0
+push $N39e48b70
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset8
+ xpos 1246
+ ypos -901
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 "r > threshold ? 0 : r"
+ name Expression9
+ xpos 1246
+ ypos -877
+}
+push $N39e48b70
+Dot {
+ name Dot39
+ xpos 1392
+ ypos -983
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 "r > threshold ?  (3*r)  : r"
+ expr1 0
+ expr2 0
+ name Expression10
+ xpos 1358
+ ypos -904
+}
+Merge2 {
+ inputs 3+1
+ operation plus
+ screen_alpha true
+ name Merge22
+ xpos 1246
+ ypos -723
+}
+Multiply {
+ value 0.3333333333
+ name Multiply5
+ xpos 1246
+ ypos -699
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-24_162501/2017-11-24_162501_010/tif/2017-11-24_162501_010.########.tif
+ format "512 352 0 0 512 352 1 v31_512x352"
+ first 602
+ before loop
+ last 951
+ after loop
+ origfirst 602
+ origlast 951
+ origset true
+ version 1
+ name Orig
+ xpos 215
+ ypos -1485
+}
+push $Ne338510
+push $Nbb49e30
+Viewer {
+ inputs 2
+ frame 259
+ frame_range 1-1000
+ fps 60
+ gain 64
+ colour_sample_bbox {1.76953125 -0.16015625 1.7734375 -0.15625}
+ samplepoints {{1.75390625 -0.16796875 1.75390625 -0.1640625 1.7578125 -0.1640625 1.76953125 -0.16015625}
+   }
+ name Viewer1
+ xpos -33
+ ypos -1400
+}
+push $N253b5850
+Viewer {
+ frame 259
+ frame_range 1-1000
+ fps 60
+ gain 64
+ name Viewer2
+ xpos 637
+ ypos -771
+}
