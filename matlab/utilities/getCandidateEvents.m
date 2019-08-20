@@ -20,13 +20,14 @@ function candidateEvents = getCandidateEvents (imds)
     %% Get the GAPS 
     candidateEvents = [];
     %handle begin to first gap
-    if gapLocations(1,1) ~= 1
-        %First candidate will be from the start of the array
-        candidateStartFrame = 1;
-        candidateStopFrame = gapLocations(1,1);
-        diff = candidateStopFrame - candidateStartFrame;
-        candidateEvents = [candidateStartFrame, diff];
-    end
+    if ~isempty(gapLocations)
+        if gapLocations(1,1) ~= 1
+            %First candidate will be from the start of the array
+            candidateStartFrame = 1;
+            candidateStopFrame = gapLocations(1,1);
+            diff = candidateStopFrame - candidateStartFrame;
+            candidateEvents = [candidateStartFrame, diff];
+        end
     for i =1 : size(gapLocations,1)-1
         candidateStartFrame = gapLocations(i,1)+gapLocations(i,2);
         candidateStopFrame = gapLocations(i+1,1)-1;

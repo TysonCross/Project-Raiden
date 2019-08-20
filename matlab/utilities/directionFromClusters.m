@@ -10,43 +10,18 @@
 %        dirVector: The resultant vector of produced by the movement of the centroids
 %        dir: The direction of the resultant vector
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [dirVector, dir] = directionFromClusters(filePath, frameStart, frameLength)
-
-%{ 
- % passed into script/function:
- filePath = '/home/tyson/Documents/MATLAB/temp/deeplabv3_2019-08-10_171747/pixelLabel.0001.png';
- frameStart = 1;
- frameLength = 99;
-%}
-
-    % script begin
-    frameEnd = frameStart+frameLength;
-    [folder, basename, ext] = fileparts(filePath);
-    basename = strsplit(basename,'.');
-    if (numel(basename) > 1)
-        paddinglength = length(basename{end});
-    else
-        paddinglength = 3;
-    end
-    basename = basename{1};
-
+function [dir, dirVector] = directionTest(subIMDS)
     % Configuration 
     % ToDo: make arguments to function
     doRecontructImage = true;      % convert pointCloud/plane back into image
     useAllClusters = false;        % if false, use the largest cluster instead
 
-    for jj=frameStart:frameEnd
+    for jj=1 : subIMDS.numpartitions
 
-        % Get the name of the image the user wants to use.
-        str = strcat('%s.%0',string(paddinglength),'d%s');
-        filename = sprintf(str, basename, jj, ext);
-        fullFileName = fullfile(folder, filename);
-
-        % [filename, folder] = uigetfile({'*.jpg';'*.bmp'},'Select image');
-        grayImage = imread(fullFileName);
+        grayImage = subIMDS.readimage(jj);
 
         % choose the lightning label (minus edges of frame)
-        chosenLabel = 1;
+        chosenLabel = double(Label.leader);
         maskedImage = grayImage;
         maskedImage(maskedImage~=chosenLabel) = 0;
         maskedImage(maskedImage>0) = 1;
@@ -57,7 +32,7 @@ function [dirVector, dir] = directionFromClusters(filePath, frameStart, frameLen
         maskedImage(:,end-edgeRemove) = 0;
 
         % Prepare the ground mask
-        groundLabel = 5;
+        groundLabel = double(Label.ground);
         groundImage = grayImage;
         groundImage(groundImage~=groundLabel) = 0;
         groundImage(groundImage>0) = 1;

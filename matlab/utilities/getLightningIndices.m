@@ -7,5 +7,5 @@
 % NOTE: Please see indexLabel for more information of the functionality
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function output = getLightningIndices(imds)
-    output = indexLabel(imds,1, 'logical');
+    output = indexLabel(imds,double(Label.leader), 'logical');
 end
