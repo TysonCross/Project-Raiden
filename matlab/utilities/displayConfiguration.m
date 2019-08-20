@@ -7,7 +7,12 @@ function displayConfiguration(opt, networkType, rez, networkName, logFile)
     fieldNames = fieldnames(opt);
     for ii=1:size(fieldNames,1)
         if eval(['opt.',fieldNames{ii}])
-            cprintf([0.2,0.7,0],'%s \t on \n',fieldNames{ii});
+            if strcmp(fieldNames{ii},'percentage')
+            	cprintf([0.2,0.7,0],'%s \t%3d%%\n',fieldNames{ii},...
+                    (opt.percentage*100));
+            else
+                cprintf([0.2,0.7,0],'%s \t on \n',fieldNames{ii});
+            end
         end
     end
     for ii=1:size(fieldNames,1)

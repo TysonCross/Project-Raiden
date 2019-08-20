@@ -4,19 +4,16 @@
 % network topologys.
 %
 % ToDo(Tyson): Expand on the above as is required
-% NOTE: Should this perhaps be changed to be a smaller script that calls the component scripts?
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % prescript clean-up and reset:
 figHandle = findall(groot, 'Type', 'Figure'); close(figHandle(:))
 setenv('NVIDIA_CUDNN', '/usr/local/cuda');
 setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
-% results = coder.checkGpuInstall('full')
-clc;
-clearvars;
+clc; clearvars;
 
 %% SETUP
-networkType = 'alexnet';
+networkType = 'deeplabv3';
 
 %{
     Network choices are:
@@ -24,22 +21,22 @@ networkType = 'alexnet';
     'alexnet' (batchsize ~100)
     'deeplabv3' (batchsize ~100)
     'segnet' (batchsize ~20)
-    'u-net' TBD
 %}
 
 % Phases to run
-opt.forceConvert        = 0;         % resize/convert/process new data (slow)
-opt.preProcess          = 0;         % if true, median filter on input data
-opt.splitTestData       = 0;         % re-split Test/Training (optionally with percentage)
-opt.splitValData        = 0;       	 % re-split Training/Validation
-opt.fromCheckpoint      = 0;         % if training did not finish, use checkpoint
-opt.useCachedNet        = 1;         % if false, generate new neural network
-opt.doTraining         	= 1;         % if true, perform training
-opt.evaluateNet         = 1;         % if true, evaluate performance on test set
-opt.archiveNet          = 0;         % archive NN, data and figures to subfolder
+opt.forceConvert	= 1;	% resize/convert/process new data (slow)
+opt.preProcess     	= 1; 	% if true, median filter on input data
+opt.splitTestData 	= 1;	% re-split Test/Training data *
+opt.splitValData 	= 1;	% re-split Training/Validation data
+opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
+opt.useCachedNet   	= 0;   	% if false, generate new neural network
+opt.doTraining    	= 1;   	% if true, perform training
+opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
+opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
 
-% percentage of each sequence (strokes will not be culled)
-percentage = 0.1;
+% Percentage of each sequence (strokes will not be culled)
+% (In order to take affect after a change, splitTestData must be enabled)
+opt.percentage    	= 0.25;	% only use a percentage of images
 
 % resolution setup
 imageSize = getResolution(networkType);
@@ -71,7 +68,10 @@ diary(logFileFull)
 cprintf([0,0.5,1], '=============== Configuration ===============\n');
 displayConfiguration(opt, networkType, rez, networkStatus.name, logFile);
 
-%% Data Conversion Phase 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Data Conversion Phase
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 cprintf([0,0.5,1], '\n=================== Data ====================\n');
 
 % This process is slow. Although there are a couple checks to determine
@@ -102,25 +102,30 @@ end
 
 diary off; diary on;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Split Test/Training data phase
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This phase seperates some test data
 
 % Check to see if cache exists
-if opt.splitTestData && ~exist(fullfile(cachePath,strcat('data','.mat')),'file')
+if (~exist(fullfile(cachePath,strcat('data','.mat')),'file') && ...
+        opt.splitTestData)
+    
     cprintf([1,0.5,0],['Warning: No datastore cache found at: %s \n'...
-        '(Training/Test data will be repartitioned) \n'], fullfile(cachePath,'data'));
+        '(Training/Test data will be repartitioned) \n'], ...
+        fullfile(cachePath,'data'));
 end
 
-if (opt.splitTestData==false && percentage < 1)
-    cprintf([1,0.5,0], ['Warning: splitTestData is off. Randomized subset will not be ' ...
-        're-selected. Enable ''splitTestData'' to force an update\n'])
+if (opt.splitTestData==false && opt.percentage < 1)
+    cprintf([1,0.5,0], ['Warning: splitTestData is off. ', ...
+        'Randomized subset will not be re-selected. ' ...
+        'Enable ''splitTestData'' to force an update\n'])
 end
 
 if (opt.splitTestData==true  || opt.forceConvert)
     splitTestPercent = 0.15;
     splitTestData(resizedImageFolders, resizedLabelFolders, ...
-        splitTestPercent, percentage);
+        splitTestPercent, opt.percentage);
 else
     fprintf('Loading datastores from cache...')
 end
@@ -140,7 +145,9 @@ disp(' ');
 
 diary off; diary on;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Training/Validation partition phase 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if (opt.splitValData==true || ~exist('imdsVal','var'))
     disp("Splitting training/validation data...")
@@ -165,7 +172,10 @@ cprintf([0.2,0.7,0],'\tTesting images: \t %d \n', numel(imdsTest.Files));
 
 diary off; diary on;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Network setup phase
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 cprintf([0,0.5,1], '\n================== Network ================== \n');
 
 if opt.fromCheckpoint
@@ -205,7 +215,8 @@ else
     end
 
     if (opt.useCachedNet==false)
-        net = createNetwork(networkType, cachePath, labelWeights);
+        createNetwork(networkType, cachePath, labelWeights);
+        load(fullfile(cachePath,'network'));
     else
         fprintf('Loading Network from cache...')
         updatedNetName = networkStatus.name;
@@ -223,7 +234,10 @@ end
 
 diary off; diary on;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Training
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 if (opt.doTraining==true) && (opt.useCachedNet==true)
     if ~(contains(class(net),'LayerGraph'))
         net = layerGraph(net);
@@ -240,7 +254,7 @@ if (opt.doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 30, ...  
-        'MiniBatchSize', 10, ...
+        'MiniBatchSize', 100, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
@@ -261,24 +275,12 @@ if (opt.doTraining==true)
     cprintf([0.2,0.7,0], '\t\t      Training Options \n');
     disp(options);
 
-    % Define augmenting methods
-%     pixelRange = [-16 16];
-%     scaleRange = [0.9 1.1];
-%     augmenter = imageDataAugmenter( ...
-%         'RandXReflection',true, ...
-%         'RandXTranslation',pixelRange, ...
-%         'RandYTranslation',pixelRange, ...
-%         'RandXScale',scaleRange, ...
-%         'RandYScale',scaleRange);
-
-    pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain); %,...
-%         'DataAugmentation', augmenter);
+    pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain);
 
     % shuffle the data
     pximds = pximds.shuffle;
     
     % Clear memory
-%     reset(gpuDevice(1));
     clear numTestingImages numTrainingImages numValidationImages
     clear inputLayer opt.convertData opt.forceConvert opt.splitTestData
     clear opt.fromCheckpoint opt.resplitValidation
@@ -296,7 +298,7 @@ if (opt.doTraining==true)
     networkStatus.trained = networkStatus.trained + 1;
     save(fullfile(cachePath,'network'),...
         'net','networkStatus','imageSize');
-    disp("Network created") 
+    disp("Network trained") 
     
     % clear out checkpoints
     delete(fullfile(checkpointPath,'net_checkpoint_*.mat'));
@@ -307,7 +309,10 @@ end
 
 diary off; diary on;
 
-%% EVALUATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Evaluation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 if (networkStatus.trained==0 && opt.evaluateNet)
             cprintf([1,0.5,0], ['Warning: Network evaluation was ', ...
                 'requested, but the network has not been trained yet!', ...
@@ -343,7 +348,10 @@ end
 
 diary off; diary on;
 
-%% ARCHIVE network, images, and matlab script
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Archive network, images, and matlab script
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 sendFileList = {''};
 if (opt.archiveNet)
    cprintf([0,0.5,1], '\n=============== Archive Data ================\n');
@@ -351,7 +359,8 @@ if (opt.archiveNet)
    fprintf('Saving data, please wait...')
    currentFileName = strcat(mfilename('fullpath'),'.m');
    if exist(currentFileName,'file')
-        foldername = fullfile(projectPath,"networks","cache",networkStatus.name);
+        foldername = fullfile(projectPath,"networks","cache", ...
+            networkStatus.name);
         mkdir(foldername);
         copyfile(currentFileName, foldername);
         copyfile(fullfile(cachePath,'data.mat'),foldername);
@@ -383,16 +392,19 @@ if (opt.archiveNet)
             {' --content-type="text/plain" --attach="'},logFileFull,{'"'});
         disp('Log archived')
    else
-       str = strcat();
-       cprintf([1,0.5,0],'Warning: %s does not exist! Network not archived. \n', string(currentFileName));
+       cprintf([1,0.5,0], ['Warning: %s does not exist! ', ...
+           'Network not archived. \n'], string(currentFileName));
    end
 else
-    cprintf([1,0.5,0],'Warning: Network not archived because ''archiveNet'' is disabled \n');
+    cprintf([1,0.5,0], ['Warning: Network not archived ', ...
+        'because ''archiveNet'' is disabled \n']);
 end
 
 diary off;
 
-%% NOTIFICATIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Notifications
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if (opt.archiveNet && opt.doTraining)
     [hours, mins, secs] = sec2hms(networkStatus.trainingTime);
@@ -413,3 +425,4 @@ if (opt.archiveNet && opt.doTraining)
 end
 
 return % end script
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,4 +1,4 @@
-function net = createNetwork(networkType, cachePath, labelWeights)
+function createNetwork(networkType, cachePath, labelWeights)
 disp("Setting up Network...")
 
     loadLabels;
