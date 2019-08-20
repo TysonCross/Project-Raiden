@@ -1,4 +1,4 @@
-function rgbFixed = noise_removal(noisyRGB, filterSize)
+function rgbFixed = reduceNoise(noisyRGB, filterSize)
     if nargin < 2
             filterSize = 2;
     end

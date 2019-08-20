@@ -1,4 +1,4 @@
-function rgbFixed = improve_contrast(dimRGB)
+function rgbFixed = increaseContrast(dimRGB)
 
     % Extract the individual red, green, and blue color channels.
     redChannel = dimRGB(:, :, 1);

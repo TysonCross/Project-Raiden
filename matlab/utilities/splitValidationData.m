@@ -1,15 +1,10 @@
 function splitValidationData(imds, pxds, splitPercentage)
     disp("Partitioning test and training Data...")
-
-    % Split training and validation
-%     [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
-%         splitTrainingData(imdsTrain, pxdsTrain, splitPercentage);
-
-% Partition data by randomly selecting a percentage of the data for training,
+% Partitions data by randomly selecting a percentage of the data for training,
 % the rest is used for validation.
 
-% Set initial random state for example reproducibility
-    rng(0);
+% Set initial random state 
+    rng('shuffle');
     numFiles = numel(imds.Files);
     shuffledIndices = randperm(numFiles);
 
@@ -35,6 +30,7 @@ function splitValidationData(imds, pxds, splitPercentage)
     pxdsTrain = pixelLabelDatastore(trainingLabels, labelNames, labelIDs_scalar);
     pxdsVal = pixelLabelDatastore(validationLabels, labelNames, labelIDs_scalar);
 
+    % check nothing went wrong
     assert(numel(imdsTrain.Files)==numel(pxdsTrain.Files));
     assert(numel(imdsVal.Files)==numel(pxdsVal.Files));
     

@@ -41,7 +41,7 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
 
             % Reduce Noise, improve contrast
             if preProcess
-%                 Im16 = time_denoise(Im16);
+%                 Im16 = timeDenoise(Im16);
             end
             
             % Resize image.
