@@ -1,5 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                         FINDSTROKEEVENTS.M
+function output = findStokeEvents(imds, blankFramesToIgnore)
 % Wrapper function for findEvents which inserts the correct label number for 
 % a stroke.
 % blankFramesToIgnore is an optional input that allows for ignoring blank frames
@@ -8,11 +7,11 @@
 % 
 %
 % NOTE: Please see findEvents for more details on the output and function
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function output = findStokeEvents(imds, blankFramesToIgnore)
-if nargin==1
-    blankFramesToIgnore = 0;
-end
 
-output = findEvents(imds, 2, blankFramesToIgnore);
+    if nargin==1
+        blankFramesToIgnore = 0;
+    end
+
+    output = findEvents(imds, 2, blankFramesToIgnore);
+    
 end

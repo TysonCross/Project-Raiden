@@ -1,4 +1,4 @@
-%% CNN_SEGMENTATION_TRAIN_AND_EVALUATE.M
+%% trainSegmentNetwork.m
 % This script implements data preperation, training and evaluation of 
 % various deep learning models, mainly using transfer learning on known
 % network topologys.

@@ -10,6 +10,7 @@ labelButton= true;
 %ToDo: This should be done dynamically
 rootPath = '~/Desktop/';
 loadSequences;
+
 %% Sequence to load
 sequenceDir = uigetdir(fullfile(rootPath),'Select the sequence to load');
     if ~sequenceDir

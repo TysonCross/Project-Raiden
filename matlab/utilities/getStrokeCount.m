@@ -1,5 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                            GETSTROKECOUNT.M
+function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
 % This function determines the number of strokes present in the datastore 
 % presented to it. The gap option allows for manipulating the space empty frames
 % allowable between frames with the stroke label for it to be counted as part 
@@ -12,18 +11,19 @@
 %        strokeInfo: Is an array that has the start frame number as the first
 %                    column and the number of frames in that event as the second
 %                    column. 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
     %#ok<*AGROW>
+    
     strokeIndices = getStrokeIndices(imds);
     if nargin > 2
         gap =2;
     end
+    
     % testCase1: strokeIndices = [1]; %expect 1 duration 1 
     % testCase2: strokeIndices = [ 1 5 8]; %expect 3 all 1
     % testCase3: strokeIndices = [ 1 2 3 8 9];%expect 2 duration 3 and 2
     % testCase4: strokeIndices = []; % expect 0 0
     % testCase5: strokeIndices = [ 1 2 4 8 11 19];% 4 duration 4 1 1 1
+    
     strokeIndexLength = length(strokeIndices);
     frameIndices = []; %#ok<NASGU>
     strikeDurations = []; % Stores the durations of each stroke
@@ -60,4 +60,5 @@ function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
         strokeCount = 0;
         strokesInfo = [];
     end
+    
 end

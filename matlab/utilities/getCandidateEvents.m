@@ -1,5 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                          GETCANDIDATEEVENTS.M
+function candidateEvents = getCandidateEvents (imds)
 % Finds the events that are surrounded by 2 gaps or a gap and a 
 % start/end of the seqeunce of frames. For example the input could look like
 %   [ ... gap EVENT gap ... ]
@@ -10,14 +9,13 @@
 %        Array where the first column is the startFrames and the 
 %        second column is the number of frames that contain the event
 %        ie,  [startFrame Duration]
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function candidateEvents = getCandidateEvents (imds)
 
     indexedLightning = getLightningIndices(imds);
     indexedStrokes = getStrokeIndices(imds);
     totalIndices = indexedLightning + indexedStrokes;
     gapLocations = findGaps(totalIndices,2);
-    %% Get the GAPS 
+    
+    % Get the GAPS 
     candidateEvents = [];
     %handle begin to first gap
     if ~isempty(gapLocations)
@@ -43,8 +41,7 @@ function candidateEvents = getCandidateEvents (imds)
                 candidateEvents = [candidateEvents; candidateStartFrame, diff];
             end
         end
-    else
-        %no gaps
+    else % no gaps without leader/stroke
         candidateEvents = [candidateEvents; 1, length(indexedLightning)-1];
         
     end

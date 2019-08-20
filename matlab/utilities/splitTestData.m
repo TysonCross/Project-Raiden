@@ -2,7 +2,9 @@ function splitTestData(resizedImageFolders, resizedLabelFolders, ...
     splitTestPercent, percentage)
 
     % [split training and test]
-    [trainIndex, testIndex] = splitData(resizedImageFolders, splitTestPercent);
+    ext = '.png';
+    [trainIndex, testIndex] = splitSequences(resizedImageFolders, ...
+        splitTestPercent, ext);
     
     imageFolder = cellstr(resizedImageFolders);
     labelFolder = cellstr(resizedLabelFolders);

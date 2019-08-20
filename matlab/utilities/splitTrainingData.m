@@ -1,4 +1,5 @@
-function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = partitionTrainingData(imds, pxds, splitPercentage)
+function [imdsTrain, imdsVal, pxdsTrain, pxdsVal] = ...
+    splitTrainingData(imds, pxds, splitPercentage)
 % Partition data by randomly selecting a percentage of the data for training,
 % the rest is used for validation.
 

@@ -1,5 +1,6 @@
-function pxds = resizePixelLabels(pxds, imageSize, destinationPath, forceConvert, outerProgressBar)
-% Resize pixel label data to [sz(1) sz(2)].
+function pxds = resizePixelLabels(pxds, imageSize, destinationPath, ...
+    forceConvert, outerProgressBar)
+% Resize pixel label data
 
     if nargin == 4
         outerProgressBar = false;

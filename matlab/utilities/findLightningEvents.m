@@ -1,5 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                         FINDLIGHTNINGEVENTS.M
+function output = findLightningEvents(imds, blankFramesToIgnore)
 % Wrapper function for findEvents which inserts the correct label number for 
 % lightning.
 % blankFramesToIgnore is an optional input that allows for ignoring blank frames
@@ -8,11 +7,11 @@
 % 
 %
 % NOTE: Please see findEvents for more details on the output and function
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-function output = findLightningEvents(imds, blankFramesToIgnore)
-if nargin==1
-    blankFramesToIgnore = 0;
-end
 
-output = findEvents(imds,1, blankFramesToIgnore);
+    if nargin==1
+        blankFramesToIgnore = 0;
+    end
+
+    output = findEvents(imds,1, blankFramesToIgnore);
+    
 end

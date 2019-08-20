@@ -1,9 +1,6 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                            GETRESOLUTION.M
-% Return the resolution required at the input of the respective network
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function imageSize = getResolution(networkType)
-        % [ height x width ]
+% Return the resolution required at the input of the respective network
+% Note: convention for netowrk size is [ height x width ]
 
     switch networkType
             case 'fcn8s'
