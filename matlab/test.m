@@ -1,3 +1,44 @@
+% temp working
+
+p{1} = [ 1000 555 555 ;
+         555 5 555 ;
+         555 555 555 ];
+     
+p{2} = [ 1000 550 550 ;
+         550 550 550 ;
+         550 550 5 ];
+     
+p{3} = [ 1000 540 540 ;
+         540 1000 540 ;
+         540 540 540 ];
+
+% % zero out values below threshold
+% p{1}(p{1}<threshold)=0;
+% p{2}(p{2}<threshold)=0;
+
+arr = cat(3, p{:});	% concatenate array
+% arr(arr(:,:,[1 2])<threshold)=0;    % zero out bright values below threshold
+a = ones(size(arr));
+a(arr(:,:,[1 2])<threshold)=0;      % mask to remove sub-threshold values
+b = (1-a);                          % mask to replace with BG
+% arr.*a : zero out bright values below threshold
+% repmat(arr(:,:,3),[1 1 3]).*b : copy current values to previous frames 
+arr = arr.*a + repmat(arr(:,:,3),[1 1 3]).*b; % rebuild frame(s) w/o past frame brightness
+Im16 = max(round(mean(arr,3)), arr(:,:,3));
+
+b1 = b1.*arr(:,:,3);
+a = b(:,:,[1 2]) + b1;
+a(:,:,3) = 0;
+arr(:,:,[1 2]) = 0;
+arr = a + arr;
+
+arr = b + b1
+
+arr(arr(:,1)>threshold)=arr(:,:,3)
+
+%-------------------------------
+
+
 trainedUnet_url = 'https://www.mathworks.com/supportfiles/vision/data/multispectralUnet.mat';
 downloadTrainedUnet(trainedUnet_url,'/home/tyson/Raiden/networks/pretrainedNetwork/');
 
@@ -12,9 +53,9 @@ layers = importCaffeLayers(protofile)
 sz = imageSize;
 
 y = sz(1);
-x = sz(2);
+a = sz(2);
 
-    rez = strcat(string(x),'x',string(y));
+    rez = strcat(string(a),'x',string(y));
     imagePath = fullfile(imagePath,'resized',rez,'label');
     
     reset(pxdsTrain)
@@ -43,7 +84,7 @@ x = sz(2);
             imshow(L)
 
             % Resize the data using 'nearest' interpolation to preserve labelIDs.
-            L = imresize(L,[y x],'nearest');
+            L = imresize(L,[y a],'nearest');
 
             % Write the data to disk.
 %             imwrite(L,fullfile(imagePath,strcat(filename,ext)));

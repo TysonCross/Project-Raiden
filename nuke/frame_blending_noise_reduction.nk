@@ -10,24 +10,13 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             </dock>
             <split size="1099" stretch="1"/>
             <splitter orientation="2">
-                <split size="676"/>
-                <splitter orientation="1">
-                    <split size="548"/>
-                    <dock id="" activePageId="Viewer.1">
-                        <page id="Viewer.1"/>
-                    </dock>
-                    <split size="547"/>
-                    <dock id="" activePageId="Viewer.2">
-                        <page id="Viewer.2"/>
-                    </dock>
-                </splitter>
-                <split size="297"/>
-                <dock id="" activePageId="Pixel Analyzer.1">
-                    <page id="Pixel Analyzer.1"/>
+                <split size="977"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
                 </dock>
             </splitter>
             <split size="1346"/>
-            <dock id="" activePageId="DAG.1" focus="true">
+            <dock id="" activePageId="DAG.1">
                 <page id="DAG.1"/>
             </dock>
         </splitter>
@@ -36,8 +25,8 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 }
 Root {
  inputs 0
- name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/trame_blending_noise_reduction.nk"
- frame 259
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/frame_blending_noise_reduction.nk"
+ frame 335
  last_frame 1000
  lock_range true
  fps 60
@@ -64,23 +53,26 @@ Reformat {
 Read {
  inputs 0
  file_type tiff
- file /mnt/Shield/Raiden/data/sequences/test/dark/tif/2017-10-21_171820_000.########.tif
+ file /mnt/Shield/Raiden/data/sequences/2017-11-24_162501/2017-11-24_162501_010/tif/2017-11-24_162501_010.########.tif
  format "512 352 0 0 512 352 1 v31_512x352"
+ first 602
  before loop
- last 500
+ last 951
  after loop
- origlast 500
+ origfirst 602
+ origlast 951
  origset true
- name Read1
- xpos 110
- ypos -1505
+ version 1
+ name Orig
+ xpos 215
+ ypos -1485
 }
 Dot {
  name Dot9
  xpos 326
  ypos -1179
 }
-set Ne34a6f0 [stack 0]
+set N77d5060 [stack 0]
 Dot {
  name Dot13
  xpos 128
@@ -91,9 +83,9 @@ Dot {
  xpos 128
  ypos -1046
 }
-set Nc911d50 [stack 0]
-push $Nc911d50
-push $Ne34a6f0
+set N7b71000 [stack 0]
+push $N7b71000
+push $N77d5060
 TimeOffset {
  time_offset 2
  time ""
@@ -112,7 +104,6 @@ Expression {
  xpos 190
  ypos -1079
 }
-set N253b5850 [stack 0]
 Dissolve {
  inputs 2
  which 1
@@ -122,20 +113,20 @@ Dissolve {
  ypos -1055
 }
 push 0
-push $Ne34a6f0
+push $N77d5060
 Dot {
  name Dot4
  xpos 456
  ypos -1179
 }
-set Ne338510 [stack 0]
+set N7913e60 [stack 0]
 Dot {
  name Dot33
  xpos 456
  ypos -1043
 }
-set N25188540 [stack 0]
-push $Ne34a6f0
+set N7788c60 [stack 0]
+push $N77d5060
 TimeOffset {
  time_offset 1
  time ""
@@ -162,7 +153,7 @@ Dissolve {
  xpos 292
  ypos -1052
 }
-push $N25188540
+push $N7788c60
 Merge2 {
  inputs 3+1
  operation plus
@@ -179,7 +170,7 @@ Multiply {
  xpos 292
  ypos -919
 }
-set Nbb49e30 [stack 0]
+set N7834890 [stack 0]
 Invert {
  channels alpha
  name Invert4
@@ -202,19 +193,19 @@ StickyNote {
  xpos 80
  ypos -1288
 }
-push $Ne338510
+push $N7913e60
 Dot {
  name Dot37
  xpos 977
  ypos -1211
 }
-set N2e163eb0 [stack 0]
+set N7812700 [stack 0]
 Dot {
  name Dot36
  xpos 977
  ypos -1150
 }
-set N1f966350 [stack 0]
+set Na432d00 [stack 0]
 TimeOffset {
  time_offset 2
  time ""
@@ -232,7 +223,7 @@ Expression {
  ypos -1049
 }
 push 0
-push $N1f966350
+push $Na432d00
 TimeOffset {
  time_offset 1
  time ""
@@ -249,7 +240,7 @@ Expression {
  xpos 831
  ypos -1044
 }
-push $N1f966350
+push $Na432d00
 Expression {
  temp_name0 threshold
  temp_expr0 " \[value \{Threshold.Threshold\}]"
@@ -274,113 +265,6 @@ Multiply {
  name Multiply4
  xpos 831
  ypos -866
-}
-push $N2e163eb0
-Dot {
- name Dot35
- xpos 1737
- ypos -1147
- addUserKnob {20 User}
- addUserKnob {7 Threshold R 0 0.02}
- Threshold 0.001
-}
-set N1f65eec0 [stack 0]
-TimeOffset {
- time_offset 2
- time ""
- name TimeOffset5
- xpos 1589
- ypos -1070
-}
-Expression {
- temp_name0 threshold
- temp_expr0 " \[value \{Threshold.Threshold\}]"
- channel0 rgb
- expr0 " r > threshold ? 0 : r"
- channel1 {-rgba.red rgba.green -rgba.blue none}
- channel2 {-rgba.red -rgba.green rgba.blue none}
- expr3 "r > threshold ? 0 : 1"
- name Expression6
- xpos 1589
- ypos -1046
- cached true
-}
-push $N1f65eec0
-Shuffle {
- alpha white
- name Shuffle1
- xpos 1426
- ypos -1007
-}
-set N1fa31fc0 [stack 0]
-Merge2 {
- inputs 2
- operation atop
- name Merge11
- xpos 1589
- ypos -1008
-}
-push 0
-push $N1f65eec0
-TimeOffset {
- time_offset 1
- time ""
- name TimeOffset6
- xpos 1703
- ypos -1065
-}
-Expression {
- temp_name0 threshold
- temp_expr0 " \[value \{Threshold.Threshold\}]"
- channel0 rgb
- expr0 " r > threshold ? 0 : r"
- channel1 {-rgba.red rgba.green -rgba.blue none}
- channel2 {-rgba.red -rgba.green rgba.blue none}
- expr3 "r > threshold ? 0 : 1"
- name Expression7
- xpos 1703
- ypos -1041
- cached true
-}
-push $N1fa31fc0
-Merge2 {
- inputs 2
- operation atop
- name Merge17
- xpos 1703
- ypos -1007
-}
-push $N1f65eec0
-Dot {
- name Original1
- xpos 1847
- ypos -1147
-}
-Merge2 {
- inputs 3+1
- operation plus
- screen_alpha true
- Achannels rgb
- Bchannels rgb
- output rgb
- name Merge21
- xpos 1703
- ypos -887
-}
-Multiply {
- value 0.3333333333
- name Multiply3
- xpos 1703
- ypos -863
-}
-NoOp {
- inputs 0
- name Threshold
- xpos 761
- ypos -1504
- addUserKnob {20 User}
- addUserKnob {16 Threshold l Theshold}
- Threshold 0.006
 }
 Read {
  inputs 0
@@ -412,7 +296,7 @@ Read {
  xpos 400
  ypos -1496
 }
-push $N2e163eb0
+push $N7812700
 Dot {
  name Dot38
  xpos 1280
@@ -421,7 +305,7 @@ Dot {
  addUserKnob {7 Threshold R 0 0.02}
  Threshold 0.1
 }
-set N39e48b70 [stack 0]
+set Na64e0e0 [stack 0]
 TimeOffset {
  time_offset 2
  time ""
@@ -439,7 +323,7 @@ Expression {
  ypos -882
 }
 push 0
-push $N39e48b70
+push $Na64e0e0
 TimeOffset {
  time_offset 1
  time ""
@@ -456,7 +340,7 @@ Expression {
  xpos 1246
  ypos -877
 }
-push $N39e48b70
+push $Na64e0e0
 Dot {
  name Dot39
  xpos 1392
@@ -487,28 +371,10 @@ Multiply {
  xpos 1246
  ypos -699
 }
-Read {
- inputs 0
- file_type tiff
- file /mnt/Shield/Raiden/data/sequences/2017-11-24_162501/2017-11-24_162501_010/tif/2017-11-24_162501_010.########.tif
- format "512 352 0 0 512 352 1 v31_512x352"
- first 602
- before loop
- last 951
- after loop
- origfirst 602
- origlast 951
- origset true
- version 1
- name Orig
- xpos 215
- ypos -1485
-}
-push $Ne338510
-push $Nbb49e30
+push $N7913e60
+push $N7834890
 Viewer {
  inputs 2
- frame 259
  frame_range 1-1000
  fps 60
  gain 64
@@ -519,13 +385,147 @@ Viewer {
  xpos -33
  ypos -1400
 }
-push $N253b5850
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/test/dark/tif/2017-10-21_171820_000.########.tif
+ format "512 352 0 0 512 352 1 v31_512x352"
+ before loop
+ last 500
+ after loop
+ origlast 500
+ origset true
+ name Read1
+ xpos 110
+ ypos -1505
+}
+push $N7812700
+Dot {
+ name Dot35
+ xpos 1737
+ ypos -1147
+ addUserKnob {20 User}
+ addUserKnob {7 Threshold R 0 0.02}
+ Threshold 0.001
+}
+set N70d75f0 [stack 0]
+TimeOffset {
+ time_offset 2
+ time ""
+ name TimeOffset5
+ xpos 1589
+ ypos -1070
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 " r > threshold ? 0 : r"
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ channel2 {-rgba.red -rgba.green rgba.blue none}
+ expr3 "r > threshold ? 0 : 1"
+ name Expression6
+ xpos 1589
+ ypos -1046
+ cached true
+}
+push $N70d75f0
+Shuffle {
+ alpha white
+ name Shuffle1
+ xpos 1426
+ ypos -1007
+}
+set N74d3ef0 [stack 0]
+Merge2 {
+ inputs 2
+ operation atop
+ name Merge11
+ xpos 1589
+ ypos -1008
+}
+push 0
+push $N70d75f0
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset6
+ xpos 1703
+ ypos -1065
+}
+Expression {
+ temp_name0 threshold
+ temp_expr0 " \[value \{Threshold.Threshold\}]"
+ channel0 rgb
+ expr0 " r > threshold ? 0 : r"
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ channel2 {-rgba.red -rgba.green rgba.blue none}
+ expr3 "r > threshold ? 0 : 1"
+ name Expression7
+ xpos 1703
+ ypos -1041
+ cached true
+}
+push $N74d3ef0
+Merge2 {
+ inputs 2
+ operation atop
+ name Merge17
+ xpos 1703
+ ypos -1007
+}
+push $N70d75f0
+Dot {
+ name Original1
+ xpos 1847
+ ypos -1147
+}
+set N74cd350 [stack 0]
+Merge2 {
+ inputs 3+1
+ operation plus
+ screen_alpha true
+ Achannels rgb
+ Bchannels rgb
+ output rgb
+ name Merge21
+ xpos 1703
+ ypos -887
+}
+Multiply {
+ value 0.3333333333
+ name Multiply3
+ xpos 1703
+ ypos -863
+}
+set N96f7560 [stack 0]
+push $N74cd350
+Difference {
+ inputs 2
+ name Difference1
+ xpos 1770
+ ypos -767
+}
+push $N96f7560
+push $N70d75f0
 Viewer {
- frame 259
+ inputs 2
+ frame 335
  frame_range 1-1000
  fps 60
+ input_number 1
  gain 64
  name Viewer2
  xpos 637
  ypos -771
+}
+NoOp {
+ inputs 0
+ name Threshold
+ selected true
+ xpos 761
+ ypos -1504
+ addUserKnob {20 User}
+ addUserKnob {16 Threshold l Theshold}
+ Threshold 0.006
 }
