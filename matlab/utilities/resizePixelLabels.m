@@ -30,15 +30,14 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, ...
     
     while hasdata(pxds)
         [C, info] = read(pxds);
-        [~, filename, ext] = fileparts(info.Filename);
-        ext = ('.png');
-        
+        [~, filename] = fileparts(info.Filename);
+        ext = '.png'; % converted labels should be png
         str = 'mask';
         maskIdx = strfind(filename, str);
         filename = strcat(filename(1:maskIdx-1),"label",filename(maskIdx+length(str):end));
-        if (filename~='label.tif') % bug fix
-            if (~exist(fullfile(destinationPath,strcat(filename,ext)), 'file')  ...
-                || forceConvert)
+        fullFile = fullfile(destinationPath,strcat(filename, ext));
+        if (filename~=strcat("label",ext)) % bug fix
+            if (~exist(fullFile, 'file') || forceConvert)
 
                 % Convert from categorical to uint8.
                 % (RGB-class label association -> per-pixel integer value)
@@ -58,7 +57,7 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, ...
             end
         end
         
-        imageList(r) = fullfile(destinationPath,strcat(filename,ext));
+        imageList(r) = fullFile;
         
         if outerProgressBar
             progressbar([],r/N);

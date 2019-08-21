@@ -1,16 +1,12 @@
 function imds = resizeImages(imds, imageSize, destinationPath, ...
-    forceConvert, outerProgressBar, preProcess)
+    forceConvert, outerProgressBar)
  % Resize images to [sz(1) sz(2)].
 
-    if nargin == 5
-        preProcess = false;
-    elseif nargin == 4
+    if nargin == 4
         outerProgressBar = false;
-        preProcess = false;
     elseif nargin == 3
         forceConvert = false;
         outerProgressBar = false;
-        preProcess = false;
     end
 
     if ~exist(destinationPath,'dir')
@@ -32,35 +28,17 @@ function imds = resizeImages(imds, imageSize, destinationPath, ...
     end
 
     while hasdata(imds)
-        [Im16,info] = read(imds);
-        [~, filename, ext] = fileparts(info.Filename);
-        ext = '.png';
         
-        if (~exist(fullfile(destinationPath,strcat(filename,ext)), 'file') ...
-                || forceConvert)
-
-            % Reduce Noise, improve contrast
-            if preProcess
-%                 Im16 = timeDenoise(Im16);
-            end
-            
-            % Resize image.
-            Im16 = imresize(Im16,[y x],'bicubic');
-
-            % convert to 8-bit
-            I = uint8(Im16/256 -1);
-            
-            %Create empty border
-            I(1,:,:) = 0;
-            I(end,:,:) = 0;
-            I(:,1,:) = 0;
-            I(:,end,:) = 0;
-            
-            % Write image to disk.
-            imwrite(I,fullfile(destinationPath,strcat(filename,ext)));
+        [Im16,info] = read(imds);
+        [~, filename] = fileparts(info.Filename);
+        ext = '.png';   % converted images should be png
+        fullFile = fullfile(destinationPath,strcat(filename, ext));
+        
+        if (~exist(fullFile, 'file') || forceConvert)
+            resizeWriteImage(Im16, imageSize, destinationPath, filename, ext);
         end
         
-        imageList(r) = fullfile(destinationPath,strcat(filename,ext));
+        imageList(r) = fullFile;
         
         if outerProgressBar
             progressbar([],r/N);

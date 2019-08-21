@@ -19,7 +19,7 @@ function [imds, pxds] = randomSubset(imds_full, pxds_full, percentage)
   end
   reset(imds_full);
 
-  % Set initial random state
+  % Set initial random state, randomize indices of non-stroke frames
   rng(now);
   leaderSetIndx = leaderSetIndx(randperm(length(leaderSetIndx)));
   otherSetIndx = otherSetIndx(randperm(length(otherSetIndx)));

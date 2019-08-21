@@ -112,7 +112,7 @@ sequences = {...
     '2017-11-24_162501/2017-11-24_162501_060', ...
     };
 
-sequencesPath = '~/Raiden/data/sequences';
+sequencesPath = '/home/tyson/Raiden/data/sequences';
 imageFolders = fullfile(sequencesPath,sequences,'tif',filesep);
 maskFolders = fullfile(sequencesPath,sequences,'mask',filesep);
 assert(numel(imageFolders)==numel(maskFolders));

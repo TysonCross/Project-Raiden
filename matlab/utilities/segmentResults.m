@@ -48,8 +48,10 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     rez = strcat(string(x),'x',string(y));
     str = char(strcat('Resizing images to ',{' '},rez));
     progressbar([],str)
+    forceConvert = true;
+    outerProgressBar = true;
     imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img'), ...
-        true, true, true);
+        forceConvert, outerProgressBar);
     
     if doCompare
         pxds = pixelLabelDatastore(labelDir,...
@@ -58,8 +60,6 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
         str = char(strcat('Converting labels to ',{' '},rez));
         progressbar([],str)
         disp(str);
-        forceConvert = true;
-        outerProgressBar = true;
         pxds = resizePixelLabels(pxds, sz, fullfile(outputDir, ...
             'tmp','label'), forceConvert, outerProgressBar);
     end

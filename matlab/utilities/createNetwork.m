@@ -1,4 +1,4 @@
-function createNetwork(networkType, cachePath, labelWeights)
+function createNetwork(networkType, cachePath, labelWeights, networkStatus)
 disp("Setting up Network...")
 
     loadLabels;
@@ -127,18 +127,18 @@ disp("Setting up Network...")
             lgraph = layerGraph(net);
             newLayer = fullyConnectedLayer(numClasses, ...
                 'Name','fc_new', ...
-                'WeightLearnRateFactor',10, ...
-                'BiasLearnRateFactor',10);       
+                'WeightLearnRateFactor',1, ...
+                'BiasLearnRateFactor',1);       
             lgraph = replaceLayer(lgraph,...
                 'predictions',newLayer);
             lgraph = replaceLayer(lgraph, ...
                 'ClassificationLayer_predictions',pxLayer);
 
-            % freeze pretrained network
-            layers = lgraph.Layers;
-            connections = lgraph.Connections;
-            layers(1:end-3) = freezeWeights(layers(1:end-3));
-            lgraph = createLgraphUsingConnections(layers,connections);
+%             % freeze pretrained network
+%             layers = lgraph.Layers;
+%             connections = lgraph.Connections;
+%             layers(1:end-3) = freezeWeights(layers(1:end-3));
+%             lgraph = createLgraphUsingConnections(layers,connections);
             net = lgraph;
 
 %             clear layers connections lgraph newLayer

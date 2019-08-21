@@ -1,8 +1,10 @@
-function splitTestData(resizedImageFolders, resizedLabelFolders, ...
-    splitTestPercent, percentage)
+function splitTestData(resizedImageFolders, cachePath, resizedLabelFolders, ...
+    splitTestPercent, dataPercentage)
 
-    % [split training and test]
+    loadLabels;
     ext = '.png';
+    
+    % [split training and test]
     [trainIndex, testIndex] = splitSequences(resizedImageFolders, ...
         splitTestPercent, ext);
     
@@ -22,10 +24,11 @@ function splitTestData(resizedImageFolders, resizedLabelFolders, ...
 
     % Most input non-stroke frame have multiple frames that are extremely 
     % similar. This function reduces the non-stroke frames to a randomised
-    % percentage of the total frames. The frames are returned sorted.
-    if percentage < 1
-        [imdsTrain, pxdsTrain] = randomSubset(imdsTrain, pxdsTrain, percentage);
-        [imdsTest, pxdsTest] = randomSubset(imdsTest, pxdsTest, percentage);
+    % percentage of the total frames. The random subset of frames are 
+    % returned sorted, by sequence and filename/frame order
+    if dataPercentage < 1
+        [imdsTrain, pxdsTrain] = randomSubset(imdsTrain, pxdsTrain, dataPercentage);
+        [imdsTest, pxdsTest] = randomSubset(imdsTest, pxdsTest, dataPercentage);
     end
     
     % Calculate the class weights 

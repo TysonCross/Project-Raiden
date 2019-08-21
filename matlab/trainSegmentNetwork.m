@@ -1,9 +1,7 @@
 %% trainSegmentNetwork.m
 % This script implements data preperation, training and evaluation of 
 % various deep learning models, mainly using transfer learning on known
-% network topologys.
-%
-% ToDo(Tyson): Expand on the above as is required
+% semantic segmentation network topologies.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % prescript clean-up and reset:
@@ -24,10 +22,9 @@ networkType = 'deeplabv3';
 %}
 
 % Phases to run
-opt.forceConvert	= 1;	% resize/convert/process new data (slow)
-opt.preProcess     	= 1; 	% if true, median filter on input data
-opt.splitTestData 	= 1;	% re-split Test/Training data *
-opt.splitValData 	= 1;	% re-split Training/Validation data
+opt.forceConvert	= 0;	% resize/convert/process new data (slow)
+opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
+opt.splitData       = 1;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
 opt.useCachedNet   	= 0;   	% if false, generate new neural network
 opt.doTraining    	= 1;   	% if true, perform training
@@ -35,8 +32,8 @@ opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
 opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
 
 % Percentage of each sequence (strokes will not be culled)
-% (In order to take affect after a change, splitTestData must be enabled)
-opt.percentage    	= 0.25;	% only use a percentage of images
+% * In order to take affect after a change, splitData must be enabled
+opt.percentage = 0.50;      % only use a percentage of images
 
 % resolution setup
 imageSize = getResolution(networkType);
@@ -86,8 +83,8 @@ loadSequences;
 % Check if we need to convert any files
 opt.convertData = checkConversion(projectPath, imageSize, opt.forceConvert);
     
-if ( (opt.convertData==true) || (opt.forceConvert==true) )
-	convertData(projectPath, imageSize, opt.forceConvert, opt.preProcess)
+if ( opt.convertData==true || opt.forceConvert==true )
+	convertData(projectPath, cachePath, imageSize, opt.forceConvert, opt.preProcess)
 else
     fprintf('Loading image metadata from cache...')
 end
@@ -109,22 +106,22 @@ diary off; diary on;
 
 % Check to see if cache exists
 if (~exist(fullfile(cachePath,strcat('data','.mat')),'file') && ...
-        opt.splitTestData)
+        opt.splitData)
     
     cprintf([1,0.5,0],['Warning: No datastore cache found at: %s \n'...
         '(Training/Test data will be repartitioned) \n'], ...
         fullfile(cachePath,'data'));
 end
 
-if (opt.splitTestData==false && opt.percentage < 1)
-    cprintf([1,0.5,0], ['Warning: splitTestData is off. ', ...
+if (opt.splitData==false && opt.percentage < 1)
+    cprintf([1,0.5,0], ['Warning: splitData is off. ', ...
         'Randomized subset will not be re-selected. ' ...
-        'Enable ''splitTestData'' to force an update\n'])
+        'Enable ''splitData'' to force an update\n'])
 end
 
-if (opt.splitTestData==true  || opt.forceConvert)
+if (opt.splitData==true  || opt.forceConvert)
     splitTestPercent = 0.15;
-    splitTestData(resizedImageFolders, resizedLabelFolders, ...
+    splitTestData(resizedImageFolders, cachePath, resizedLabelFolders, ...
         splitTestPercent, opt.percentage);
 else
     fprintf('Loading datastores from cache...')
@@ -149,10 +146,12 @@ diary off; diary on;
 %% Training/Validation partition phase 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if (opt.splitValData==true || ~exist('imdsVal','var'))
+if (opt.splitData==true || ~exist('imdsVal','var'))
     disp("Splitting training/validation data...")
-    splitTrainingPercentage = 0.8;
-    splitValidationData(imdsTrain, pxdsTrain, splitTrainingPercentage);
+    splitTrainingPercentage = 0.80;
+    splitValidationData(imdsTrain, pxdsTrain, ...
+        splitTrainingPercentage, cachePath, ...
+        imdsTest, pxdsTest, labelWeights, labelTable);
 else
     fprintf('Loading training/validation-split from cache...')
 end
@@ -215,7 +214,7 @@ else
     end
 
     if (opt.useCachedNet==false)
-        createNetwork(networkType, cachePath, labelWeights);
+        createNetwork(networkType, cachePath, labelWeights, networkStatus);
         load(fullfile(cachePath,'network'));
     else
         fprintf('Loading Network from cache...')
@@ -250,11 +249,24 @@ if (opt.doTraining==true)
     checkpointsFolder = fullfile(projectPath,'networks','checkpoints');
     close all;
     
+    % Define augmenting methods
+    pixelRange = [-16 16];
+    scaleRange = [1 2.0];
+    augmenter = imageDataAugmenter( ...
+        'RandXReflection',true, ...
+        'RandXTranslation',pixelRange, ...
+        'RandYTranslation',pixelRange, ...
+        'RandXScale',scaleRange);
+
+    % Validation datastore
+    pximdsVal = pixelLabelImageDatastore(imdsVal,pxdsVal,...
+        'DataAugmentation', augmenter);
+    
     % Define training options.
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 30, ...  
-        'MiniBatchSize', 100, ...
+        'MiniBatchSize', 50, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-2, ... % from 1e-3
@@ -274,15 +286,18 @@ if (opt.doTraining==true)
     % display info
     cprintf([0.2,0.7,0], '\t\t      Training Options \n');
     disp(options);
-
-    pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain);
-
+    
+    % Training datastore
+    pximds = pixelLabelImageDatastore(imdsTrain,pxdsTrain,...
+        'DataAugmentation', augmenter);
+    
     % shuffle the data
+    pximdsVal = pximdsVal.shuffle;
     pximds = pximds.shuffle;
     
     % Clear memory
     clear numTestingImages numTrainingImages numValidationImages
-    clear inputLayer opt.convertData opt.forceConvert opt.splitTestData
+    clear inputLayer opt.convertData opt.forceConvert opt.splitData
     clear opt.fromCheckpoint opt.resplitValidation
     clear imdsTrain imdsVal pxdsTrain pxdsVal labelIDs labelIDs_scalar
     clear labelTable labelWeights network sequences

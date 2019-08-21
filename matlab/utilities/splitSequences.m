@@ -14,7 +14,7 @@ function[index1, index2] = splitSequences(imageFolders, splitPercent, ext)
         index2 = [];
         index1 = 1:length(imageFolders);
     elseif (splitPercent==1)
-        error('splitPercent = 1 means no images are used for training.')
+        error('splitPercent=1 means no images are used for training!')
     else
         numberOfSequences = length(imageFolders);
         sequenceLengths = zeros(1, numberOfSequences);
