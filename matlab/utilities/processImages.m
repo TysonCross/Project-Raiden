@@ -22,11 +22,16 @@ function imds = processImages(imds, imageSize, destinationPath, ...
     N = length(imds.Files);
     imageList = string(zeros(1,N));
     
+    x = imageSize(1);
+    y = imageSize(2);
+    
     if ~outerProgressBar
         rez = strcat(string(x),'x',string(y));
         str = char(strcat('Resizing images to ',{' '},rez));
         progressbar(str)
     end
+    
+ 
     
     if preProcess
         frameBlendNum = 2; % how many previous frames to blend
@@ -47,7 +52,6 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         frameBlendNum = 0;
     end
     
-    
     for r=1:N
         info = imds.Files(r);
         [~, filename] = fileparts(info{1});
@@ -55,8 +59,7 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         fullFile = fullfile(destinationPath,strcat(filename, ext));
         
         if (~exist(fullFile, 'file') || forceConvert)
-            if r > frameBlendNum && preProcess
-                
+            if r >  frameBlendNum  && preProcess
                 for ii = frameBlendNum:-1:0
                     im = imds.readimage(r - ii);
                     p{frameBlendNum-ii+1} = im2single(im(:,:,1));

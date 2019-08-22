@@ -1,19 +1,30 @@
 function segmentResults(networkFile, sequenceDir, outputDir, ...
-    doOverlay, doCompare, labelDir)
-    
-    progressbar('Total progress',[]);
-    
+  doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
+% function segmentResults(networkFile, sequenceDir, outputDir, ...
+% doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
+% once doPreprocessing is used change line 68 and 69 as well as the app
+% check app as well
+
+ext = '.png';
+
     load(networkFile);
-        if nargin == 3
+        if nargin == 3 
+            %doPreprocessing = true;
             doOverlay = false;
             doCompare = false;
             labelDir = '';
         elseif nargin == 4
+            %doPreprocessing = true;
+            %doOverlay = false;
             doCompare = false;
             labelDir = '';
-        elseif nargin ==5 
-            error(['All options and labelDir needs to be supplied if ', ...
-                'doCompare is requested'])
+        elseif nargin == 5
+            %doPreprocessing = true;
+            %doCompare = false;
+            labelDir = '';
+        elseif nargin ==6 
+            %error(['All options and labelDir needs to be supplied if ', ...
+            %    'doCompare is requested'])
         end
 
     if ~exist('net','var')
@@ -23,16 +34,21 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
             error('No network defined')
         end
     end
-
-    loadLabels;
+    
+    if exist('progressBarFigure', 'var')
+        progress = uiprogressdlg(progressBarFigure,'Title','Please Wait',...
+            'Message','Loading network');
+        loadLabels;
+    end
+    
     setupColors;
-    sz = net.Layers(1).InputSize(1:2);
+    imageSize = net.Layers(1).InputSize(1:2);
 
     %% Resize
     imds = imageDatastore(sequenceDir);
     originalSize = size(imds.readimage(1));
-
-    % Create output folders
+    destinationPath = fullfile(outputDir,'tmp','img');
+    
     if ~exist(fullfile(outputDir,'output'),'dir')
       mkdir(fullfile(outputDir,'output'));
     end
@@ -40,37 +56,48 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     if ~exist(fullfile(outputDir,'tmp'),'dir')
         mkdir(fullfile(outputDir,'tmp'))
     end
-    progressbar(0.1)
-    disp("Resizing images...")
-
-    y = sz(1);
-    x = sz(2);
-    rez = strcat(string(x),'x',string(y));
-    str = char(strcat('Resizing images to ',{' '},rez));
-    progressbar([],str)
-    forceConvert = true;
-    outerProgressBar = true;
-    imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img'), ...
-        forceConvert, outerProgressBar);
     
-    if doCompare
-        pxds = pixelLabelDatastore(labelDir,...
-        labelNames,labelIDs,'FileExtensions','.tif');
-        disp("Resizing labels and converting to categorical label form...")
-        str = char(strcat('Converting labels to ',{' '},rez));
-        progressbar([],str)
-        disp(str);
-        pxds = resizePixelLabels(pxds, sz, fullfile(outputDir, ...
-            'tmp','label'), forceConvert, outerProgressBar);
+    if exist('progressBarFigure', 'var')
+        progress.Value = .1;
+        progress.Message = 'Resizing images';
+        disp("Resizing images...")
     end
-    progressbar(0.2)
+    
+    y = imageSize(1);
+    x = imageSize(2);
+    rez = strcat(string(x),'x',string(y));
+    forceConvert = true;
+    outerProgressBar = false;
+    imds = processImages(imds, imageSize, destinationPath, ...
+    forceConvert, doPreprocessing , outerProgressBar);
+   
+    if doCompare
+        pxds = pixelLabelDatastore(labelDir, ...
+            labelNames, labelIDs, 'FileExtensions','.tif');
+        disp("Resizing labels and converting to categorical label form...")
+        
+        if exist('progressBarFigure', 'var')
+            progress.Value = .2;
+            progress.Message = 'Resizing Labels';
+        end
+        destinationPath = fullfile(outputDir,'tmp','label');
+        pxds = processPixelLabels(pxds, imageSize, destinationPath, ...
+                forceConvert, outerProgressBar);
+
+    end
 
     %% Segment data
+    if exist('progressBarFigure', 'var')
+        progress.Value = 0.3;
+        progress.Message = 'Segmenting images';
+    end
+    
     resultPixelLabels = semanticseg(imds, net, ...
             'MiniBatchSize', 1, ...
-            'WriteLocation', fullfile(outputDir, '/output'), ...
+            'WriteLocation', fullfile(outputDir, 'output'), ...
             'Verbose', true);
-    progressbar(0.4)
+    tempDS = imageDatastore(fullfile(outputDir, 'output')); 
+    
     if doCompare
          if ~exist(fullfile(outputDir,'comparison'),'dir')
             mkdir(fullfile(outputDir,'comparison'))
@@ -83,11 +110,17 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
             mkdir(fullfile(outputDir,'overlay'))
         end
     end
-
+    
+    if exist('progressBarFigure', 'var')
+        progress.Value = 0.7;
+        progress.Message = 'Reize output images';
+    end
+    
     for n = 1:length(imds.Files)
      [~,name,~] = fileparts(string(imds.Files(n)));
 
      I = readimage(imds,n);
+
         if doOverlay
             segImage = labeloverlay(I,resultPixelLabels.readimage(n), ...
                 'Colormap',cmap,'Transparency',0.4);
@@ -95,31 +128,44 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
             segImage = unit8(resultPixelLabels);
         end
 
+            splitName = split(name,'.');
+            insertLength = strlength(splitName(1));  % 21
+
         if doCompare
             numClasses = numel(labelNames);
             expectedResult = readimage(pxds,n);
-            actual = uint8(resultPixelLabels.readimage(n))*(255/numClasses);
-            expected = uint8(expectedResult)*(255/numClasses);
+            actual = uint8(resultPixelLabels.readimage(n));
+            expected = uint8(expectedResult);
+            %show diff only
+%             actual = uint8(resultPixelLabels.readimage(n));
+%             expected = uint8(expectedResult)
             diffImage = imfuse(actual, expected);
-            % ToDo: please make the '21' value programatic?
-            insertLength = 21;
-            str = strcat(outputDir,'/comparison/', ...
-                name.insertAfter(insertLength,'_comparison'), '.tif');
+            str = fullfile(outputDir,'comparison', ...
+                strcat(name.insertAfter(insertLength,'_comparison'), ext));
             outImage = imresize(diffImage,[originalSize(1) originalSize(2)]); 
             imwrite(outImage, str);
 
         end
+        
         outImage = imresize(segImage,[originalSize(1) originalSize(2)]);
-        % ToDo: please make the '21' value programatic?
-        insertLength = 21;
-        imwrite(outImage, strcat(outputDir,'/overlay/', ...
-            name.insertAfter(insertLength,'_out'),  '.tif'));
-        progressbar(0.80)
-
+        imwrite(outImage, fullfile(outputDir,'overlay', ...
+            strcat(name.insertAfter(insertLength,'_overlay'),  ext)));
+        
+        % Change name of ouput
+        outputName = fullfile(outputDir, 'output', ...
+            strcat(name.insertAfter(insertLength,'_output'),  ext));
+        
+        movefile(string(tempDS.Files(n)),outputName);
+       
     end
 
     fprintf('Cleaning up... \t ')
-    progressbar(0.9)
+    
+    if exist('progressBarFigure', 'var')
+        progress.Value = .9;
+        progress.Message = 'Cleaning up';
+    end
+
     if exist(fullfile(outputDir,'tmp'),'dir')
         [~, msg] = rmdir(fullfile(outputDir,'tmp'), 's');
         disp(msg);
@@ -128,11 +174,14 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     clear actual ans cmap diffImage expected expectedResult I ...
         imds info labelDir labelIDs labelIDs_scalar labelNames ...
         msg n name net numClasses originalSize outputImage ...
-        outputDir pxds resultPixelLabels segImage sequenceDir ...
+        outputDir pxds resultPixelLabels tempDS segImage sequenceDir ...
         status str sz outImage;
-    progressbar(0.999)
-    fprintf('Done \n')
-    progressbar(1);
-    msgbox('Operation Completed');
 
+    fprintf('Done \n')
+
+    if exist('progressBarFigure', 'var')
+        progress.Value = 1;
+        progress.Message = 'Completed';
+        close(progress);
+    end
 end
