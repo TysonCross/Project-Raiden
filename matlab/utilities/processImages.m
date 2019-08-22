@@ -22,6 +22,9 @@ function imds = processImages(imds, imageSize, destinationPath, ...
     N = length(imds.Files);
     imageList = string(zeros(1,N));
     
+    x = imageSize(1);
+    y = imageSize(2);
+    
     if ~outerProgressBar
         rez = strcat(string(x),'x',string(y));
         str = char(strcat('Resizing images to ',{' '},rez));

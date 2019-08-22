@@ -1,8 +1,8 @@
-function pxds = resizePixelLabels(pxds, imageSize, destinationPath, ...
+function pxds = processPixelLabels(pxds, imageSize, destinationPath, ...
     forceConvert, outerProgressBar, doBorders)
 % Resize pixel label data
 
-    if nargins == 5
+    if nargin == 5
         doBorders = false;
     elseif nargin == 4
         outerProgressBar = false;
