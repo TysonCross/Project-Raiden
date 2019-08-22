@@ -31,6 +31,8 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         progressbar(str)
     end
     
+ 
+    
     if preProcess
         frameBlendNum = 2; % how many previous frames to blend
         noiseThreshold =  0.01;
@@ -47,8 +49,9 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         else
             error('Error: Time denoising requires a minimum of %d images', frameBlendNum +1)
         end
+    else
+        frameBlendNum = 0;
     end
-    
     
     for r=1:N
         info = imds.Files(r);

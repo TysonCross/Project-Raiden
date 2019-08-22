@@ -4,6 +4,9 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
 % doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
 % once doPreprocessing is used change line 68 and 69 as well as the app
 % check app as well
+
+ext = '.png';
+
     load(networkFile);
         if nargin == 3 
             %doPreprocessing = true;
@@ -37,6 +40,7 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
             'Message','Loading network');
         loadLabels;
     end
+    
     setupColors;
     imageSize = net.Layers(1).InputSize(1:2);
 
@@ -64,15 +68,12 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     rez = strcat(string(x),'x',string(y));
     forceConvert = true;
     outerProgressBar = false;
-    
     imds = processImages(imds, imageSize, destinationPath, ...
     forceConvert, doPreprocessing , outerProgressBar);
    
     if doCompare
-        
-        
         pxds = pixelLabelDatastore(labelDir, ...
-        labelNames, labelIDs, 'FileExtensions','.tif');
+            labelNames, labelIDs, 'FileExtensions','.tif');
         disp("Resizing labels and converting to categorical label form...")
         
         if exist('progressBarFigure', 'var')
@@ -87,15 +88,16 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
 
     %% Segment data
     if exist('progressBarFigure', 'var')
-        progress.Value = .3;
+        progress.Value = 0.3;
         progress.Message = 'Segmenting images';
     end
     
     resultPixelLabels = semanticseg(imds, net, ...
             'MiniBatchSize', 1, ...
-            'WriteLocation', fullfile(outputDir, '/output'), ...
+            'WriteLocation', fullfile(outputDir, 'output'), ...
             'Verbose', true);
-    tempDS = imageDatastore(fullfile(outputDir, '/output')); 
+    tempDS = imageDatastore(fullfile(outputDir, 'output')); 
+    
     if doCompare
          if ~exist(fullfile(outputDir,'comparison'),'dir')
             mkdir(fullfile(outputDir,'comparison'))
@@ -110,7 +112,7 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     end
     
     if exist('progressBarFigure', 'var')
-        progress.Value = .7;
+        progress.Value = 0.7;
         progress.Message = 'Reize output images';
     end
     
@@ -126,6 +128,9 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
             segImage = unit8(resultPixelLabels);
         end
 
+            splitName = split(name,'.');
+            insertLength = strlength(splitName(1));  % 21
+
         if doCompare
             numClasses = numel(labelNames);
             expectedResult = readimage(pxds,n);
@@ -135,25 +140,22 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
 %             actual = uint8(resultPixelLabels.readimage(n));
 %             expected = uint8(expectedResult)
             diffImage = imfuse(actual, expected);
-            % ToDo: please make the '21' value programatic?
-            insertLength = 21;
-            str = strcat(outputDir,'/comparison/', ...
-                name.insertAfter(insertLength,'_comparison'), '.tif');
+            str = fullfile(outputDir,'comparison', ...
+                strcat(name.insertAfter(insertLength,'_comparison'), ext));
             outImage = imresize(diffImage,[originalSize(1) originalSize(2)]); 
             imwrite(outImage, str);
 
         end
+        
         outImage = imresize(segImage,[originalSize(1) originalSize(2)]);
-        % ToDo: please make the '21' value programatic?
-        insertLength = 21;
-        imwrite(outImage, strcat(outputDir,'/overlay/', ...
-            name.insertAfter(insertLength,'_out'),  '.tif'));
+        imwrite(outImage, fullfile(outputDir,'overlay', ...
+            strcat(name.insertAfter(insertLength,'_overlay'),  ext)));
+        
         % Change name of ouput
-
-        outputName = fullfile(outputDir, '/output', strcat(name,'.png'));
+        outputName = fullfile(outputDir, 'output', ...
+            strcat(name.insertAfter(insertLength,'_output'),  ext));
+        
         movefile(string(tempDS.Files(n)),outputName);
-        imwrite(I, strcat(outputDir,'/overlay/', ...
-        name.insertAfter(insertLength,'_out'),  '.tif'));
        
     end
 
