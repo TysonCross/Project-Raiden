@@ -12,51 +12,39 @@ function convertData(projectPath, cachePath, imageSize, forceConvert, preProcess
     resizedLabelFolders = fullfile(projectPath,'data','resized', ...
         rez, sequences,'label');
     
-    % create default datastores
+    %% create default datastores
     loadLabels;
     for i = 1:numel(imageFolders)
-        imds{i} = imageDatastore(imageFolders(i),...
+        imdsArray{i} = imageDatastore(imageFolders(i),...
             'FileExtensions','.tif');
-        pxds{i} = pixelLabelDatastore(maskFolders(i),...
+        pxdsArray{i} = pixelLabelDatastore(maskFolders(i),...
             labelNames, labelIDs,'FileExtensions','.tif');
     end
     
-    if preProcess
-        disp(['Preprocessing and resizing images & labels, ' ...
-            'converting labels RGB -> categorical ...'])
-
-        str = char(strcat('Processing images, resizing to ',{' '},rez));
-        progressbar('Processing image sequences',str)
-        outerProgressBar = true;
-        for j = 1:numel(imageFolders)
-            imds{j} = resizeProcessImages(imds{j}, imageSize, ...
-                resizedImageFolders{j}, forceConvert, outerProgressBar);
-            progressbar(j/numel(imageFolders),[])
-        end
-
-    else
-        disp("Resizing images & labels, converting labels RGB -> categorical ...")
-
-        str = char(strcat('Processing images, resizing to ',{' '},rez));
-        progressbar('Processing image sequences',str)
-        outerProgressBar = true;
-        for j = 1:numel(imageFolders)
-            imds{j} = resizeImages(imds{j}, imageSize, ...
-                resizedImageFolders{j}, forceConvert, outerProgressBar);
-            progressbar(j/numel(imageFolders),[])
-        end
+    %% Resize/process images
+    disp("Resizing images & labels, converting labels RGB -> categorical ...")
+    str = char(strcat('Processing images, resizing to ',{' '},rez));
+    progressbar('Processing image sequences',str)
+    outerProgressBar = true;
+        
+    for j = 1:numel(imageFolders)
+        imdsArray{j} = processImages(imdsArray{j}, imageSize, ...
+            resizedImageFolders{j}, forceConvert, preProcess, outerProgressBar);
+        progressbar(j/numel(imageFolders),[])
     end
     
+    %% Resize/process labels
     str = char(strcat('Converting labels to ',{' '},rez));
     progressbar('Resizing and converting label sequences',str)
     outerProgressBar = true;
     for j = 1:numel(imageFolders)
-        pxds{j} = resizePixelLabels(pxds{j}, imageSize, ...
+        pxdsArray{j} = resizePixelLabels(pxdsArray{j}, imageSize, ...
             resizedLabelFolders{j}, forceConvert, outerProgressBar);
         progressbar(j/numel(imageFolders),[])
     end
     progressbar(1)
 
+    %% Checks and hashfile
     converted = listConvertedSequences(projectPath, imageSize)';
     if numel(converted)~=numel(sequences)
         cprintf([1,0,0],'Conversion failed for sequences: /%s', ...

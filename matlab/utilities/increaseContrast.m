@@ -1,15 +1,6 @@
-function rgbFixed = increaseContrast(dimRGB)
-
-    % Extract the individual red, green, and blue color channels.
-    redChannel = dimRGB(:, :, 1);
-    greenChannel = dimRGB(:, :, 2);
-    blueChannel = dimRGB(:, :, 3);
+function grayCLAHE = increaseContrast(dimGray)
 
     % Apply Contrast-Limited Adaptive Histogram Equalization (CLAHE)
-    redCLAHE = adapthisteq(redChannel);
-    greenCLAHE = adapthisteq(greenChannel);
-    blueCLAHE = adapthisteq(blueChannel);
+    grayCLAHE = adapthisteq(dimGray);
 
-    % Reconstruct the RGB image
-    rgbFixed = cat(3, redCLAHE, greenCLAHE, blueCLAHE);
 end

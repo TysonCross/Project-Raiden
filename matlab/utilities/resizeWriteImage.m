@@ -1,6 +1,5 @@
 function resizeWriteImage(Im16, imageSize, destinationPath, ...
                             filename, ext, doBorders)
-    
     if nargin < 6
         doBorders = false;
     end
@@ -19,6 +18,9 @@ function resizeWriteImage(Im16, imageSize, destinationPath, ...
         I(:,end,:) = 0;
     end
 
+    % convert to 8-bit
+    I = im2uint8(I);
+    
     % Write image to disk.
     imwrite(I,fullfile(destinationPath,strcat(filename,ext)));
     
