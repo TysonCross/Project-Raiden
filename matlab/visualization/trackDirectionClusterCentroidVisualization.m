@@ -38,13 +38,16 @@ set(fig1,'defaultTextFontName', 'Roboto');                     % CMU Serif
 set(fig1, 'MenuBar', 'figure');
 set(fig1, 'ToolBar', 'figure');
 
+Pmain = gca;
+
 jj = frameStart;
 keepPlaying = true;
 
 while keepPlaying
-    Tmain = text(0.5,-0.1,strcat({'Frame: '},string(jj)),'FontSize',20,'HorizontalAlignment','center');
-    set(gca, 'visible', 0);
+%     set(gca, 'visible', 0);
+%     P1 = sgtitle(strcat({'Frame: '},string(jj)));
 
+    
     % Get the name of the image the user wants to use.
     folder = '/home/tyson/Raiden/networks/output/test_deeplabv3_256x256_2019-08-18_121943/2017-11-22_144155_010/output';
     filename = sprintf('pixelLabel.%03d.png',jj);
@@ -85,7 +88,6 @@ while keepPlaying
     maskedImage = immultiply(maskedImage,groundImage);
     assert(min(size(maskedImage)==size(labelImage))==1);
     [x_max, y_max] = size(maskedImage);
-
     
 %% PLOT 
 
@@ -93,11 +95,11 @@ while keepPlaying
     sp1 = subplot_tight(2, 5, 1);
     cla;
     imshow(origImage);
-    p1 = gca;
+%     p1 = gca;
     box on
-%     if ~exist('t1')
-        t1 = title('Input Image');
-%     end
+%     title(sp1, 'Input Image');
+%     set(get(gca, 'title'), 'string', "Input Image");
+    sp1.Title.String = 'Input Image';
     hold off
     
     % plot labels
@@ -107,11 +109,12 @@ while keepPlaying
     segImage = labeloverlay(origImage,labelImage, ...
                 'Colormap',cmap,'Transparency',0.4);
     imshow(segImage);
-    p2 = gca;
+%     p2 = gca;
     box on
-%     if ~exist('t2')
-        t2 = title('Output Label');
-%     end
+%     title(sp2, 'Output Label');
+%     set(sp2, 'title');
+    sp2.Title.String = 'Output Label';
+
     hold off
     
     % show masked image
@@ -121,10 +124,9 @@ while keepPlaying
 %     xlim([0 x_max-1])
 %     ylim([0 y_max-1])
 %     axis on image;
-    p3 = gca;
-%     if ~exist('t3')
-        t3 = title('Binary mask','fontsize',fontSize);
-%     end
+%     title(sp3, 'Binary mask');
+%     set(get(gca, 'title'), 'string', 'Binary mask');
+    sp3.Title.String = 'Binary mask';
     hold off
 
     % convert to points
@@ -155,9 +157,9 @@ while keepPlaying
     xticks([0 128 255]);
     yticks([0 128 255]);
     box on
-%     if ~exist('t4')
-        t4 = title('Image as points','fontsize',fontSize);
-%     end
+%     title(sp4, 'Image as points');
+%     set(get(gca, 'title'), 'string', 'Image as points');
+    sp4.Title.String = 'Image as points';
     hold off
 
     % choose minimum cluster size
@@ -191,20 +193,20 @@ while keepPlaying
         % plot clusters
         sp5 = subplot_tight(2, 5, 7);
         plot_clusters = gscatter(pointImage(:,1),pointImage(:,2),idx);
-        sp5.Legend.Visible = 'off'
+        sp5.Legend.Visible = 'off';
         axis on image;
         set(gca, 'YDir','reverse');
         xlim([0 255]);
         ylim([0 255]);
         hFig=findall(0,'type','figure');
         hLeg=findobj(hFig(1,1),'type','legend');
-        set(hLeg,'visible','off')
+        set(hLeg,'visible','off');
         xticks([0 128 255]);
         yticks([0 128 255]);
         box on
-%         if ~exist('t5')
-            t5 = title(strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts)));
-%         end
+%         title(sp5, strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts)));
+%         set(get(gca, 'title'), 'string', strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts)));
+        sp5.Title.String =  strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts));
         hold off
 
 
@@ -253,10 +255,10 @@ while keepPlaying
         yticks([0 128 255]);
         box on
         hold off
-%         if ~exist('t6')
-            t6 = title(strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']'),'FontSize',12);
-%         end
-        hold off
+%         title(sp6, strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']'));
+%         set(get(gca, 'title'), 'string', strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']'));
+        sp6.Title.String =  strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']');
+hold off
         
         % plot centroids
         sp7 = subplot_tight(2, 5, [4, 5, 9, 10] );
@@ -264,14 +266,14 @@ while keepPlaying
 %         hold on
 %         cla;
         plot_reconstructed = imshow(1-reconstructedImage,[]);
-        set(gca, 'YDir','reverse')
+        set(gca, 'YDir','reverse');
         xlim([0 255]);
         ylim([0 255]);
         xticks([0 128 255]);
         yticks([0 128 255]);
-%         if ~exist('t7')
-            t7 = title('Reconstructed Image','fontsize',fontSize);
-%         end
+%         title(sp7, 'Reconstructed Image');
+%         set(get(gca, 'title'), 'string', 'Reconstructed Image');
+        sp7.Title.String = 'Reconstructed Image';
         hold on
         offset = [6 0];
         for kk=2:size(centroidMarker,1)
@@ -319,6 +321,7 @@ while keepPlaying
                 plot_clusters(ii).Color = [0.5 0.5 0.5 0.5];
 %             end
         end
+        sp5.Title.String = "Cluster observation skipped";
         legend('hide');
         hold off
         
@@ -336,16 +339,18 @@ while keepPlaying
 %         if exist('plot_centroid.MarkerFaceColor','var')
             plot_centroid.MarkerFaceColor  = [0.18 0.18 0.18];
 %         end
-        title(sp5, "Cluster observation skipped");
+%         set(get(sp6, 'title'), 'string', "Cluster observation skipped");
+        sp6.Title.String = "Cluster observation skipped";
         hold off
     end
-   
+       
     if jj < frameEnd
         jj = jj + 1;
     else
-%         clf;
+        
+        clf;
 %         pause(0.5);
-        clearvars -except jj frameStart frameEnd keepPlaying fig1 fontSize origOffset plot_clusters plot_clusters
+        clearvars -except jj frameStart frameEnd keepPlaying fig1 fontSize origOffset plot_clusters plot_clusters Pmain
         jj = frameStart;
     end
     
@@ -356,6 +361,13 @@ while keepPlaying
     plot_reduced.HandleVisibility = 'off';
     drawnow limitrate;                                      % draw graph
     clf;
+%     set(get(gca, 'title'), 'string', "");
+%     set(get(gca, 'title'), 'string', "");
+%     set(get(gca, 'title'), 'string', "");
+%     set(get(gca, 'title'), 'string', "");
+%     set(get(gca, 'title'), 'string', "");
+    sp5.Title.String =  " ";
+    sp6.Title.String =  " ";
     if exist('sp7','var')&& ishghandle(fig1)
         sp5.HandleVisibility = 'on';
         sp6.HandleVisibility = 'on';
