@@ -1,17 +1,22 @@
 function segmentResults(networkFile, sequenceDir, outputDir, ...
-    doOverlay, doCompare, labelDir)
+    doPreprocessing, doOverlay, doCompare, labelDir)
     
-    progressbar('Total progress',[]);
+    progressbar('Total progress','Resize');
     
     load(networkFile);
         if nargin == 3
+            doPreprocessing = true;
             doOverlay = false;
             doCompare = false;
             labelDir = '';
         elseif nargin == 4
+            doOverlay = false;
             doCompare = false;
             labelDir = '';
-        elseif nargin ==5 
+        elseif nargin == 5
+            doCompare = false;
+            labelDir = '';
+        elseif nargin ==6 
             error(['All options and labelDir needs to be supplied if ', ...
                 'doCompare is requested'])
         end
@@ -47,18 +52,22 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     x = sz(2);
     rez = strcat(string(x),'x',string(y));
     str = char(strcat('Resizing images to ',{' '},rez));
-    progressbar([],str)
+    %progressbar([],str)
     forceConvert = true;
     outerProgressBar = true;
+
     imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img'), ...
-        forceConvert, outerProgressBar);
+    forceConvert, outerProgressBar);
+%     imds = resizeImages(imds, sz, fullfile(outputDir,'tmp','img'), ...
+%     forceConvert, doPreprocessing, outerProgressBar);
+
     
     if doCompare
         pxds = pixelLabelDatastore(labelDir,...
         labelNames,labelIDs,'FileExtensions','.tif');
         disp("Resizing labels and converting to categorical label form...")
         str = char(strcat('Converting labels to ',{' '},rez));
-        progressbar([],str)
+        %progressbar([],str)
         disp(str);
         pxds = resizePixelLabels(pxds, sz, fullfile(outputDir, ...
             'tmp','label'), forceConvert, outerProgressBar);
