@@ -38,7 +38,7 @@ function convertData(projectPath, cachePath, imageSize, forceConvert, preProcess
     progressbar('Resizing and converting label sequences',str)
     outerProgressBar = true;
     for j = 1:numel(imageFolders)
-        pxdsArray{j} = resizePixelLabels(pxdsArray{j}, imageSize, ...
+        pxdsArray{j} = processPixelLabels(pxdsArray{j}, imageSize, ...
             resizedLabelFolders{j}, forceConvert, outerProgressBar);
         progressbar(j/numel(imageFolders),[])
     end

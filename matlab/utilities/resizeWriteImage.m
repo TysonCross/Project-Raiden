@@ -18,7 +18,7 @@ function resizeWriteImage(Im16, imageSize, destinationPath, ...
         I(:,end,:) = 0;
     end
 
-    % convert to 8-bit
+    % convert to 8-bit :(
     I = im2uint8(I);
     
     % Write image to disk.

@@ -31,7 +31,6 @@ function imds = processImages(imds, imageSize, destinationPath, ...
     if preProcess
         frameBlendNum = 2; % how many previous frames to blend
         noiseThreshold =  0.01;
-%         darkThreshold = 0.01;
     
         if N > frameBlendNum + 1
             info = imds.Files(1);
@@ -44,6 +43,8 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         else
             error('Error: Time denoising requires a minimum of %d images', frameBlendNum +1)
         end
+    else
+        frameBlendNum = 0;
     end
     
     
@@ -55,11 +56,14 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         
         if (~exist(fullFile, 'file') || forceConvert)
             if r > frameBlendNum && preProcess
+                
                 for ii = frameBlendNum:-1:0
                     im = imds.readimage(r - ii);
                     p{frameBlendNum-ii+1} = im2single(im(:,:,1));
                 end
-                % images are single precison and 1 channel until after processing
+                
+                % Images are single precison
+                % Images are processed as 1 channel until after processing
 
                 % make frame buffer matrix
                 buffer = cat(frameBlendNum+1, p{:});
