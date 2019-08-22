@@ -59,26 +59,23 @@ function imds = resizeProcessImages(imds, imageSize, destinationPath, ...
                 a = ones(size(buffer)); 
                 a(buffer(:,:,1:frameBlendNum)<threshold)=0;
           
-                % Rebuild frame(s) w/o past frame brightness:
+                % Rebuild frame(s) w/o the past frames brightness:
                 % Zero out bright values below threshold in past frames
-                % and replace only these pixels with the current frame pixel values
+                % and replace only these pixels with the current frame 
+                % pixel values. This is a binary compositing operation
+                % which replaced bright "background" (from the past) with the 
+                % current "foreground" pixel values. This mitigates strokes 
+                % and leaders from the past appearing in the current frame.
                 buffer = buffer.*a + ...
                     repmat(buffer(:,:,end), ...
                     [ones(1,frameBlendNum) frameBlendNum+1]).*(1-a);
                 
                 % Combine buffers, preserving current frame max brightness:
-                Im16 = im2uint16(max(mean(buffer,frameBlendNum+1), ...
-                    buffer(:,:,end)));
+                Im16 = max(mean(buffer,frameBlendNum+1), ...
+                    buffer(:,:,end));
+                
                 Im16 = cat(3,Im16,Im16,Im16);
-
-                % Testing: to remove
-%                 ImOrig = imds.readimage(r);
-%                 ImOrig = ImOrig(:,:,1);
-%                 close all;
-%                 figure(1)
-%                 imshowpair(ImOrig, Im16,'montage')
-%                 figure(2)
-%                 imshowpair(ImOrig, Im16,'diff')
+                
             else
                 Im16 = imds.readimage(r);
             end

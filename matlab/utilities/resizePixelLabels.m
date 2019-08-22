@@ -1,12 +1,16 @@
 function pxds = resizePixelLabels(pxds, imageSize, destinationPath, ...
-    forceConvert, outerProgressBar)
+    forceConvert, outerProgressBar, doBorders)
 % Resize pixel label data
 
-    if nargin == 4
+    if nargins == 5
+        doBorders = false;
+    elseif nargin == 4
         outerProgressBar = false;
-    elseif nargin == 3
+        doBorders = false;
+    elseif nargin== 3
         forceConvert = false;
         outerProgressBar = false;
+        doBorders = false;
     end
 
     if ~exist(destinationPath,'dir')
@@ -46,11 +50,13 @@ function pxds = resizePixelLabels(pxds, imageSize, destinationPath, ...
                 % Resize the data using 'nearest' interpolation to preserve labelIDs.
                 L = imresize(L,[y x],'nearest');
                 
-                %Create empty border
-                I(1,:,:) = 0;
-                I(end,:,:) = 0;
-                I(:,1,:) = 0;
-                I(:,end,:) = 0;
+                if doBorders
+                    %Create empty border
+                    I(1,:,:) = 0;
+                    I(end,:,:) = 0;
+                    I(:,1,:) = 0;
+                    I(:,end,:) = 0;
+                end
                 
                 % Write the data to disk.
                 imwrite(L,fullfile(destinationPath,strcat(filename,ext)));
