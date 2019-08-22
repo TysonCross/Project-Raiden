@@ -57,7 +57,7 @@ function imds = processImages(imds, imageSize, destinationPath, ...
         fullFile = fullfile(destinationPath,strcat(filename, ext));
         
         if (~exist(fullFile, 'file') || forceConvert)
-            if r > frameBlendNum && preProcess
+            if r >  frameBlendNum  && preProcess
                 for ii = frameBlendNum:-1:0
                     im = imds.readimage(r - ii);
                     p{frameBlendNum-ii+1} = im2single(im(:,:,1));

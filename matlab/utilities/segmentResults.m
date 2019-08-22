@@ -71,8 +71,8 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     if doCompare
         
         
-        pxds = pixelLabelDatastore(labelDir,...
-        labelNames,labelIDs,'FileExtensions','.tif');
+        pxds = pixelLabelDatastore(labelDir, ...
+        labelNames, labelIDs, 'FileExtensions','.tif');
         disp("Resizing labels and converting to categorical label form...")
         
         if exist('progressBarFigure', 'var')
@@ -95,6 +95,7 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
             'MiniBatchSize', 1, ...
             'WriteLocation', fullfile(outputDir, '/output'), ...
             'Verbose', true);
+    tempDS = imageDatastore(fullfile(outputDir, '/output')); 
     if doCompare
          if ~exist(fullfile(outputDir,'comparison'),'dir')
             mkdir(fullfile(outputDir,'comparison'))
@@ -117,6 +118,7 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
      [~,name,~] = fileparts(string(imds.Files(n)));
 
      I = readimage(imds,n);
+
         if doOverlay
             segImage = labeloverlay(I,resultPixelLabels.readimage(n), ...
                 'Colormap',cmap,'Transparency',0.4);
@@ -127,8 +129,11 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
         if doCompare
             numClasses = numel(labelNames);
             expectedResult = readimage(pxds,n);
-            actual = uint8(resultPixelLabels.readimage(n))*(255/numClasses);
-            expected = uint8(expectedResult)*(255/numClasses);
+            actual = uint8(resultPixelLabels.readimage(n));
+            expected = uint8(expectedResult);
+            %show diff only
+%             actual = uint8(resultPixelLabels.readimage(n));
+%             expected = uint8(expectedResult)
             diffImage = imfuse(actual, expected);
             % ToDo: please make the '21' value programatic?
             insertLength = 21;
@@ -143,7 +148,13 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
         insertLength = 21;
         imwrite(outImage, strcat(outputDir,'/overlay/', ...
             name.insertAfter(insertLength,'_out'),  '.tif'));
+        % Change name of ouput
 
+        outputName = fullfile(outputDir, '/output', strcat(name,'.png'));
+        movefile(string(tempDS.Files(n)),outputName);
+        imwrite(I, strcat(outputDir,'/overlay/', ...
+        name.insertAfter(insertLength,'_out'),  '.tif'));
+       
     end
 
     fprintf('Cleaning up... \t ')
@@ -161,7 +172,7 @@ function segmentResults(networkFile, sequenceDir, outputDir, ...
     clear actual ans cmap diffImage expected expectedResult I ...
         imds info labelDir labelIDs labelIDs_scalar labelNames ...
         msg n name net numClasses originalSize outputImage ...
-        outputDir pxds resultPixelLabels segImage sequenceDir ...
+        outputDir pxds resultPixelLabels tempDS segImage sequenceDir ...
         status str sz outImage;
 
     fprintf('Done \n')
