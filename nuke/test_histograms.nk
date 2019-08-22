@@ -1,0 +1,164 @@
+#! /usr/local/Nuke11.3v4/libnuke-11.3.4.so -nx
+version 11.3 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="67" y="27" w="2493" h="1023" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="608" stretch="1"/>
+            <splitter orientation="2">
+                <split size="487"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+                <split size="486"/>
+                <dock id="" activePageId="Viewer.2">
+                    <page id="Viewer.2"/>
+                </dock>
+            </splitter>
+            <split size="1837"/>
+            <dock id="" activePageId="DAG.1">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/test_histograms.nk"
+ frame 4920
+ last_frame 10000
+ lock_range true
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-14_202834/2017-11-14_202834_010/tif/2017-11-14_202834_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 586
+ before loop
+ last 607
+ after loop
+ origfirst 586
+ origlast 607
+ origset true
+ name Read3
+ xpos -249
+ ypos -367
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-24_162501/2017-11-24_162501_010/tif/2017-11-24_162501_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 602
+ before loop
+ last 951
+ after loop
+ origfirst 602
+ origlast 951
+ origset true
+ name Read4
+ selected true
+ xpos -80
+ ypos -373
+}
+set N87d02f0 [stack 0]
+Dot {
+ name Dot1
+ xpos -358
+ ypos -167
+}
+set N109b1c80 [stack 0]
+Expression {
+ temp_name0 threshold
+ temp_expr0 0.01
+ channel0 rgb
+ expr0 " r > threshold ? 0:r"
+ channel1 {-rgba.red rgba.green -rgba.blue none}
+ channel2 {-rgba.red -rgba.green rgba.blue none}
+ expr3 "r > threshold ? 0 : 1"
+ name Expression6
+ xpos -392
+ ypos -84
+ cached true
+}
+set N87fbcc0 [stack 0]
+Histogram {
+ name Histogram1
+ xpos -392
+ ypos -60
+}
+push $N109b1c80
+Viewer {
+ inputs 2
+ frame 4920
+ frame_range 1-10000
+ gain 30
+ name Viewer1
+ xpos -40
+ ypos -9
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-02-10_162903/2017-02-10_162903_010/tif/2017-02-10_162903_010.########.tif
+ format "512 256 0 0 512 256 1 "
+ first 159
+ last 481
+ after loop
+ origfirst 159
+ origlast 481
+ origset true
+ name Read2
+ xpos -412
+ ypos -377
+}
+push $N109b1c80
+Histogram {
+ name Histogram2
+ xpos -464
+ ypos -170
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-09-25_183210/2017-09-25_183210_010/tif/2017-09-25_183210_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 2993
+ before loop
+ last 9070
+ after loop
+ origfirst 2993
+ origlast 9070
+ origset true
+ name Read1
+ xpos -579
+ ypos -374
+}
+push $N87fbcc0
+push $N87d02f0
+Viewer {
+ inputs 2
+ frame 4920
+ frame_range 1-10000
+ input_number 1
+ gain 64
+ name Viewer2
+ xpos -323
+ ypos -432
+}
