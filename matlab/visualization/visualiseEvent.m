@@ -1,24 +1,18 @@
-% ToDo(Tyson) please change the function name or the script name to match
-% CREATEVOLUME.M
-% strokeArray = createVolume(imdsInput, imdsLabel, chosenLabel)
-% The function creates 
-%
-%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function strokeArray = createVolume(imdsInput, imdsLabel, chosenLabel)
-    for i=1:imdsInput
-        inputImage = imdsInput.readimage(i);
-        maskImage = imdsLabel.readimage(i);
-        maskImage = maskImage==chosenLabel;
-        maskedRgbImage = bsxfun(@times, inputImage, cast(maskImage, 'like', inputImage));
-        strokeArray{i} = maskedRgbImage(:,:,1);
-    %     imwrite(maskedRgbImage, [num2str(i) '.png']);
+function strokeArray = visualiseEvent(imds, pxds, ...
+    chosenLabel, frameRange)
+
+    for i=frameRange
+        inputImage = im2uint8(imds.readimage(i));
+        maskImage = uint8(pxds.readimage(i));
+        maskImage(maskImage~=chosenLabel) = 0;
+        inputImage = inputImage(:,:,1);
+        maskedRgbImage = inputImage .* maskImage;
+%         maskedRgbImage = bsxfun(@times, inputImage, cast(maskImage, 'like', inputImage));
+        vol(:,:,i) = maskedRgbImage(:,:,1);
     end
 
     method = 'bicubic';
-
+    
+    view([45 30]); 
     vis3D(vol, method);
 end
