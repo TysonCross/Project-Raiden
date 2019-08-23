@@ -9,10 +9,8 @@ clc;
 close all;
 
 fontSize = 14;
-% frameStart = 3;
-% frameEnd = 38;
-frameStart = 29;
-frameEnd = 33;
+frameStart = 3;
+frameEnd = 38;
 
 origOffset = 3466;
 
@@ -26,8 +24,6 @@ b = scr(4) - h/2;
 
 pos = [l b w h];
 fig1 =  figure('Position', pos);                               % draw figure
-%     [scr(1)/2 scr(4)*1.78 scr(3)*1.78 scr(4)*1.78]);
-% fig1 = figure('Position',[27,131,1661,785]);
 set(fig1,'numbertitle','off',...                            % Give figure useful title
     'name','ELEN3012 Lightning Direction (DBScan clustering)')
 set(fig1, 'MenuBar', 'none');                               % Make figure clean
@@ -40,13 +36,11 @@ set(fig1, 'ToolBar', 'figure');
 
 Pmain = gca;
 
+k=1;
 jj = frameStart;
 keepPlaying = true;
 
 while keepPlaying
-%     set(gca, 'visible', 0);
-%     P1 = sgtitle(strcat({'Frame: '},string(jj)));
-
     
     % Get the name of the image the user wants to use.
     folder = '/home/tyson/Raiden/networks/output/test_deeplabv3_256x256_2019-08-18_121943/2017-11-22_144155_010/output';
@@ -56,7 +50,7 @@ while keepPlaying
     origFolder = ('/home/tyson/Raiden/data/resized/256x256/2017-11-22_144155/2017-11-22_144155_010/image/');
     origFile = sprintf('2017-11-22_144155_010.%08d.png',jj+origOffset);
     origFileName = fullfile(origFolder,origFile);
-
+    
     % [filename, folder] = uigetfile({'*.jpg';'*.bmp'},'Select image');
     labelImage = imread(fullFileName);
     origImage = imread(origFileName);
@@ -89,45 +83,37 @@ while keepPlaying
     assert(min(size(maskedImage)==size(labelImage))==1);
     [x_max, y_max] = size(maskedImage);
     
-%% PLOT 
-
-    % plot results
+%% PLOT
+    
+%% INPUT
+    % plot input
     sp1 = subplot_tight(2, 5, 1);
     cla;
     imshow(origImage);
-%     p1 = gca;
     box on
-%     title(sp1, 'Input Image');
-%     set(get(gca, 'title'), 'string', "Input Image");
     sp1.Title.String = 'Input Image';
     hold off
     
-    % plot labels
+%% LABELS
     sp2 = subplot_tight(2, 5, 2);
     cla;
     setupColors;
     segImage = labeloverlay(origImage,labelImage, ...
-                'Colormap',cmap,'Transparency',0.4);
+        'Colormap',cmap,'Transparency',0.4);
     imshow(segImage);
-%     p2 = gca;
     box on
-%     title(sp2, 'Output Label');
-%     set(sp2, 'title');
     sp2.Title.String = 'Output Label';
-
+    
     hold off
     
-    % show masked image
-    sp3 = subplot_tight(2, 5, 3); 
-%     cla;
+%% BINARY MASK
+    sp3 = subplot_tight(2, 5, 3);
+    %     cla;
     plot_input = imshow(maskedImage,[]);
-%     xlim([0 x_max-1])
-%     ylim([0 y_max-1])
-%     axis on image;
-%     title(sp3, 'Binary mask');
-%     set(get(gca, 'title'), 'string', 'Binary mask');
     sp3.Title.String = 'Binary mask';
     hold off
+    
+%% POINTS
 
     % convert to points
     clear X;
@@ -142,7 +128,7 @@ while keepPlaying
             end
         end
     end
-
+    
     % plot points
     sp4 = subplot_tight(2, 5, 6);
     if numel(pointImage)>0
@@ -157,14 +143,14 @@ while keepPlaying
     xticks([0 128 255]);
     yticks([0 128 255]);
     box on
-%     title(sp4, 'Image as points');
-%     set(get(gca, 'title'), 'string', 'Image as points');
     sp4.Title.String = 'Image as points';
     hold off
-
+    
+%% CLUSTER SETUP
+    
     % choose minimum cluster size
     minpts = min(round(sqrt(x_max)),4);
-
+    
     % choose radius about centre
     epsilon = 10;
     if numel(pointImage)>0
@@ -190,6 +176,8 @@ while keepPlaying
         pointImage(~corepts,:)=[];
         idx(~corepts)=[];
 
+        %% CLUSTERS
+ 
         % plot clusters
         sp5 = subplot_tight(2, 5, 7);
         plot_clusters = gscatter(pointImage(:,1),pointImage(:,2),idx);
@@ -204,45 +192,29 @@ while keepPlaying
         xticks([0 128 255]);
         yticks([0 128 255]);
         box on
-%         title(sp5, strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts)));
-%         set(get(gca, 'title'), 'string', strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts)));
         sp5.Title.String =  strcat({'epsilon = '},string(epsilon),{' and minpts = '},string(minpts));
         hold off
-
-
-        % Find Centroids:
+        
+        %% Find Centroids:
         ia = unique(idx);
         numClusters = numel(ia);
-
-%       % Weighted cluster initialise:
-%         clusters{numClusters} = [];
-%         clusterCounts(numClusters) = 0;
-%         clusterCentres{numClusters} = [x_max/2 y_max/2];
-%         clusterWeights(numClusters) = 0;
-%         weightedCentre = [0 0];
-
+        
         for ii=1:numClusters
             clusters{ii} = pointImage(idx==ii,:);
             clusterCounts(ii) = size(pointImage(idx==ii,:),1);
             clusterCentres{ii} = mean(clusters{ii});
             clusterWeights(ii) = clusterCounts(ii)/size(pointImage,1);
         end
-
-        % Weighting for all clusters
-%         for ii=1:numClusters
-%             weightedCentre =  weightedCentre + (clusterWeights(ii) .* clusterCentres{ii});
-%         end
-%         weightedCentre = round(weightedCentre);
         
         % Just choose the largest cluster
         [maximum, index] = max(clusterCounts);
         weightedCentre = round(clusterCentres{index});
-
+        
         centroidMarker(jj,:) = weightedCentre;
         pointImage =  clusters{index};
         hold off
         
-        % plot reduced clusters
+        %% plot reduced clusters
         sp6 = subplot_tight(2, 5, 8);
         plot_reduced = scatter(pointImage(:,1),pointImage(:,2));
         hold on
@@ -255,24 +227,17 @@ while keepPlaying
         yticks([0 128 255]);
         box on
         hold off
-%         title(sp6, strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']'));
-%         set(get(gca, 'title'), 'string', strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']'));
         sp6.Title.String =  strcat({'Weighted centroid = ['},string(weightedCentre(1)),{' '}, string(weightedCentre(2)),']');
-hold off
+        hold off
         
-        % plot centroids
+        %% plot centroids
         sp7 = subplot_tight(2, 5, [4, 5, 9, 10] );
-%         scatter(centroidMarker(:,1),centroidMarker(:,2),50)
-%         hold on
-%         cla;
         plot_reconstructed = imshow(1-reconstructedImage,[]);
         set(gca, 'YDir','reverse');
         xlim([0 255]);
         ylim([0 255]);
         xticks([0 128 255]);
         yticks([0 128 255]);
-%         title(sp7, 'Reconstructed Image');
-%         set(get(gca, 'title'), 'string', 'Reconstructed Image');
         sp7.Title.String = 'Reconstructed Image';
         hold on
         offset = [6 0];
@@ -314,60 +279,42 @@ hold off
         assert(max(size(maskedImage)-size(reconstructedImage))==0)
         
     else
-%         sp5 = subplot(2, 5, 7);
         set(sp5,'Color',[0.5 0.5 0.5 0.5]);
         for ii=1:numel(plot_clusters)
-%             if exist('plot_clusters(ii).Color','var')
-                plot_clusters(ii).Color = [0.5 0.5 0.5 0.5];
-%             end
+            plot_clusters(ii).Color = [0.5 0.5 0.5 0.5];
         end
         sp5.Title.String = "Cluster observation skipped";
         legend('hide');
         hold off
         
-%        sp6 = subplot(2, 5, 8);
         set(sp6,'Color',[0.5 0.5 0.5 0.5]);
         if exist('plot_reduced','var')
             plot_reduced.MarkerFaceColor = [0.5 0.5 0.5];
             plot_reduced.MarkerEdgeAlpha = 0;
-            %             for ii=1:numel(plot_reduced)
-            %                 if exist('plot_reduced(ii).MarkerFaceColor')
-            %                     plot_reduced(ii).MarkerFaceColor  = [0.5 0.5 0.5];
-            %                     plot_reduced(ii).MarkerEdgeColor  = [0.5 0.5 0.5];
-            %                 end
         end
-%         if exist('plot_centroid.MarkerFaceColor','var')
-            plot_centroid.MarkerFaceColor  = [0.18 0.18 0.18];
-%         end
-%         set(get(sp6, 'title'), 'string', "Cluster observation skipped");
+        plot_centroid.MarkerFaceColor  = [0.18 0.18 0.18];
+        
         sp6.Title.String = "Cluster observation skipped";
         hold off
     end
-       
-    if jj < frameEnd
-        jj = jj + 1;
-    else
-        
-        clf;
-%         pause(0.5);
-        clearvars -except jj frameStart frameEnd keepPlaying fig1 fontSize origOffset plot_clusters plot_clusters Pmain
-        jj = frameStart;
-    end
     
-%%% Display Plot
+    %% Display control
     sp5.HandleVisibility = 'off';
     sp6.HandleVisibility = 'off';
     sp7.HandleVisibility = 'off';
     plot_reduced.HandleVisibility = 'off';
-    drawnow limitrate;                                      % draw graph
-    clf;
-%     set(get(gca, 'title'), 'string', "");
-%     set(get(gca, 'title'), 'string', "");
-%     set(get(gca, 'title'), 'string', "");
-%     set(get(gca, 'title'), 'string', "");
-%     set(get(gca, 'title'), 'string', "");
+    if k == 2
+        folderOut = '~/Desktop/cluster_video';
+        fileNameOut = sprintf('cluster_analysis.%04d.png',jj+origOffset);
+        if ~exist('folderOut','dir')
+            mkdir(folderOut)
+        end
+            export_fig(fig1, fullfile(folderOut,fileNameOut));
+    end
+    drawnow limitrate;                                      % draw graph    
     sp5.Title.String =  " ";
     sp6.Title.String =  " ";
+    clf;
     if exist('sp7','var')&& ishghandle(fig1)
         sp5.HandleVisibility = 'on';
         sp6.HandleVisibility = 'on';
@@ -375,34 +322,19 @@ hold off
         plot_reduced.HandleVisibility = 'on';
     end
 
-%     delete([t1 t2 t3 t4 t5 t6 t7]);
-%     arrayfun(@cla,findall(0,'type','axes'));
-%     if exist('sp1')
-%         delete(sp1);
-%     end
-%     if exist('sp2')
-%         delete(sp2);
-%     end
-%     if exist('sp2')
-%         delete(sp2);
-%     end
-%     if exist('sp2')
-%         delete(sp2);
-%     end
-%     if exist('sp2')
-%         delete(sp2);
-%     end
-%     if exist('sp2')
-%         delete(sp2);
-%     end
-%     if exist('sp2')
-%         delete(sp2);
-%     end
+    if jj < frameEnd
+        jj = jj + 1;
+    elseif jj==frameEnd
+        k = k + 1;
+        clf;
+%         pause(0.5);
+        clearvars -except jj k frameStart frameEnd keepPlaying fig1 fontSize origOffset plot_clusters plot_clusters Pmain
+        jj = frameStart;
+    end
+    
     if ~ishghandle(fig1)                                    % break if figure window closed
         keepPlaying = false;
         break
     end
 end
 close all
-
-

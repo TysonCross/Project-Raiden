@@ -33,7 +33,7 @@ opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
 
 % Percentage of each sequence (strokes will not be culled)
 % * In order to take affect after a change, splitData must be enabled
-opt.percentage = 0.50;      % only use a percentage of images
+opt.percentage = 0.80;      % only use a percentage of images
 
 % resolution setup
 imageSize = getResolution(networkType);
@@ -339,7 +339,7 @@ if (networkStatus.trained && opt.evaluateNet)
     cprintf([0,0.5,1], '\n================ Evaluation =================\n');
     
     outputDir = fullfile(projectPath,"networks","output",networkStatus.name)
-    metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest);
+    metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest, net);
     
     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
     disp(metrics.DataSetMetrics); disp(' ');
@@ -361,7 +361,8 @@ if (opt.archiveNet)
    cprintf([0,0.5,1], '\n=============== Archive Data ================\n');
 
    fprintf('Saving data, please wait...')
-   currentFileName = strcat(mfilename('fullpath'),'.m');
+%    currentFileName = strcat(mfilename('fullpath'),'.m');
+currentFileName = fullfile(scriptPath,'trainSegmentNetwork.m');
    if exist(currentFileName,'file')
         foldername = fullfile(projectPath,"networks","cache", ...
             networkStatus.name);
