@@ -333,17 +333,27 @@ if (networkStatus.trained==0 && opt.evaluateNet)
                 'requested, but the network has not been trained yet!', ...
                 ' Please enable ''doTraining'' if you want to train ', ...
                 'a network \n'])
-end
-
-if (networkStatus.trained && opt.evaluateNet)
+            
+elseif (networkStatus.trained && opt.evaluateNet)
     cprintf([0,0.5,1], '\n================ Evaluation =================\n');
     
-    outputDir = fullfile(projectPath,"networks","output",networkStatus.name)
-    metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest, net);
-    
-    cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
-    disp(metrics.DataSetMetrics); disp(' ');
-    disp(metrics.ClassMetrics); disp(' ');
+    outputDir = fullfile(projectPath,"networks","output",networkStatus.name);
+    %metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest, net);
+    networkFile = fullfile(cachePath,'network');
+    sequenceDir = imdsTest;
+    outputPath = outputDir;
+    doPreprocessing = true;
+    doOverlay = true;
+    doCompare = true;
+    labelDir = pxdsTest;
+    isSeqPXDS = true;
+    metrics = segmentResults(networkFile, sequenceDir, outputPath, ...
+        doPreprocessing, doOverlay, doCompare, labelDir, isSeqPXDS);
+    clear networkFile sequenceDir outputPath  isSeqPXDS ...
+        doPreprocessing doOverlay doCompare labelDir progressBarFigure;
+%     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
+%     disp(metrics.DataSetMetrics); disp(' ');
+%     disp(metrics.ClassMetrics); disp(' ');
     
     save(fullfile(cachePath,'network'), ...
         'net','networkStatus','imageSize','metrics');
