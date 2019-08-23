@@ -50,8 +50,7 @@ if ~isempty(candidateEvents)
             subIMDS = imds.subset(indices);
             dir = directionFromClusters(subIMDS);
             eventsCellArray(i).direction = dir;
-            %eventsCellArray(i).strokes = num2cell(findStokeEvents(subEventDS),2);
-
+            eventsCellArray(i).strokes = num2cell(findStokeEvents(subEventDS),2);
         end
     end
 else
