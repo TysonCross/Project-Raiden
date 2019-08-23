@@ -1,4 +1,4 @@
-function metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest)
+function metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest, net)
 
     if ~exist(outputDir,'dir')
         mkdir(outputDir)
