@@ -1,5 +1,6 @@
-function segmentResults(networkFile, sequenceDir, outputPath, ...
-  doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
+function outputMetrics = segmentResults(networkFile, sequences, outputPath, ...
+  doPreprocessing, doOverlay, doCompare, labels, isDsPassed, progressBarFigure)
+
 ext = '.png';
 
     load(networkFile);
@@ -10,24 +11,22 @@ ext = '.png';
         outputDir = fullfile(outputPath,networkStatus.name, ...
             strcat('trainingEvaluation_',string(i)));
     end
-        if nargin == 3 
-            %doPreprocessing = true;
-            doOverlay = false;
-            doCompare = false;
-            labelDir = '';
-        elseif nargin == 4
-            %doPreprocessing = true;
-            %doOverlay = false;
-            doCompare = false;
-            labelDir = '';
-        elseif nargin == 5
-            %doPreprocessing = true;
-            %doCompare = false;
-            labelDir = '';
-        elseif nargin ==6 
-            %error(['All options and labelDir needs to be supplied if ', ...
-            %    'doCompare is requested'])
-        end
+    
+    if nargin == 6
+         error('Compare set but no label directory specified')
+    elseif nargin == 5
+        doCompare = false;
+        labels = '';
+    elseif nargin == 4
+        doOverlay = false;
+        doCompare = false;
+        labels = '';
+    elseif nargin == 3
+        doPreprocessing = true;
+        doOverlay = false;
+        doCompare = false;
+        labels = '';
+    end
 
     if ~exist('net','var')
         if exist('lgraph','var')
@@ -47,7 +46,12 @@ ext = '.png';
     imageSize = net.Layers(1).InputSize(1:2);
 
     %% Resize
-    imds = imageDatastore(sequenceDir);
+    if isDsPassed
+       imds = sequences;
+    else
+        imds = imageDatastore(sequences);
+    end
+    
     originalSize = size(imds.readimage(1));
     destinationPath = fullfile(tempdir,'img');
     
@@ -74,8 +78,12 @@ ext = '.png';
     forceConvert, doPreprocessing , outerProgressBar);
    
     if doCompare
-        pxds = pixelLabelDatastore(labelDir, ...
+        if isDsPassed
+            pxds = labels;
+        else
+            pxds = pixelLabelDatastore(labels, ...
             labelNames, labelIDs, 'FileExtensions','.tif');
+        end
         disp("Resizing labels and converting to categorical label form...")
         
         if exist('progressBarFigure', 'var')
@@ -178,17 +186,22 @@ ext = '.png';
             analysisDir = fullfile(outputDir,'analysis');
             mkdir(analysisDir)
             save(fullfile(analysisDir, 'events' ),"eventsCellArray")
-            %metrics
+            % metrics
             if doCompare % require a pxds 
+                cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
                 save(fullfile(analysisDir, 'outputMetrics' ),"metrics")
-                writetable(metrics.NormalizedConfusionMatrix, ...
+                writetable(outputMetrics.NormalizedConfusionMatrix, ...
                     fullfile(analysisDir,'NormalizedConfusionMatrix.txt'));
-                writetable(metrics.DataSetMetrics, ...
+                disp(outputMetrics.NormalizedConfusionMatrix); disp(' ');
+                writetable(outputMetrics.DataSetMetrics, ...
                     fullfile(analysisDir,'DataSetMetrics.txt'));
-                writetable(metrics.ClassMetrics, ...
+                disp(outputMetrics.DataSetMetrics); disp(' ');
+                writetable(outputMetrics.ClassMetrics, ...
                     fullfile(analysisDir,'ClassMetrics'));
-                %writetable(metrics.ImageMetrics, ...
+                disp(outputMetrics.ClassMetrics); disp(' ');
+                % writetable(metrics.ImageMetrics, ...
                 %   fullfile(analysisDir,'ImageMetrics.txt'));
+                % disp(metrics.ImageMetrics); disp(' ');
             end
     %% Clean up
     fprintf('Cleaning up... \t ')
