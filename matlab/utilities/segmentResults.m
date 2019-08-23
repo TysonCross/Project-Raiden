@@ -1,4 +1,4 @@
-function segmentResults(networkFile, sequenceDir, outputDir, ...
+function metrics = segmentResults(networkFile, sequenceDir, outputDir, ...
   doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
 % function segmentResults(networkFile, sequenceDir, outputDir, ...
 % doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
@@ -139,7 +139,7 @@ ext = '.png';
             %show diff only
 %             actual = uint8(resultPixelLabels.readimage(n));
 %             expected = uint8(expectedResult)
-            diffImage = imfuse(actual, expected);
+            diffImage = imfuse(actual, expected, 'diff');
             str = fullfile(outputDir,'comparison', ...
                 strcat(name.insertAfter(insertLength,'_comparison'), ext));
             outImage = imresize(diffImage,[originalSize(1) originalSize(2)]); 
@@ -158,7 +158,13 @@ ext = '.png';
         movefile(string(tempDS.Files(n)),outputName);
        
     end
-
+    
+    pxdsResults = pixelLabelDatastore(fullfile(outputDir, ...
+        '/output'),labelNames,labelIDs_scalar);
+    
+     metrics = evaluateSemanticSegmentation(pxdsResults, pxds, ...
+        'Verbose',false);
+    
     fprintf('Cleaning up... \t ')
     
     if exist('progressBarFigure', 'var')
