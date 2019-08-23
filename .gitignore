@@ -765,3 +765,6 @@ pathdef.m
 
 # logs
 logs/**
+
+# video edting
+/OpenDay/**
