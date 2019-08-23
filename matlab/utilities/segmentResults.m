@@ -1,5 +1,6 @@
 function outputMetrics = segmentResults(networkFile, sequences, outputPath, ...
-  doPreprocessing, doOverlay, doCompare, labels, isDsPassed, progressBarFigure)
+  doPreprocessing, doOverlay, doCompare, labels, batchSize, isDsPassed, ...
+  progressBarFigure)
 
 ext = '.png';
 
@@ -11,17 +12,27 @@ ext = '.png';
         outputDir = fullfile(outputPath,networkStatus.name, ...
             strcat('trainingEvaluation_',string(i)));
     end
-    
-    if nargin == 6
+    if nargin == 8
+        isDsPassed = false;
+    elseif nargin == 7
+         isDsPassed = false;
+         batchSize = 1;
+    elseif nargin == 6
          error('Compare set but no label directory specified')
     elseif nargin == 5
+         isDsPassed = false;
+         batchSize = 1;
         doCompare = false;
         labels = '';
     elseif nargin == 4
+         isDsPassed = false;
+         batchSize = 1;
         doOverlay = false;
         doCompare = false;
         labels = '';
     elseif nargin == 3
+         isDsPassed = false;
+         batchSize = 1;
         doPreprocessing = true;
         doOverlay = false;
         doCompare = false;
@@ -104,7 +115,7 @@ ext = '.png';
     end
     
     resultPixelLabels = semanticseg(imds, net, ...
-            'MiniBatchSize', 1, ...
+            'MiniBatchSize', batchSize, ...
             'WriteLocation', fullfile(outputDir, 'output'), ...
             'Verbose', true);
     tempDS = imageDatastore(fullfile(outputDir, 'output')); 
