@@ -347,8 +347,9 @@ elseif (networkStatus.trained && opt.evaluateNet)
     doCompare = true;
     labelDir = pxdsTest;
     isSeqPXDS = true;
+    batchSize = 16;
     metrics = segmentResults(networkFile, sequenceDir, outputPath, ...
-        doPreprocessing, doOverlay, doCompare, labelDir, isSeqPXDS);
+        doPreprocessing, doOverlay, doCompare, labelDir, batchSize, isSeqPXDS);
     clear networkFile sequenceDir outputPath  isSeqPXDS ...
         doPreprocessing doOverlay doCompare labelDir progressBarFigure;
 %     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
