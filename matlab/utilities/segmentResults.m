@@ -1,8 +1,15 @@
-function segmentResults(networkFile, sequenceDir, outputDir, ...
+function segmentResults(networkFile, sequenceDir, outputPath, ...
   doPreprocessing, doOverlay, doCompare, labelDir, progressBarFigure)
 ext = '.png';
 
     load(networkFile);
+    outputDir = fullfile(outputPath,networkStatus.name,'trainingEvaluation');
+    i=0;
+    while exist(outputDir, 'dir')
+        i=i+1;
+        outputDir = fullfile(outputPath,networkStatus.name, ...
+            strcat('trainingEvaluation_',string(i)));
+    end
         if nargin == 3 
             %doPreprocessing = true;
             doOverlay = false;
