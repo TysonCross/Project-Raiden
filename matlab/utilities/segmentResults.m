@@ -69,6 +69,11 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         mkdir(overlayDir)
     end
 
+    outputTempDir = fullfile(tempOutputPathBase,'output');
+    if ~exist(outputTempDir,'dir')
+        mkdir(outputTempDir)
+    end
+    
     outputDir = fullfile(outputPath,'output');
     if ~exist(outputDir,'dir')
         mkdir(outputDir);
@@ -107,6 +112,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         imds = processImages(imdsInput, imageSize, tempOutputPath, forceConvert, doPreprocessing , outerProgressBar);
         clear sizeImds sequences imageFolders labelFolders
         clear newHash hashString outerProgressBar forceConvert imdsInput
+        clear tempOutputPath
     end
 
     if doCompare
@@ -127,7 +133,8 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             tempOutputPath = fullfile(tempOutputPathBase,'label');
             outerProgressBar = false;
             pxds = processPixelLabels(pxdsMasks, imageSize, tempOutputPath, forceConvert, outerProgressBar);
-            clear outerProgressBar forceConvert
+            clear outerProgressBar forceConvert tempOutputPath
+
         end
     else
         metrics = 'No Metrics evaluated. Please specify ''doCompare''';
@@ -142,15 +149,49 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         progress.Value = 0.3;
         progress.Message = 'Segmenting images';
     end
-
-    resultPixelLabels = semanticseg(imds, net, ...
+    
+    pxdsResults = semanticseg(imds, net, ...
         'MiniBatchSize', batchSize, ...
-        'WriteLocation', outputDir, ...
+        'WriteLocation', outputTempDir, ...
         'Verbose', false);
-    tempOutputNames = imageDatastore(outputDir);
 
     fprintf('Done \n');
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Evaluate and count/classify events
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % find and classify events
+    fprintf('Analyzing and classifying events... \t');
+    
+    % collect output
+    outputData = imageDatastore(outputTempDir);
+    eventsCellArray = createEvents(outputData);                 %#ok<NASGU>
+
+    % Export the classifications
+    save(fullfile(analysisDir, 'events' ), 'eventsCellArray')
+    fprintf('Done \n');
+
+    % Evaluate the performance metrics
+    if doCompare
+        metrics = evaluateSemanticSegmentation(pxdsResults, pxds, ...
+            'Verbose',false);
+
+        save(fullfile(analysisDir, 'metrics' ),'metrics')
+        writetable(metrics.DataSetMetrics, fullfile(analysisDir,'DataSetMetrics.txt'));
+        writetable(metrics.ClassMetrics, fullfile(analysisDir,'ClassMetrics'));
+
+        cprintf([0.2,0.7,0],'\n\t\t\t\t Evaluation metrics\n\n');
+        disp(metrics.DataSetMetrics); disp(' ');
+        disp(metrics.ClassMetrics); disp(' ');
+    else
+        metrics = 'No Evaluation performed. Enable doCompare.';
+    end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Resize and output images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     if exist('progressBarFigure', 'var')
         progress.Value = 0.7;
         progress.Message = 'Resize output images';
@@ -160,7 +201,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     for n = 1:numel(imds.Files)
 
         I = imds.readimage(n);
-        labelIm = resultPixelLabels.readimage(n);
+        labelIm = pxdsResults.readimage(n);
 
         [~,name] = fileparts(string(imds.Files(n)));
         splitName = split(name,'.');
@@ -185,53 +226,12 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %             imwrite(diffImage, str);
 %         end
 
-        % Change name of ouput
-        outputName = fullfile(outputDir, strcat(name.insertAfter(insertLength,'_output'), ext));
-%         movefile(string(tempOutputNames.Files(n)), outputName);
-        cmd = char(strcat({'mv "'},string(tempOutputNames.Files(n)), {'" "'}, outputName,{'"'}));
-        if unix(cmd)
-            error('Error attempting to rename %s to %s',string(tempOutputNames.Files(n)), outputName);
-        end 
+        % resize output, write to folder
+        outImage = imresize(uint8(labelIm),[originalSize(1) originalSize(2)], 'nearest');
+        imwrite(outImage, fullfile(outputDir, strcat(name.insertAfter(insertLength,'_output'),  ext)));
     end
     fprintf('Done \n');
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Evaluate and count/classify events
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % prepare input for segmentation
-    pxdsResults = pixelLabelDatastore(outputDir, labelNames, labelIDs_scalar);
-
-    % collect output
-    outputData = imageDatastore(outputDir);
-
-    % find and classify events
-    fprintf('Analyzing and classifying events... \t');
-    eventsCellArray = createEvents(outputData);                %#ok<NASGU>
-
-    % Export the classifications
-    save(fullfile(analysisDir, 'events' ), 'eventsCellArray')
-    fprintf('Done \n');
-
-    % Evaluate the performance metrics
-    if doCompare
-        metrics = evaluateSemanticSegmentation(pxdsResults, pxds, ...
-            'Verbose',false);
-
-        save(fullfile(analysisDir, 'metrics' ),'metrics')
-        writetable(metrics.DataSetMetrics, fullfile(analysisDir,'DataSetMetrics.txt'));
-        writetable(metrics.ClassMetrics, fullfile(analysisDir,'ClassMetrics'));
-        % writetable(metrics.NormalizedConfusionMatrix, fullfile(analysisDir,'NormalizedConfusionMatrix.txt'));
-        % writetable(outputMetrics.ImageMetrics, fullfile(analysisDir,'ImageMetrics.txt'));
-
-        cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
-%         disp(metrics.NormalizedConfusionMatrix); disp(' ');
-        disp(metrics.DataSetMetrics); disp(' ');
-        disp(metrics.ClassMetrics); disp(' ');
-    else
-        metrics = 'No Evaluation performed. Enable doCompare.';
-    end
-
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Clean up
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -242,10 +242,10 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         progress.Message = 'Cleaning up';
     end
 
-    [~, msg] = rmdir(fullfile(tempOutputPathBase, 'img'),'s');
-    disp(msg);
-    [~, msg] = rmdir(fullfile(tempOutputPathBase, 'label'),'s');
-    disp(msg);
+    [status, msg] = rmdir(tempOutputPathBase,'s');
+    if ~status 
+        fprintf('\n%s',msg);
+    end
 
     %     clear actual ans cmap diffImage expected expectedResult I ...
     %         imds info labelDir labelIDs labelIDs_scalar labelNames ...
