@@ -1,7 +1,10 @@
 function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     doPreprocessing, doOverlay, doCompare, labelObject, batchSize, fromTraining, ...
     progressBarFigure)
-
+    if exist('progressBarFigure', 'var')
+        progress = uiprogressdlg(progressBarFigure,'Title','Performing Segmentation',...
+        'Message','Starting');
+    end
     if nargin == 8
         fromTraining = false;
     elseif nargin == 7
@@ -104,7 +107,8 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 
         forceConvert = true;
         outerProgressBar = false;
-        imds = processImages(imdsInput, imageSize, tempOutputPath, forceConvert, doPreprocessing , outerProgressBar);
+        imds = processImages(imdsInput, imageSize, tempOutputPath, ...
+            forceConvert, doPreprocessing , outerProgressBar);
         clear sizeImds sequences imageFolders labelFolders
         clear newHash hashString outerProgressBar forceConvert imdsInput
     end
@@ -122,7 +126,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             if exist('progressBarFigure', 'var')
                 progress.Value = 0.2;
             end
-
+            forceConvert = true;
             % resize labels to match network input (save into temp folder)
             tempOutputPath = fullfile(tempOutputPathBase,'label');
             outerProgressBar = false;
@@ -136,13 +140,12 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Segment data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+    disp(size(imds.readimage(1)))
     fprintf('Performing segmentation... \t');
     if exist('progressBarFigure', 'var')
         progress.Value = 0.3;
         progress.Message = 'Segmenting images';
     end
-
     resultPixelLabels = semanticseg(imds, net, ...
         'MiniBatchSize', batchSize, ...
         'WriteLocation', outputDir, ...
@@ -242,9 +245,9 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         progress.Message = 'Cleaning up';
     end
 
-    [~, msg] = rmdir(fullfile(tempOutputPathBase, 'img'),'s');
-    disp(msg);
-    [~, msg] = rmdir(fullfile(tempOutputPathBase, 'label'),'s');
+%     [~, msg] = rmdir(fullfile(tempOutputPathBase, 'img'),'s');
+%     disp(msg);
+    [~, msg] = rmdir(fullfile(tempOutputPathBase),'s');
     disp(msg);
 
     %     clear actual ans cmap diffImage expected expectedResult I ...
