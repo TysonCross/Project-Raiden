@@ -40,8 +40,7 @@ if ~isempty(candidateEvents)
             earlyFrames = round((eventsCellArray(i).start + ...
                 eventsCellArray(i).duration)/2);
             subIMDS = imds.subset(eventsCellArray(i).start:earlyFrames);
-            [~,dir] = directionFromClusters(subIMDS);
-            eventsCellArray(i).direction = dir;
+            eventsCellArray(i).direction = directionFromClusters(subIMDS);
         else
             eventsCellArray(i).type = 'Attachment event';
 
@@ -50,7 +49,7 @@ if ~isempty(candidateEvents)
             subIMDS = imds.subset(indices);
             dir = directionFromClusters(subIMDS);
             eventsCellArray(i).direction = dir;
-            eventsCellArray(i).strokes = num2cell(findStokeEvents(subEventDS),2);
+%             eventsCellArray(i).strokes = num2cell(findStokeEvents(subEventDS),2);
         end
     end
 else

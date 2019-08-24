@@ -4,10 +4,7 @@ function [dir, dirVector] =  directionFromClusters(imds)
 % The clusters are chosen using the DBSCAN algorithm
 %
 % INPUT:
-%ToDo: This description is no longer valid
-%        filePath: The filepath for full events segmented images to use
-%        frameStart: The determined start of a lighting event
-%        frameLength: The number of frames to consider as part of the classifiable event
+%        imds: an image datastore of input images (the label predictions)
 % OUTPUT:
 %        dir: a string indicating the direction of the resultant vector
 %        dirVector: the resultant vector from the delta of the centroids

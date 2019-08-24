@@ -22,14 +22,14 @@ networkType = 'deeplabv3';
 %}
 
 % Phases to run
-opt.forceConvert	= 1;	% resize/convert/process new data (slow)
-opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
-opt.splitData       = 1;	% re-split Test/Training/Validation data *
+opt.forceConvert	= 0;	% resize/convert/process new data (slow)
+opt.preProcess     	= 0; 	% if true, apply time-denoising on input data
+opt.splitData       = 0;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
-opt.useCachedNet   	= 0;   	% if false, generate new neural network
-opt.doTraining    	= 1;   	% if true, perform training
+opt.useCachedNet   	= 1;   	% if false, generate new neural network
+opt.doTraining    	= 0;   	% if true, perform training
 opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
-opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
+opt.archiveNet     	= 0;   	% archive NN, data and figures to subfolder
 
 % Percentage of each sequence (strokes will not be culled)
 % * In order to take affect after a change, splitData must be enabled
@@ -223,7 +223,6 @@ else
         networkStatus.name = updatedNetName;
         clear updatedNetName
         
-%         disp('Updating network name...')
         save(fullfile(cachePath,'network'),...
         'net','networkStatus','imageSize');
         fprintf('\t Done \n');
@@ -317,7 +316,7 @@ if (opt.doTraining==true)
     
     % clear out checkpoints
     delete(fullfile(checkpointPath,'net_checkpoint_*.mat'));
-
+false
 else
     cprintf([1,0.5,0],'Warning: Training skipped by user request \n')
 end
@@ -337,24 +336,17 @@ if (networkStatus.trained==0 && opt.evaluateNet)
 elseif (networkStatus.trained && opt.evaluateNet)
     cprintf([0,0.5,1], '\n================ Evaluation =================\n');
     
-    outputDir = fullfile(projectPath,"networks","output",networkStatus.name);
-    %metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest, net);
     networkFile = fullfile(cachePath,'network');
-    sequenceDir = imdsTest;
-    outputPath = outputDir;
+    outputPath = fullfile(projectPath,'networks','output',networkStatus.name);
     doPreprocessing = true;
-    doOverlay = true;
+    doOverlay = false;
     doCompare = true;
-    labelDir = pxdsTest;
-    isSeqPXDS = true;
-    batchSize = 16;
-    metrics = segmentResults(networkFile, sequenceDir, outputPath, ...
-        doPreprocessing, doOverlay, doCompare, labelDir, batchSize, isSeqPXDS);
+    fromTraining = true;
+    batchSize = 32;
+    metrics = segmentResults(networkFile, imdsTest, outputPath, ...
+        doPreprocessing, doOverlay, doCompare, pxdsTest, batchSize, fromTraining);
     clear networkFile sequenceDir outputPath  isSeqPXDS ...
         doPreprocessing doOverlay doCompare labelDir progressBarFigure;
-%     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
-%     disp(metrics.DataSetMetrics); disp(' ');
-%     disp(metrics.ClassMetrics); disp(' ');
     
     save(fullfile(cachePath,'network'), ...
         'net','networkStatus','imageSize','metrics');
