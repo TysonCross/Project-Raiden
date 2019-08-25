@@ -42,7 +42,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     imageSize = net.Layers(1).InputSize(1:2);
 
     % setup temp folder
-    hashString = strcat(datestr(datetime('now'),networkStatus.name));
+    hashString = strcat(datestr(datetime('now')),networkStatus.name);
     newHash = cellfun(@(s)s(1:6),cellstr(mlreportgen.utils.hash(hashString)),'uni',0);
     tempOutputPathBase = fullfile(tempdir,strcat(networkStatus.name,'_',newHash));
 

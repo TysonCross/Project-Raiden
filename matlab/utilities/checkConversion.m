@@ -1,4 +1,4 @@
-function doConvertData = checkConversion(projectPath, imageSize, forceConvert)
+function doConvertData = checkConversion(projectPath, cachePath, imageSize, forceConvert)
 if (forceConvert==false)
 %     disp('Checking sequences...')
     
@@ -8,8 +8,8 @@ if (forceConvert==false)
     rez = strcat(string(x),'x',string(y));
     
     % hashCheck:
-    if (exist(fullfile(projectPath,'data','resized',rez,...
-            'fingerprint.mat'),'file')) ...
+    if exist(fullfile(projectPath,'data','resized',rez,...
+            'fingerprint.mat'),'file') ...
 
         hashString = strcat(sequences{:},rez);
         newHash = mlreportgen.utils.hash(hashString);
@@ -58,4 +58,12 @@ else
     doConvertData = true;
 end
 
+% check if the resolution of the cache on disk is different from the
+% network to be trained
+if exist(fullfile(cachePath,'metadata.mat'),'file')
+    oldRez = load(fullfile(cachePath,'metadata'),'rez');
+    if oldRez.rez ~= rez
+        doConvertData = true;
+    end
+end
 end

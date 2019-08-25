@@ -86,7 +86,7 @@ disp("Setting up Network...")
 
 %             clear lgraph layers pretrainedNet
 
-
+%{
         case 'vgg16'
             net = vgg16;
             layersTransfer = net.Layers(1:end-3);
@@ -128,7 +128,9 @@ disp("Setting up Network...")
             newLayer = fullyConnectedLayer(numClasses, ...
                 'Name','fc_new', ...
                 'WeightLearnRateFactor',1, ...
-                'BiasLearnRateFactor',1);       
+                'BiasLearnRateFactor',1);
+%             avgPoolLayer = averagePooling2dLayer([8 8],"Name","avg_pool1","Stride",[3 3]);
+%             lgraph = replaceLayer(lgraph,'avg_pool',avgPoolLayer);
             lgraph = replaceLayer(lgraph,...
                 'predictions',newLayer);
             lgraph = replaceLayer(lgraph, ...
@@ -140,6 +142,7 @@ disp("Setting up Network...")
 %             layers(1:end-3) = freezeWeights(layers(1:end-3));
 %             lgraph = createLgraphUsingConnections(layers,connections);
             net = lgraph;
+%}
 
 %             clear layers connections lgraph newLayer
 

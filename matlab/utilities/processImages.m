@@ -24,14 +24,12 @@ function imds = processImages(imds, imageSize, destinationPath, ...
     
     x = imageSize(1);
     y = imageSize(2);
-    
+    rez = strcat(string(x),'x',string(y));
+
     if ~outerProgressBar
-        rez = strcat(string(x),'x',string(y));
         str = char(strcat('Resizing images to ',{' '},rez));
         progressbar(str)
     end
-    
- 
     
     if preProcess
         frameBlendNum = 2; % how many previous frames to blend

@@ -11,25 +11,26 @@ setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 clc; clearvars;
 
 %% SETUP
-networkType = 'deeplabv3';
+networkType = 'u-net';
 
 %{
     Network choices are:
     'fcn8s' (batch size ~10)
-    'alexnet' (batchsize ~100)
-    'deeplabv3' (batchsize ~100)
+    'alexnet' (batchsize ~100) 
+    'deeplabv3' (batchsize ~100) (trained with full/latest dataset)
     'segnet' (batchsize ~20)
+    'u-net' (batchsize ~30)
 %}
 
 % Phases to run
 opt.forceConvert	= 0;	% resize/convert/process new data (slow)
-opt.preProcess     	= 0; 	% if true, apply time-denoising on input data
-opt.splitData       = 0;	% re-split Test/Training/Validation data *
+opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
+opt.splitData       = 1;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
-opt.useCachedNet   	= 1;   	% if false, generate new neural network
-opt.doTraining    	= 0;   	% if true, perform training
+opt.useCachedNet   	= 0;   	% if false, generate new neural network
+opt.doTraining    	= 1;   	% if true, perform training
 opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
-opt.archiveNet     	= 0;   	% archive NN, data and figures to subfolder
+opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
 
 % Percentage of each sequence (strokes will not be culled)
 % * In order to take affect after a change, splitData must be enabled
@@ -81,7 +82,7 @@ loadLabels;
 loadSequences;
 
 % Check if we need to convert any files
-opt.convertData = checkConversion(projectPath, imageSize, opt.forceConvert);
+opt.convertData = checkConversion(projectPath, cachePath, imageSize, opt.forceConvert);
     
 if ( opt.convertData==true || opt.forceConvert==true )
 	convertData(projectPath, cachePath, imageSize, opt.forceConvert, opt.preProcess)
@@ -265,7 +266,7 @@ if (opt.doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 20, ...  
-        'MiniBatchSize', 80, ...
+        'MiniBatchSize', 10, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
         'InitialLearnRate',1e-3, ... % from 1e-3
@@ -339,7 +340,7 @@ elseif (networkStatus.trained && opt.evaluateNet)
     networkFile = fullfile(cachePath,'network');
     outputPath = fullfile(projectPath,'networks','output',networkStatus.name);
     doPreprocessing = true;
-    doOverlay = false;
+    doOverlay = true;
     doCompare = true;
     fromTraining = true;
     batchSize = 32;
