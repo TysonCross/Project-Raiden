@@ -1,7 +1,10 @@
 function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     doPreprocessing, doOverlay, doCompare, labelObject, batchSize, fromTraining, ...
     progressBarFigure)
-
+    if exist('progressBarFigure', 'var')
+        progress = uiprogressdlg(progressBarFigure,'Title','Performing Segmentation',...
+        'Message','Starting');
+    end
     if nargin == 8
         fromTraining = false;
     elseif nargin == 7
@@ -69,9 +72,9 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         mkdir(overlayDir)
     end
 
-    outputTempDir = fullfile(tempOutputPathBase,'output');
-    if ~exist(outputTempDir,'dir')
-        mkdir(outputTempDir)
+    tempOutputDir = fullfile(tempOutputPathBase,'output');
+    if ~exist(tempOutputDir,'dir')
+        mkdir(tempOutputDir);
     end
     
     outputDir = fullfile(outputPath,'output');
@@ -109,7 +112,8 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 
         forceConvert = true;
         outerProgressBar = false;
-        imds = processImages(imdsInput, imageSize, tempOutputPath, forceConvert, doPreprocessing , outerProgressBar);
+        imds = processImages(imdsInput, imageSize, tempOutputPath, ...
+            forceConvert, doPreprocessing , outerProgressBar);
         clear sizeImds sequences imageFolders labelFolders
         clear newHash hashString outerProgressBar forceConvert imdsInput
         clear tempOutputPath
@@ -128,7 +132,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             if exist('progressBarFigure', 'var')
                 progress.Value = 0.2;
             end
-
+            forceConvert = true;
             % resize labels to match network input (save into temp folder)
             tempOutputPath = fullfile(tempOutputPathBase,'label');
             outerProgressBar = false;
@@ -143,17 +147,17 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Segment data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+    disp(size(imds.readimage(1)))
     fprintf('Performing segmentation... \t');
     if exist('progressBarFigure', 'var')
         progress.Value = 0.3;
         progress.Message = 'Segmenting images';
     end
-    
-    pxdsResults = semanticseg(imds, net, ...
+    resultPixelLabels = semanticseg(imds, net, ...
         'MiniBatchSize', batchSize, ...
-        'WriteLocation', outputTempDir, ...
-        'Verbose', false);
+        'WriteLocation', tempOutputDir, ...
+        'Verbose', true);
+    tempOutputNames = imageDatastore(tempOutputDir);
 
     fprintf('Done \n');
 
@@ -226,9 +230,15 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %             imwrite(diffImage, str);
 %         end
 
-        % resize output, write to folder
-        outImage = imresize(uint8(labelIm),[originalSize(1) originalSize(2)], 'nearest');
-        imwrite(outImage, fullfile(outputDir, strcat(name.insertAfter(insertLength,'_output'),  ext)));
+        % Change name of ouput, color labels
+        
+        outputName = fullfile(outputDir, strcat(name.insertAfter(insertLength,'_output'), ext));
+        labelImColor = ind2rgb(labelIm, cmapOffset);
+        imwrite(labelImColor, outputName);
+%         cmd = char(strcat({'mv "'},string(tempOutputNames.Files(n)), {'" "'}, outputName,{'"'}));
+%         if unix(cmd)
+%             error('Error attempting to rename %s to %s',string(tempOutputNames.Files(n)), outputName);
+%         end
     end
     fprintf('Done \n');
     
@@ -242,9 +252,11 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         progress.Message = 'Cleaning up';
     end
 
-    [status, msg] = rmdir(tempOutputPathBase,'s');
-    if ~status 
-        fprintf('\n%s',msg);
+%     [~, msg] = rmdir(fullfile(tempOutputPathBase, 'img'),'s');
+%     disp(msg);
+    [status, msg] = rmdir(fullfile(tempOutputPathBase),'s');
+    if status 
+        disp(msg);
     end
 
     %     clear actual ans cmap diffImage expected expectedResult I ...
