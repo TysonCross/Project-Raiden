@@ -20,7 +20,7 @@ function results = findGaps(arrayOfSummedEvents, blankLength)
         blankLength=3;
     end
     
-    transitionPoints = diff([0 arrayOfSummedEvents == 0 0]); 
+    transitionPoints = diff([0 arrayOfSummedEvents==0 0]); 
     
     % 1 shows it goes to 0; -1 shows is goes away from zero
     startOfRun = find(transitionPoints == 1);

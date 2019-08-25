@@ -45,7 +45,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     imageSize = net.Layers(1).InputSize(1:2);
 
     % setup temp folder
-    hashString = strcat(datestr(datetime('now'),networkStatus.name));
+    hashString = strcat(datestr(datetime('now')),networkStatus.name);
     newHash = cellfun(@(s)s(1:6),cellstr(mlreportgen.utils.hash(hashString)),'uni',0);
     tempOutputPathBase = fullfile(tempdir,strcat(networkStatus.name,'_',newHash));
 
@@ -72,6 +72,11 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         mkdir(overlayDir)
     end
 
+    tempOutputDir = fullfile(tempOutputPathBase,'output');
+    if ~exist(tempOutputDir,'dir')
+        mkdir(tempOutputDir);
+    end
+    
     outputDir = fullfile(outputPath,'output');
     if ~exist(outputDir,'dir')
         mkdir(outputDir);
@@ -148,9 +153,9 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     end
     resultPixelLabels = semanticseg(imds, net, ...
         'MiniBatchSize', batchSize, ...
-        'WriteLocation', outputDir, ...
-        'Verbose', false);
-    tempOutputNames = imageDatastore(outputDir);
+        'WriteLocation', tempOutputDir, ...
+        'Verbose', true);
+    tempOutputNames = imageDatastore(tempOutputDir);
 
     fprintf('Done \n');
 
@@ -188,13 +193,15 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %             imwrite(diffImage, str);
 %         end
 
-        % Change name of ouput
+        % Change name of ouput, color labels
+        
         outputName = fullfile(outputDir, strcat(name.insertAfter(insertLength,'_output'), ext));
-%         movefile(string(tempOutputNames.Files(n)), outputName);
-        cmd = char(strcat({'mv "'},string(tempOutputNames.Files(n)), {'" "'}, outputName,{'"'}));
-        if unix(cmd)
-            error('Error attempting to rename %s to %s',string(tempOutputNames.Files(n)), outputName);
-        end 
+        labelImColor = ind2rgb(labelIm, cmapOffset);
+        imwrite(labelImColor, outputName);
+%         cmd = char(strcat({'mv "'},string(tempOutputNames.Files(n)), {'" "'}, outputName,{'"'}));
+%         if unix(cmd)
+%             error('Error attempting to rename %s to %s',string(tempOutputNames.Files(n)), outputName);
+%         end
     end
     fprintf('Done \n');
 
@@ -247,8 +254,10 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 
 %     [~, msg] = rmdir(fullfile(tempOutputPathBase, 'img'),'s');
 %     disp(msg);
-    [~, msg] = rmdir(fullfile(tempOutputPathBase),'s');
-    disp(msg);
+    [status, msg] = rmdir(fullfile(tempOutputPathBase),'s');
+    if status 
+        disp(msg);
+    end
 
     %     clear actual ans cmap diffImage expected expectedResult I ...
     %         imds info labelDir labelIDs labelIDs_scalar labelNames ...

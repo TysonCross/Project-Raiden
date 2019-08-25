@@ -25,7 +25,7 @@ function output = findEvents(imds, eventID, blankFramesToIgnore)
         output = [strokeEntries(1) 1];
     elseif numel(strokeEntries) > 1
 
-        for i=1 : numel(strokeEntries)-1
+        for i=1:numel(strokeEntries)-1
             currentFrame = strokeEntries(i);
             offset = currentFrame+blankFramesToIgnore+1;
             
