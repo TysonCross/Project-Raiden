@@ -6,7 +6,11 @@ if numel(imds.Files)
     imageSize = size(imds.readimage(1));
     y = imageSize(1);
     x = imageSize(2);
-    threshold = round(0.005 * x * y);
+    if labelID == double(Label.leader)
+        threshold = round(0.0025* x * y);
+    else
+        threshold = 0;
+    end
 else
     threshold = 0;
 end
