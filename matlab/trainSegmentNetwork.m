@@ -23,11 +23,11 @@ networkType = 'u-net';
 %}
 
 % Phases to run
-opt.forceConvert	= 0;	% resize/convert/process new data (slow)
+opt.forceConvert	= 1;	% resize/convert/process new data (slow)
 opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
 opt.splitData       = 1;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
-opt.useCachedNet   	= 0;   	% if false, generate new neural network
+opt.useCachedNet   	= 1;   	% if false, generate new neural network
 opt.doTraining    	= 1;   	% if true, perform training
 opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
 opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
