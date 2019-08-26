@@ -179,7 +179,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             fprintf('\t Duration: %d \n', eventsCellArray(ii).duration);
             fprintf('\t Type: %s \n', eventsCellArray(ii).type);
             fprintf('\t Direction: %s \n', eventsCellArray(ii).direction);
-            if ~isempty(eventsCellArray(ii).strokes)
+            if strcmp(eventsCellArray(ii).type,'Attempted leader')
                 for jj=1:numel(eventsCellArray(ii).strokes)
                     disp(eventsCellArray(ii).strokes{jj});
                 end
