@@ -18,22 +18,22 @@ function [dir, dirVector] =  directionFromClusters(imds)
 
     for jj=1:imds.numpartitions
 
-        grayImage = imds.readimage(jj);
+        pixelLabelImage = imds.readimage(jj);
 
         % choose the lightning label (minus edges of frame)
         chosenLabel = double(Label.leader);
-        maskedImage = grayImage;
+        maskedImage = pixelLabelImage;
         maskedImage(maskedImage~=chosenLabel) = 0;
         maskedImage(maskedImage>0) = 1;
         edgeRemove = 4;
-        maskedImage(edgeRemove,:) = 0;
-        maskedImage(end-edgeRemove,:) = 0;
-        maskedImage(:,edgeRemove) = 0;
-        maskedImage(:,end-edgeRemove) = 0;
+        maskedImage(1:edgeRemove,:) = 0;
+        maskedImage(end-edgeRemove+1:end,:) = 0;
+        maskedImage(:,1:edgeRemove) = 0;
+        maskedImage(:,end-edgeRemove+1:end) = 0;
 
         % Prepare the ground mask
         groundLabel = double(Label.ground);
-        groundImage = grayImage;
+        groundImage = pixelLabelImage;
         groundImage(groundImage~=groundLabel) = 0;
         groundImage(groundImage>0) = 1;
         edgeRemoveH = 4;
@@ -45,7 +45,7 @@ function [dir, dirVector] =  directionFromClusters(imds)
 
         % remove the ground from the mask
         maskedImage = immultiply(maskedImage,groundImage);
-        assert(min(size(maskedImage)==size(grayImage))==1);
+        assert(min(size(maskedImage)==size(pixelLabelImage))==1);
         [x_max, y_max] = size(maskedImage);
 
         % convert to points

@@ -46,7 +46,8 @@ if ~isempty(candidateEvents)
         else
            eventsCellArray(i).type = 'Attachment event';
             % assign stroke frames
-            indices = eventsCellArray(i).start:eventsCellArray(i).duration;
+            endFrame = eventsCellArray(i).duration + eventsCellArray(i).start -2;
+            indices = eventsCellArray(i).start+1:endFrame;
             subIMDS = imds.subset(indices);
             dir = directionFromClusters(subIMDS);
             eventsCellArray(i).direction = dir;

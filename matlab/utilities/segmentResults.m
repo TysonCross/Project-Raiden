@@ -68,7 +68,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %     if doCompare && ~exist(comparisonDir, 'dir')
 %         mkdir(comparisonDir)
 %     end
-
+    
     overlayDir = fullfile(outputPath,'overlay');
     if doOverlay && ~exist(overlayDir,'dir')
         mkdir(overlayDir)
@@ -83,7 +83,12 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     if ~exist(outputDir,'dir')
         mkdir(outputDir);
     end
-
+    
+    pixelLabelDir = fullfile(outputPath, 'pixelLabel');
+    if ~exist(pixelLabelDir, 'dir')
+        mkdir(pixelLabelDir);
+    end
+    
     analysisDir = fullfile(outputPath,'analysis');
     if ~exist(analysisDir,'dir')
         mkdir(analysisDir);
@@ -156,7 +161,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     end
     resultPixelLabels = semanticseg(imds, net, ...
         'MiniBatchSize', batchSize, ...
-        'WriteLocation', tempOutputDir, ...
+        'WriteLocation', pixelLabelDir, ...
         'Verbose', true);
 
 
@@ -167,7 +172,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     cprintf([0.2,0.7,0],'\n\t\t\t\t Event analysis \n\n');
     
     % collect output
-    outputData = imageDatastore(tempOutputDir);
+    outputData = imageDatastore(pixelLabelDir);
     eventsCellArray = createEvents(outputData);                 %#ok<NASGU>
 
     % Export the classifications
