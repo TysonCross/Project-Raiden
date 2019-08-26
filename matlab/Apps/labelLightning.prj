@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="298808285" file="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning.prj" location="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps" name="labelLightning" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="2650110560" file="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps/labelLightning.prj" location="/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/Apps" name="labelLightning" target="target.mlapps" target-name="Package App">
     <param.appname>labelLightning</param.appname>
     <param.authnamewatermark>Jason Smit, Tyson Cross</param.authnamewatermark>
     <param.email>jason.smit@students.wits.ac.za, tyson.cross1@students.wits.ac.za</param.email>
@@ -13,7 +13,7 @@
     <param.summary>Segment lightning footage using a trained network</param.summary>
     <param.description>This app segments an input sequence of images, using a chosen network, outputting the segmented labels as an image. Optionally, an overlay of the predicted labels on top of the original images can be generated as well. There is also an option to compare the predicted labels with the known ground truth, if the user provides an input label sequence.</param.description>
     <param.screenshot>${PROJECT_ROOT}/screenshot.png</param.screenshot>
-    <param.version>2.3</param.version>
+    <param.version>2.5</param.version>
     <param.products.name>
       <item>MATLAB</item>
       <item>Computer Vision Toolbox</item>
@@ -53,10 +53,10 @@
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/classes/Label.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/createEvents.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/directionFromClusters.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/findEvents.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/findGaps.m</file>
+      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/findStokeEvents.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/getCandidateEvents.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/getLightningIndices.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/getStrokeIndices.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/indexLabel.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/loadLabels.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/loadSequences.m</file>

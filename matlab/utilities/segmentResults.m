@@ -1,10 +1,12 @@
 function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     doPreprocessing, doOverlay, doCompare, labelObject, batchSize, fromTraining, ...
     progressBarFigure)
+
     if exist('progressBarFigure', 'var')
         progress = uiprogressdlg(progressBarFigure,'Title','Performing Segmentation',...
         'Message','Starting');
     end
+    
     if nargin == 8
         fromTraining = false;
     elseif nargin == 7
@@ -147,8 +149,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Segment data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    disp(size(imds.readimage(1)))
-    fprintf('Performing segmentation... \t');
+%     fprintf('Performing segmentation... \n');
     if exist('progressBarFigure', 'var')
         progress.Value = 0.3;
         progress.Message = 'Segmenting images';
@@ -157,28 +158,41 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         'MiniBatchSize', batchSize, ...
         'WriteLocation', tempOutputDir, ...
         'Verbose', true);
-    tempOutputNames = imageDatastore(tempOutputDir);
-
-    fprintf('Done \n');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Evaluate and count/classify events
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % find and classify events
-    fprintf('Analyzing and classifying events... \t');
+    cprintf([0.2,0.7,0],'\n\t\t\t\t Event analysis \n\n');
     
     % collect output
-    outputData = imageDatastore(outputTempDir);
+    outputData = imageDatastore(tempOutputDir);
     eventsCellArray = createEvents(outputData);                 %#ok<NASGU>
 
     % Export the classifications
-    save(fullfile(analysisDir, 'events' ), 'eventsCellArray')
-    fprintf('Done \n');
+    if numel(eventsCellArray)>0
+        save(fullfile(analysisDir, 'events' ), 'eventsCellArray');
+        for ii=1:numel(eventsCellArray)
+            fprintf('Event: %d \n', ii);
+            fprintf('\t Start: %d \n', eventsCellArray(ii).start); 
+            fprintf('\t Duration: %d \n', eventsCellArray(ii).duration);
+            fprintf('\t Type: %s \n', eventsCellArray(ii).type);
+            fprintf('\t Direction: %s \n', eventsCellArray(ii).direction);
+            if ~isempty(eventsCellArray(ii).strokes)
+                for jj=1:numel(eventsCellArray(ii).strokes)
+                    disp(eventsCellArray(ii).strokes{jj});
+                end
+            end
+            disp(' ');
+        end
+    else
+        cprintf([1,0.5,0],'Warning: No events found!\n')
+    end
 
     % Evaluate the performance metrics
     if doCompare
-        metrics = evaluateSemanticSegmentation(pxdsResults, pxds, ...
+        metrics = evaluateSemanticSegmentation(resultPixelLabels, pxds, ...
             'Verbose',false);
 
         save(fullfile(analysisDir, 'metrics' ),'metrics')
@@ -205,7 +219,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     for n = 1:numel(imds.Files)
 
         I = imds.readimage(n);
-        labelIm = pxdsResults.readimage(n);
+        labelIm = resultPixelLabels.readimage(n);
 
         [~,name] = fileparts(string(imds.Files(n)));
         splitName = split(name,'.');
@@ -231,14 +245,10 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 %         end
 
         % Change name of ouput, color labels
-        
         outputName = fullfile(outputDir, strcat(name.insertAfter(insertLength,'_output'), ext));
         labelImColor = ind2rgb(labelIm, cmapOffset);
+        labelImColor = imresize(labelImColor,[originalSize(1) originalSize(2)], 'nearest');
         imwrite(labelImColor, outputName);
-%         cmd = char(strcat({'mv "'},string(tempOutputNames.Files(n)), {'" "'}, outputName,{'"'}));
-%         if unix(cmd)
-%             error('Error attempting to rename %s to %s',string(tempOutputNames.Files(n)), outputName);
-%         end
     end
     fprintf('Done \n');
     
@@ -252,18 +262,11 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
         progress.Message = 'Cleaning up';
     end
 
-%     [~, msg] = rmdir(fullfile(tempOutputPathBase, 'img'),'s');
-%     disp(msg);
     [status, msg] = rmdir(fullfile(tempOutputPathBase),'s');
     if status 
         disp(msg);
     end
 
-    %     clear actual ans cmap diffImage expected expectedResult I ...
-    %         imds info labelDir labelIDs labelIDs_scalar labelNames ...
-    %         msg n name net numClasses originalSize outImage outputImage ...
-    %         outputDir pxds resultPixelLabels tempDS segImage sequenceDir ...
-    %         status str sz ;
 
     fprintf('Done \n')
 

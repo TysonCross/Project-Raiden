@@ -10,8 +10,8 @@ function candidateEvents = getCandidateEvents (imds)
 %        second column is the number of frames that contain the event
 %        ie,  [startFrame Duration]
 
-    indexedLightning = getLightningIndices(imds);
-    indexedStrokes = getStrokeIndices(imds);
+    indexedLightning = indexLabel(imds,double(Label.leader), 'logical');
+    indexedStrokes = indexLabel(imds, double(Label.stroke), 'logical');
     totalIndices = indexedLightning + indexedStrokes;
     gapLocations = findGaps(totalIndices,2);
     

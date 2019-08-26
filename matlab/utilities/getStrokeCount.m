@@ -13,7 +13,8 @@ function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
 %                    column. 
     %#ok<*AGROW>
     
-    strokeIndices = getStrokeIndices(imds);
+    strokeIndices = indexLabel(imds, double(Label.stroke), 'logical');
+    
     if nargin > 2
         gap =2;
     end

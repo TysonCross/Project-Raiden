@@ -1,27 +1,31 @@
-function labelList = indexLabel(outputDs, labelID, opt)
-    
-    imageSize = size(outputDs.readimage(1));
+function labelList = indexLabel(imds, labelID, opt)
+% This function returns an array,with a binary value for each frame 
+% containing the specified label .
+
+if numel(imds.Files)
+    imageSize = size(imds.readimage(1));
     y = imageSize(1);
     x = imageSize(2);
     threshold = round(0.005 * x * y);
-    
-    if nargin == 2
-        labelList = find(occuranceFrames);
-    elseif(opt == 'logical')
-        labelList = occuranceFrames;
-    else
-        error('Invalid option');
+else
+    threshold = 0;
+end
+
+    numImages = numel(imds.Files);
+    occurrenceFrames = zeros(1,numImages);
+    for i=1:numImages 
+        im = imds.readimage(i);
+        if nnz(im(:)==labelID) > threshold % any frame has the event, do
+            occurrenceFrames(i) = 1; % true
+        end
     end
     
-    numImages = numel(outputDs.Files);
-    occuranceFrames = zeros(1,numImages);
-    for i = 1:numImages 
-        tmp = outputDs.readimage(i);
-        indx = tmp(:)==labelID;
-        if nnz(indx) > threshold: % any frame has the event, do
-            occuranceFrames(i) = 1; % true
-        end
-        %else load new image
+    if nargin == 2
+        labelList = find(occurrenceFrames);
+    elseif strcmp(opt,'logical')
+        labelList = occurrenceFrames;
+    else
+        error('Invalid option');
     end
     
 end

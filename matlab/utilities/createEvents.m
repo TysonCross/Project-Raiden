@@ -17,8 +17,10 @@ function eventsCellArray = createEvents(imds, minEventSize)
 if nargin == 1
     minEventSize = 1;
 end
-candidateEvents = getCandidateEvents (imds);
-strokeIndices = getStrokeIndices(imds);
+
+candidateEvents = getCandidateEvents(imds);
+strokeIndices = indexLabel(imds, double(Label.stroke), 'logical');
+
 % remove the 1 frame events (normally noise)
 if ~isempty(candidateEvents)
     indices = candidateEvents(:,2)<= minEventSize;
@@ -26,7 +28,6 @@ if ~isempty(candidateEvents)
 end
 if ~isempty(candidateEvents) 
     for i=1:size(candidateEvents,1)
-
         eventsCellArray(i).start = candidateEvents(i,1);
         eventsCellArray(i).duration = candidateEvents(i,2);
 
@@ -35,21 +36,21 @@ if ~isempty(candidateEvents)
         % frames are used
         strokeIndicesPerEvent = strokeIndices(eventsCellArray(i).start : ...
             eventsCellArray(i).start + eventsCellArray(i).duration);
-        if ~ any(strokeIndicesPerEvent)
-            eventsCellArray(i).type = 'Attempted leader'; 
+        
+        if ~any(strokeIndicesPerEvent)
+                        eventsCellArray(i).type = 'Attempted leader'; 
             earlyFrames = round((eventsCellArray(i).start + ...
                 eventsCellArray(i).duration)/2);
             subIMDS = imds.subset(eventsCellArray(i).start:earlyFrames);
             eventsCellArray(i).direction = directionFromClusters(subIMDS);
         else
-            eventsCellArray(i).type = 'Attachment event';
-
+           eventsCellArray(i).type = 'Attachment event';
             % assign stroke frames
             indices = eventsCellArray(i).start:eventsCellArray(i).duration;
             subIMDS = imds.subset(indices);
             dir = directionFromClusters(subIMDS);
             eventsCellArray(i).direction = dir;
-            eventsCellArray(i).strokes = num2cell(findStokeEvents(subIMDS),2);
+            eventsCellArray(i).strokes = num2cell(findEvents(subIMDS, 2, 0));
         end
     end
 else
