@@ -1,0 +1,299 @@
+#! /usr/local/Nuke11.3v4/libnuke-11.3.4.so -nx
+#write_info Write1 file:"/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/OpenDay/Poster/images/labels/Example_label2.png" format:"512 352 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"3467 3738" fps:"0" colorspace:"default (sRGB)" datatype:"8 bit" transfer:"unknown" views:"main" colorManagement:"Nuke"
+version 11.3 v4
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="67" y="27" w="2493" h="1023" maximized="1" screen="0">
+        <splitter orientation="1">
+            <split size="40"/>
+            <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                <page id="Toolbar.1"/>
+            </dock>
+            <split size="1099" stretch="1"/>
+            <splitter orientation="2">
+                <split size="977"/>
+                <dock id="" activePageId="Viewer.1">
+                    <page id="Viewer.1"/>
+                </dock>
+            </splitter>
+            <split size="1346"/>
+            <dock id="" activePageId="DAG.1" focus="true">
+                <page id="DAG.1"/>
+            </dock>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/nuke/example_label_v1.nk"
+ frame 3502
+ first_frame 3467
+ last_frame 3738
+ lock_range true
+ format "512 352 0 0 512 352 1 "
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ colorManagement Nuke
+ workingSpaceLUT linear
+ monitorLut sRGB
+ int8Lut sRGB
+ int16Lut sRGB
+ logLut Cineon
+ floatLut linear
+}
+Constant {
+ inputs 0
+ channels {rgba.red rgba.green rgba.blue none}
+ color 1
+ name Constant2
+ xpos -123
+ ypos -456
+}
+Roto {
+ premultiply alpha
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x43800000 x43300000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {px x455ae000
+        {0 0}
+        {x43f54000 x43b28000}
+        {0 0}
+        {0 0}
+        {x43f30000 xc1100000}
+        {0 0}
+        {0 0}
+        {x44024000 xc1080000}
+        {0 0}
+        {x3fc00000 0}
+        {x44036000 x43b38000}
+        {xbfc00000 0}}}     idem}
+     {tx x455ae000 x43fce000 x432ea000}
+     {a r 0 g 0 b 0 a 0 osw x41200000 osf 0 str 1 spx x43800000 spy x43300000 sb 1 ltn x455ae000 ltm x455ae000 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {256 176}
+ color 0
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ lifetime_start 3502
+ lifetime_end 3502
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ name Roto1
+ xpos -123
+ ypos -300
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_010/mask/2017-11-22_144155_010_mask.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 3467
+ last 3738
+ origfirst 3467
+ origlast 3738
+ origset true
+ name Read2
+ xpos -482
+ ypos -436
+}
+set N716f5f0 [stack 0]
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge4
+ xpos -371
+ ypos -339
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ xpos -371
+ ypos -297
+}
+Erode {
+ size -1.8
+ name Erode1
+ xpos -371
+ ypos -273
+}
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle3
+ xpos -371
+ ypos -237
+}
+Group {
+ name BinaryAlpha2
+ tile_color 0x2a2a2aff
+ label "(\[value an] --> \[value output1])"
+ note_font Verdana
+ note_font_color 0xfffff9ff
+ xpos -371
+ ypos -200
+ addUserKnob {20 BinaryAlpha}
+ addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+ an rgba
+ addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -398
+  ypos 275
+ }
+ Expression {
+  temp_name0 rgb_an
+  temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+  temp_name1 rgba_an
+  temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+  temp_name2 alpha_an
+  temp_expr2 a!=0?1:0
+  expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+  name Expression
+  xpos -398
+  ypos 341
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle
+  label "\[value in]"
+  xpos -398
+  ypos 367
+  disable {{parent.output1}}
+ }
+ Output {
+  name Output1
+  xpos -398
+  ypos 456
+ }
+end_group
+set N9bb78e0 [stack 0]
+Constant {
+ inputs 0
+ channels {rgba.red -rgba.green -rgba.blue}
+ color 1
+ name Constant1
+ xpos 51
+ ypos -316
+}
+ShuffleCopy {
+ inputs 2
+ name ShuffleCopy1
+ xpos 51
+ ypos -88
+}
+Premult {
+ name Premult1
+ xpos 51
+ ypos -64
+}
+push $N9bb78e0
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle2
+ xpos -374
+ ypos -160
+}
+Invert {
+ name Invert1
+ xpos -374
+ ypos -136
+}
+push $N716f5f0
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge2
+ xpos -520
+ ypos -77
+}
+Merge2 {
+ inputs 2
+ operation plus
+ name Merge3
+ xpos -520
+ ypos 1
+}
+Read {
+ inputs 0
+ file_type tiff
+ file /mnt/Shield/Raiden/data/sequences/2017-11-22_144155/2017-11-22_144155_010/tif/2017-11-22_144155_010.########.tif
+ format "512 352 0 0 512 352 1 "
+ first 3467
+ last 3738
+ origfirst 3467
+ origlast 3738
+ origset true
+ name Read1
+ xpos -713
+ ypos -426
+}
+Merge2 {
+ inputs 2
+ operation plus
+ mix 0.135
+ name Merge1
+ xpos -713
+ ypos 129
+}
+Shuffle {
+ alpha white
+ name Shuffle4
+ xpos -713
+ ypos 153
+}
+Write {
+ file "/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/OpenDay/Poster/images/labels/Example_label2.png"
+ file_type png
+ checkHashOnRead false
+ version 1
+ name Write1
+ xpos -713
+ ypos 191
+}
+Viewer {
+ frame 3502
+ frame_range 3467-3738
+ name Viewer1
+ xpos 169
+ ypos 38
+}
