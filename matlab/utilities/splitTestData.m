@@ -26,9 +26,11 @@ function splitTestData(resizedImageFolders, cachePath, resizedLabelFolders, ...
     % similar. This function reduces the non-stroke frames to a randomised
     % percentage of the total frames. The random subset of frames are 
     % returned sorted, by sequence and filename/frame order
+    % The test set should not be threshed as we need to evaluate whole
+    % sequences for the direction classification to work.
     if dataPercentage < 1
         [imdsTrain, pxdsTrain] = randomSubset(imdsTrain, pxdsTrain, dataPercentage);
-        [imdsTest, pxdsTest] = randomSubset(imdsTest, pxdsTest, dataPercentage);
+%         [imdsTest, pxdsTest] = randomSubset(imdsTest, pxdsTest, dataPercentage);
     end
     
     % Calculate the class weights 

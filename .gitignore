@@ -757,6 +757,7 @@ matlab/codegen/**
 matlab/pathdef.m
 matlab/startup.m
 matlab/test*.m
+matlab/other/test*.m
 experiments/**
 data/**
 networks/**
