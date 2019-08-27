@@ -11,7 +11,7 @@ setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 clc; clearvars;
 
 %% SETUP
-networkType = 'u-net';
+networkType = 'alexnet';
 
 %{
     Network choices are:
@@ -23,11 +23,11 @@ networkType = 'u-net';
 %}
 
 % Phases to run
-opt.forceConvert	= 1;	% resize/convert/process new data (slow)
+opt.forceConvert	= 0;	% resize/convert/process new data (slow)
 opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
-opt.splitData       = 1;	% re-split Test/Training/Validation data *
+opt.reSplitData     = 0;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
-opt.useCachedNet   	= 1;   	% if false, generate new neural network
+opt.useCachedNet   	= 0;   	% if false, generate new neural network
 opt.doTraining    	= 1;   	% if true, perform training
 opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
 opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
@@ -107,20 +107,20 @@ diary off; diary on;
 
 % Check to see if cache exists
 if (~exist(fullfile(cachePath,strcat('data','.mat')),'file') && ...
-        opt.splitData)
+        opt.reSplitData)
     
     cprintf([1,0.5,0],['Warning: No datastore cache found at: %s \n'...
         '(Training/Test data will be repartitioned) \n'], ...
         fullfile(cachePath,'data'));
 end
 
-if (opt.splitData==false && opt.percentage < 1)
+if (opt.reSplitData==false && opt.percentage < 1)
     cprintf([1,0.5,0], ['Warning: splitData is off. ', ...
         'Randomized subset will not be re-selected. ' ...
         'Enable ''splitData'' to force an update\n'])
 end
 
-if (opt.splitData==true  || opt.forceConvert)
+if (opt.reSplitData==true  || opt.forceConvert)
     splitTestPercent = 0.15;
     splitTestData(resizedImageFolders, cachePath, resizedLabelFolders, ...
         splitTestPercent, opt.percentage);
@@ -147,7 +147,7 @@ diary off; diary on;
 %% Training/Validation partition phase 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if (opt.splitData==true || ~exist('imdsVal','var'))
+if (opt.reSplitData==true || ~exist('imdsVal','var'))
     disp("Splitting training/validation data...")
     splitTrainingPercentage = 0.80;
     splitValidationData(imdsTrain, pxdsTrain, ...
@@ -266,12 +266,12 @@ if (opt.doTraining==true)
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
         'MaxEpochs', 20, ...  
-        'MiniBatchSize', 10, ...
+        'MiniBatchSize', 120, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-3, ... % from 1e-3
+        'InitialLearnRate',1e-2, ... % from 1e-3
         'LearnRateSchedule','piecewise',...
-        'LearnRateDropPeriod',2,...
+        'LearnRateDropPeriod',5,...
         'LearnRateDropFactor',0.5,...
         'Momentum',0.9, ...
         'L2Regularization',0.003, ... % from 0.005
@@ -297,7 +297,7 @@ if (opt.doTraining==true)
     
     % Clear memory
     clear numTestingImages numTrainingImages numValidationImages
-    clear inputLayer opt.convertData opt.forceConvert opt.splitData
+    clear inputLayer opt.convertData opt.forceConvert opt.reSplitData
     clear opt.fromCheckpoint opt.resplitValidation
     clear imdsTrain imdsVal pxdsTrain pxdsVal labelIDs labelIDs_scalar
     clear labelTable labelWeights network sequences
@@ -383,7 +383,9 @@ currentFileName = fullfile(scriptPath,'trainSegmentNetwork.m');
             fig_name = regexprep(fig_name, '[ .,''!?():]', '');
             fig_name = sprintf('%s.pdf',fig_name);
             fn = sprintf('%s/%s',foldername,fig_name);
+            warning('off')
             export_fig(fn,figHandle(1));
+            warning('on')
             fprintf("%d figures exported to %s\n", ...
                 length(figHandle),foldername);
             sendFileList = strcat(sendFileList, ...
