@@ -11,7 +11,7 @@ setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 clc; clearvars;
 
 %% SETUP
-networkType = 'alexnet';
+networkType = 'deeplabv3';
 
 %{
     Network choices are:
@@ -25,7 +25,7 @@ networkType = 'alexnet';
 % Phases to run
 opt.forceConvert	= 0;	% resize/convert/process new data (slow)
 opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
-opt.reSplitData     = 0;	% re-split Test/Training/Validation data *
+opt.reSplitData     = 1;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
 opt.useCachedNet   	= 0;   	% if false, generate new neural network
 opt.doTraining    	= 1;   	% if true, perform training
@@ -251,7 +251,7 @@ if (opt.doTraining==true)
     
     % Define augmenting methods
     pixelRange = [-16 16];
-    scaleRange = [1 2.0];
+    scaleRange = [1 2.0]; 
     augmenter = imageDataAugmenter( ...
         'RandXReflection',true, ...
         'RandXTranslation',pixelRange, ...
@@ -269,7 +269,7 @@ if (opt.doTraining==true)
         'MiniBatchSize', 120, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-2, ... % from 1e-3
+        'InitialLearnRate',1e-3, ... % from 1e-3
         'LearnRateSchedule','piecewise',...
         'LearnRateDropPeriod',5,...
         'LearnRateDropFactor',0.5,...
@@ -336,22 +336,44 @@ if (networkStatus.trained==0 && opt.evaluateNet)
             
 elseif (networkStatus.trained && opt.evaluateNet)
     cprintf([0,0.5,1], '\n================ Evaluation =================\n');
+
+    metricsOverall = evaluateNetwork(imdsTest, pxdsTest, net)
+    
+    cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
+    disp(metricsOverall.DataSetMetrics); disp(' ');
+    disp(metricsOverall.ClassMetrics); disp(' ');
+    
+    save(fullfile(cachePath,'network'), ...
+        'net','networkStatus','imageSize','metrics');
+    disp("Performance metrics added to network cache") 
+
+    % split the test set back into indivual sequences
+    disp("Evaluating each test sequence individually...")
+    
+    [imdsTestSequences, pxdsTestSequences] = seperateSequences(imdsTest, pxdsTest);
     
     networkFile = fullfile(cachePath,'network');
-    outputPath = fullfile(projectPath,'networks','output',networkStatus.name);
     doPreprocessing = true;
     doOverlay = true;
     doCompare = true;
     fromTraining = true;
     batchSize = 32;
-    metrics = segmentResults(networkFile, imdsTest, outputPath, ...
-        doPreprocessing, doOverlay, doCompare, pxdsTest, batchSize, fromTraining);
-    clear networkFile sequenceDir outputPath  isSeqPXDS ...
-        doPreprocessing doOverlay doCompare labelDir progressBarFigure;
     
-    save(fullfile(cachePath,'network'), ...
-        'net','networkStatus','imageSize','metrics');
-    disp("Performance metrics added to network cache") 
+    for ii=1:numel(imdsTestSequences)
+        [~,filename] = fileparts(imdsTestSequences{ii}.Files{1});
+        sequencePath = split(filename, '.');
+        sequencePath = sequencePath{1};
+        outputPath = fullfile(projectPath,'networks','output', ...
+            networkStatus.name,sequencePath);
+        segmentResults(networkFile, imdsTestSequences{ii}, outputPath, ...
+            doPreprocessing, doOverlay, doCompare, ...
+            pxdsTestSequences{ii}, batchSize, fromTraining);
+
+        disp("Individual test sequence analysis and output complete.")
+    end
+    
+    clear networkFile sequenceDir outputPath  isSeqPXDS
+    clear doPreprocessing doOverlay doCompare labelDir progressBarFigure;
 end
 
 diary off; diary on;

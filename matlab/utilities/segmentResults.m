@@ -202,7 +202,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
 
         save(fullfile(analysisDir, 'metrics' ),'metrics')
         writetable(metrics.DataSetMetrics, fullfile(analysisDir,'DataSetMetrics.txt'));
-        writetable(metrics.ClassMetrics, fullfile(analysisDir,'ClassMetrics'));
+        writetable(metrics.ClassMetrics, fullfile(analysisDir,'ClassMetrics.txt'));
 
         cprintf([0.2,0.7,0],'\n\t\t\t\t Evaluation metrics\n\n');
         disp(metrics.DataSetMetrics); disp(' ');

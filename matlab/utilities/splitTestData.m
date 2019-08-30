@@ -30,7 +30,6 @@ function splitTestData(resizedImageFolders, cachePath, resizedLabelFolders, ...
     % sequences for the direction classification to work.
     if dataPercentage < 1
         [imdsTrain, pxdsTrain] = randomSubset(imdsTrain, pxdsTrain, dataPercentage);
-%         [imdsTest, pxdsTest] = randomSubset(imdsTest, pxdsTest, dataPercentage);
     end
     
     % Calculate the class weights 
