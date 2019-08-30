@@ -336,9 +336,9 @@ if (networkStatus.trained==0 && opt.evaluateNet)
             
 elseif (networkStatus.trained && opt.evaluateNet)
     cprintf([0,0.5,1], '\n================ Evaluation =================\n');
-
-    metricsOverall = evaluateNetwork(imdsTest, pxdsTest, net)
-    
+    fprintf("Evaluating network against overall test set...\t")
+    metricsOverall = evaluateNetwork(imdsTest, pxdsTest, net, networkStatus);
+    fprintf('Done\n\n');
     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
     disp(metricsOverall.DataSetMetrics); disp(' ');
     disp(metricsOverall.ClassMetrics); disp(' ');
@@ -363,6 +363,7 @@ elseif (networkStatus.trained && opt.evaluateNet)
         [~,filename] = fileparts(imdsTestSequences{ii}.Files{1});
         sequencePath = split(filename, '.');
         sequencePath = sequencePath{1};
+        disp(['Sequence: ', sequencePath]);
         outputPath = fullfile(projectPath,'networks','output', ...
             networkStatus.name,sequencePath);
         segmentResults(networkFile, imdsTestSequences{ii}, outputPath, ...

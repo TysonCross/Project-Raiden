@@ -1,4 +1,4 @@
-function metrics = evaluateNetwork(imdsTest, pxdsTest, net)
+function metrics = evaluateNetwork(imdsTest, pxdsTest, net, networkStatus)
 
     % setup temp folder
     hashString = strcat(datestr(datetime('now')),networkStatus.name);
@@ -18,7 +18,7 @@ function metrics = evaluateNetwork(imdsTest, pxdsTest, net)
         'Verbose',false);
     
     % cleanup
-    [status, msg] = rmdir(fullfile(tempOutputPathBase),'s');
+    [status, msg] = rmdir(fullfile(tempOutputDir),'s');
     if status 
         disp(msg);
     end
