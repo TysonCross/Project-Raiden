@@ -1,8 +1,8 @@
-function[index1, index2] = splitSequences(imageFolders, splitPercent, ext)
+function[index1, index2] = splitSequences(resizedImageFolders, splitPercent, ext)
 % This function used to create an index for the training and
 % testing data based on the requested split percentage. 
 %
-% INPUT : imageFolders = A list of folders containing image sequences 
+% INPUT : resizedImageFolders = A list of folders containing image sequences 
 %         splitPercent = [0-1] value of the original data to assign to index1
 %
 % OUTPUT: index1 = The index of the sequence images to use for training
@@ -12,16 +12,17 @@ function[index1, index2] = splitSequences(imageFolders, splitPercent, ext)
     end
     if (splitPercent==0)
         index2 = [];
-        index1 = 1:length(imageFolders);
+        index1 = 1:length(resizedImageFolders);
     elseif (splitPercent==1)
         error('splitPercent=1 means no images are used for training!')
     else
-        numberOfSequences = length(imageFolders);
+        numberOfSequences = length(resizedImageFolders);
         sequenceLengths = zeros(1, numberOfSequences);
 
         % get the number of tif files in each folder
         parfor i = 1:numberOfSequences
-            sequenceLengths(i) = numel(dir([imageFolders{i},'/*',ext]));
+            folder = strcat(resizedImageFolders{i},"/*",ext);
+            sequenceLengths(i) = numel(dir(folder));
         end
 
         if ~min(sequenceLengths(:))
