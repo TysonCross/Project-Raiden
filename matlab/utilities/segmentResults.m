@@ -172,8 +172,8 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
     cprintf([0.2,0.7,0],'\n\t\t\t\t Event analysis \n\n');
     
     % collect output
-    outputData = imageDatastore(pixelLabelDir);
-    eventsCellArray = createEvents(outputData);                 %#ok<NASGU>
+    outputImages = imageDatastore(pixelLabelDir);
+    eventsCellArray = createEvents(outputImages);                 %#ok<NASGU>
 
     % Export the classifications
     if numel(eventsCellArray)>0
@@ -184,14 +184,10 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             fprintf('\t Duration: %d \n', eventsCellArray(ii).duration);
             fprintf('\t Type: %s \n', eventsCellArray(ii).type);
             fprintf('\t Direction: %s \n', eventsCellArray(ii).direction);
-            if(eventsCellArray(ii).type == "Attachment event")
-                fprintf('\t Stoke frame: %d \n', eventCellArray(ii).strokes{1});
-                fprintf('\t Stoke duration: %d \n', eventCellArray(ii).strokes{2});
-            end
-            if strcmp(eventsCellArray(ii).type,'Attempted leader')
-                for jj=1:numel(eventsCellArray(ii).strokes)
-                    disp(eventsCellArray(ii).strokes{jj});
-                end
+            if strcmp(eventsCellArray(ii).type, "Attachment event")
+                % as curently constructed, this only works with a single stroke in the event
+                fprintf('\t Stroke frame: %d \n', eventsCellArray(ii).strokes{1});
+                fprintf('\t Stroke duration: %d \n', eventsCellArray(ii).strokes{2});
             end
             disp(' ');
         end

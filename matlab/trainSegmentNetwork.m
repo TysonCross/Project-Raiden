@@ -337,7 +337,7 @@ if (networkStatus.trained==0 && opt.evaluateNet)
 elseif (networkStatus.trained && opt.evaluateNet)
     cprintf([0,0.5,1], '\n================ Evaluation =================\n');
     fprintf("Evaluating network against overall test set...\t")
-    metricsOverall = evaluateNetwork(imdsTest, pxdsTest, net, networkStatus);
+    metrics = evaluateNetwork(imdsTest, pxdsTest, net, networkStatus);
     fprintf('Done\n\n');
     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
     disp(metricsOverall.DataSetMetrics); disp(' ');
@@ -369,10 +369,10 @@ elseif (networkStatus.trained && opt.evaluateNet)
         segmentResults(networkFile, imdsTestSequences{ii}, outputPath, ...
             doPreprocessing, doOverlay, doCompare, ...
             pxdsTestSequences{ii}, batchSize, fromTraining);
-
-        disp("Individual test sequence analysis and output complete.")
     end
     
+    disp("Individual test sequence analysis and output complete.")
+
     clear networkFile sequenceDir outputPath  isSeqPXDS
     clear doPreprocessing doOverlay doCompare labelDir progressBarFigure;
 end
