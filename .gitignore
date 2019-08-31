@@ -770,5 +770,8 @@ logs/**
 
 # video edting
 /OpenDay/**
+Admin/OpenDay/**
 
-Admin/OpenDay/.~lock.Presentation.odg#
+# Report and graphics
+Admin/Report/**
+Admin/Report Graphics/**
