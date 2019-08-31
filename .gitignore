@@ -771,4 +771,7 @@ logs/**
 # video edting
 /OpenDay/**
 Admin/OpenDay/**
+
+# Report and graphics
+Admin/Report/**
 Admin/Report Graphics/**
