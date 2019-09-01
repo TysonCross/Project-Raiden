@@ -751,6 +751,10 @@ DerivedData/
 # nuke
 *.nk.autosave
 
+# local
+tools/**
+experiments/**
+
 # MATLAB
 matlab/cache/**
 matlab/codegen/**
