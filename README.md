@@ -33,7 +33,7 @@ This code is used to improve the readability of the output produced when trainin
 
 dirwalk.m (by Evgeny Pr) is covered by the licence found under [./Licences/dirwalk.lic](./Licences/dirwalk.lic). This code is used to get a list of files on disk beneath a specified directory. The file can be downladed from: [https://www.mathworks.com/matlabcentral/fileexchange/32036-dirwalk-walk-the-directory-tree](https://www.mathworks.com/matlabcentral/fileexchange/32036-dirwalk-walk-the-directory-tree)
 
-export_fig.m (by Yair Altman) is covered by the licence found under [./Licences/export_fig.lic](./Licences/export_fig.lic). This code enables the exporting of figures from matlab with LaTeX fonts (not included).
+export_fig.m (by  Oliver J. Woodford and Yair Altman) is covered by the licence found under [./Licences/export_fig.lic](./Licences/export_fig.lic). This code enables the exporting of figures from matlab with LaTeX fonts (not included).
 The file can be downloaded from [https://www.mathworks.com/matlabcentral/fileexchange/23629-export_fig](https://www.mathworks.com/matlabcentral/fileexchange/23629-export_fig)
 
 ## Overview
@@ -45,7 +45,7 @@ This folder contains the planning, research and spreadsheets that have
 been used by the group, along with progress reports and meeting minutes.
 
 ## config
-This folder contains the canda environment and python env list of the libraries and tools used in the project environment
+This folder contains the Conda environment and python env list of the libraries and tools used in the project environment
 
 ## matlab
 Contains all the Matlab scripts created, where each script describes its function in the header of the script. The main training and evaluation script is the _trainSegmentNetwork.m_ script found at the root of the _matlab_ folder.  Further scripts and applications
