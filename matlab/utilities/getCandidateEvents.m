@@ -13,7 +13,7 @@ function candidateEvents = getCandidateEvents (imds)
     indexedLightning = indexLabel(imds,double(Label.leader), 'logical');
     indexedStrokes = indexLabel(imds, double(Label.stroke), 'logical');
     totalIndices = indexedLightning + indexedStrokes;
-    gapLocations = findGaps(totalIndices,15);
+    gapLocations = findGaps(totalIndices,2);
     
     % Get the GAPS 
     candidateEvents = [];
