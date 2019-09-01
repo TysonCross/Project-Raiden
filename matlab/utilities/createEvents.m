@@ -51,7 +51,8 @@ if ~isempty(candidateEvents)
             subIMDS = imds.subset(indices);
             dir = directionFromClusters(subIMDS);
             eventsCellArray(i).direction = dir;
-            eventsCellArray(i).strokes = num2cell(output + ...
+            eventsCellArray(i).strokes = num2cell(...
+                findEvents(subIMDS, double(Label.stroke))+ ...
                 [eventsCellArray(i).start 0]);
 %             msg = strcat('Stroke frame: ', string(eventsCellArray(i).strokes{1}));
 %             disp(msg)
