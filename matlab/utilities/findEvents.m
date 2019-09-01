@@ -41,7 +41,7 @@ function output = findEvents(imds, eventID, blankFramesToIgnore)
                 lastOfEvent = strokeEntries(i);
                 firstOfEvent = strokeEntries(i-(index-1));
                 output = [output; [strokeEntries(i-(index-1)), ...
-                    lastOfEvent - firstOfEvent] ];
+                    lastOfEvent - firstOfEvent+1] ];
                 index = 1; % reset
             end
         end

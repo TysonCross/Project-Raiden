@@ -185,9 +185,11 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             fprintf('\t Type: %s \n', eventsCellArray(ii).type);
             fprintf('\t Direction: %s \n', eventsCellArray(ii).direction);
             if strcmp(eventsCellArray(ii).type, "Attachment event")
-                % as curently constructed, this only works with a single stroke in the event
-                fprintf('\t Stroke frame: %d \n', eventsCellArray(ii).strokes{1});
-                fprintf('\t Stroke duration: %d \n', eventsCellArray(ii).strokes{2});
+                for kk=1:size( eventsCellArray(ii).strokes,1) % for each stroke in this event
+                    fprintf('\t Stoke %d: \n', kk);
+                    fprintf('\t\t Stroke frame: %d \n', eventsCellArray(ii).strokes{kk,1});
+                    fprintf('\t\t Stroke duration: %d \n', eventsCellArray(ii).strokes{kk,2});
+                end
             end
             disp(' ');
         end

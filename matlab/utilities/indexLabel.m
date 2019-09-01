@@ -1,6 +1,6 @@
 function labelList = indexLabel(imds, labelID, opt)
 % This function returns an array,with a binary value for each frame 
-% containing the specified label .
+% containing the specified label if the logical option is presented
 
 if numel(imds.Files)
     imageSize = size(imds.readimage(1));
