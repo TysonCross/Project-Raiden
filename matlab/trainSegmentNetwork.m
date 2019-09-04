@@ -11,7 +11,7 @@ setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 clc; clearvars;
 
 %% SETUP
-networkType = 'deeplabv3';
+networkType = 'segnet';
 
 %{
     Network choices are:
@@ -25,7 +25,7 @@ networkType = 'deeplabv3';
 % Phases to run
 opt.forceConvert	= 0;	% resize/convert/process new data (slow)
 opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
-opt.reSplitData     = 1;	% re-split Test/Training/Validation data *
+opt.reSplitData     = 0;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
 opt.useCachedNet   	= 0;   	% if false, generate new neural network
 opt.doTraining    	= 1;   	% if true, perform training
@@ -265,11 +265,11 @@ if (opt.doTraining==true)
     % Define training options.
     options = trainingOptions('sgdm', ...
         'ExecutionEnvironment','auto', ...
-        'MaxEpochs', 20, ...  
-        'MiniBatchSize', 120, ...
+        'MaxEpochs', 5, ...  
+        'MiniBatchSize', 10, ...
         'Shuffle','every-epoch', ...
         'CheckpointPath', checkpointPath, ...
-        'InitialLearnRate',1e-3, ... % from 1e-3
+        'InitialLearnRate',1e-2, ... % from 1e-3
         'LearnRateSchedule','piecewise',...
         'LearnRateDropPeriod',5,...
         'LearnRateDropFactor',0.5,...
@@ -340,8 +340,8 @@ elseif (networkStatus.trained && opt.evaluateNet)
     metrics = evaluateNetwork(imdsTest, pxdsTest, net, networkStatus);
     fprintf('Done\n\n');
     cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
-    disp(metricsOverall.DataSetMetrics); disp(' ');
-    disp(metricsOverall.ClassMetrics); disp(' ');
+    disp(metrics.DataSetMetrics); disp(' ');
+    disp(metrics.ClassMetrics); disp(' ');
     
     save(fullfile(cachePath,'network'), ...
         'net','networkStatus','imageSize','metrics');
@@ -363,7 +363,7 @@ elseif (networkStatus.trained && opt.evaluateNet)
         [~,filename] = fileparts(imdsTestSequences{ii}.Files{1});
         sequencePath = split(filename, '.');
         sequencePath = sequencePath{1};
-        disp(['Sequence: ', sequencePath]);
+        cprintf([0.2,0.7,0],'\nSequence: %s\n', sequencePath);
         outputPath = fullfile(projectPath,'networks','output', ...
             networkStatus.name,sequencePath);
         segmentResults(networkFile, imdsTestSequences{ii}, outputPath, ...
