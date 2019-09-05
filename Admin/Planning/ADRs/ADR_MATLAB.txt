@@ -1,0 +1,18 @@
+ADR: MATLAB IDE
+
+CONTEXT:
+MATLAB offers a unified, powerful scripting environment with a dedicated Deep Learning Toolbox, with support for the creation and analysis of existing networks
+DECISION:
+We will use MATLAB instead of TensorFlow due to the ease of use, familiarity and access to graphical network design tools and functions.
+STATUS: 
+Accepted.
+
+CONSEQUENCES:
+Pros:
+	- Performant
+	- Ease of use
+	- Existing networks simple to use and modify
+Cons:
+	- Large install size
+	- Limits the availible networks (although can import from Caffe, Innx, etc.)
+	- Not industry norm (PyTorch/Tensorflow widely adopted in ML applications)
