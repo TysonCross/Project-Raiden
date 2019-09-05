@@ -31,7 +31,7 @@ function doConvertData = checkConversion(projectPath, cachePath, imageSize, forc
                 sequences = sort(sequences);
                 for i=1:numel(converted)
                     if strcmpi(converted(i),sequences(i))
-                        if ~opt.forceConvert
+                        if ~forceConvert
                             fprintf(['Source and conversion folders ', ...
                                 'match, data will not be converted. ', ...
                                 '(Enable ''forceConvert'' to override) \n']);
