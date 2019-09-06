@@ -12,6 +12,6 @@ function output = findLightningEvents(imds, blankFramesToIgnore)
         blankFramesToIgnore = 0;
     end
 
-    output = findEvents(imds,1, blankFramesToIgnore);
+    output = findEvents(imds, 1, blankFramesToIgnore);
     
 end

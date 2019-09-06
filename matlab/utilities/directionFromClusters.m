@@ -13,7 +13,7 @@ function [dir, dirVector] =  directionFromClusters(imds)
     % Configuration
     % ToDo: make arguments to function
     dir = 'unknown';
-    doRecontructImage = true;      % convert pointCloud/plane back into image
+    doRecontructImage = false;      % convert pointCloud/plane back into image
     useAllClusters = false;        % if false, use the largest cluster instead
 
     for jj=1:imds.numpartitions

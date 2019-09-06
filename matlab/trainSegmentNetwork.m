@@ -11,7 +11,7 @@ setenv('NVIDIA_TENSORRT', '/opt/TensorRT-5.1.2.2');
 clc; clearvars;
 
 %% SETUP
-networkType = 'segnet';
+networkType = 'deeplabv3';
 
 %{
     Network choices are:
@@ -27,10 +27,10 @@ opt.forceConvert	= 0;	% resize/convert/process new data (slow)
 opt.preProcess     	= 1; 	% if true, apply time-denoising on input data
 opt.reSplitData     = 0;	% re-split Test/Training/Validation data *
 opt.fromCheckpoint 	= 0;	% if training did not finish, use checkpoint
-opt.useCachedNet   	= 0;   	% if false, generate new neural network
-opt.doTraining    	= 1;   	% if true, perform training
+opt.useCachedNet   	= 1;   	% if false, generate new neural network
+opt.doTraining    	= 0;   	% if true, perform training
 opt.evaluateNet    	= 1;   	% if true, evaluate performance on test set
-opt.archiveNet     	= 1;   	% archive NN, data and figures to subfolder
+opt.archiveNet     	= 0;   	% archive NN, data and figures to subfolder
 
 % Percentage of each sequence (strokes will not be culled)
 % * In order to take affect after a change, splitData must be enabled

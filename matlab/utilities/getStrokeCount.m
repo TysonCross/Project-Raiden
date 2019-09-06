@@ -7,7 +7,7 @@ function [strokeCount, strokesInfo] = getStrokeCount(imds, gap)
 %        imds: A datastore that has the segmented images
 %        gap: The number of frames to ignore between frames containing the label
 % OUTPUT:
-%        strokeCount: The number of stoke events in the given dataStore.
+%        strokeCount: The number of stroke events in the given dataStore.
 %        strokeInfo: Is an array that has the start frame number as the first
 %                    column and the number of frames in that event as the second
 %                    column. 

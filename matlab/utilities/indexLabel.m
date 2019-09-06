@@ -7,7 +7,7 @@ if numel(imds.Files)
     y = imageSize(1);
     x = imageSize(2);
     if labelID == double(Label.leader)
-        threshold = round(0.0025* x * y);
+        threshold = round(0.002 * x * y);
     else
         threshold = 0;
     end

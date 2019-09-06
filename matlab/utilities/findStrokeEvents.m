@@ -1,4 +1,4 @@
-function output = findStokeEvents(imds, blankFramesToIgnore)
+function output = findStrokeEvents(imds, blankFramesToIgnore)
 % Wrapper function for findEvents which inserts the correct label number for 
 % a stroke.
 % blankFramesToIgnore is an optional input that allows for ignoring blank frames

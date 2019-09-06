@@ -186,7 +186,7 @@ function metrics = segmentResults(networkFile, sequenceObject, outputPath, ...
             fprintf('\t Direction: %s \n', eventsCellArray(ii).direction);
             if strcmp(eventsCellArray(ii).type, "Attachment event")
                 for kk=1:size( eventsCellArray(ii).strokes,1) % for each stroke in this event
-                    fprintf('\t Stoke %d: \n', kk);
+                    fprintf('\t Stroke %d: \n', kk);
                     fprintf('\t\t Stroke frame: %d \n', eventsCellArray(ii).strokes{kk,1});
                     fprintf('\t\t Stroke duration: %d \n', eventsCellArray(ii).strokes{kk,2});
                 end

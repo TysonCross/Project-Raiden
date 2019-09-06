@@ -55,7 +55,6 @@
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/directionFromClusters.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/findEvents.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/findGaps.m</file>
-      <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/findStokeEvents.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/getCandidateEvents.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/indexLabel.m</file>
       <file>/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/loadLabels.m</file>
@@ -104,7 +103,7 @@
       <vista>false</vista>
       <linux>true</linux>
       <solaris>false</solaris>
-      <osver>5.0.0-25-generic</osver>
+      <osver>5.0.0-27-generic</osver>
       <os32>false</os32>
       <os64>true</os64>
       <arch>glnxa64</arch>
