@@ -1,0 +1,503 @@
+=============== Configuration ===============
+Network: 	 deeplabv3_256x256_2019-09-06_010159 
+Topology: 	 deeplabv3 
+Input size: 	 256x256 (3 channels) 
+preProcess 	 on 
+useCachedNet 	 on 
+evaluateNet 	 on 
+percentage 	 80%
+forceConvert 	 off 
+reSplitData 	 off 
+fromCheckpoint 	 off 
+doTraining 	 off 
+archiveNet 	 off 
+
+=================== Data ====================
+Warning :Hash file not found. Comparing converted and specified sequences 
+Source and conversion folders match, data will not be converted. (Enable 'forceConvert' to override) 
+Loading image metadata from cache...	 Done 
+Warning: splitData is off. Randomized subset will not be re-selected. Enable 'splitData' to force an update
+Loading datastores from cache...	 Done 
+
+      Per-label pixel label count for dataset
+
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.3662e+06      1.2495e+09   
+    'stroke'    2.8696e+06      4.6858e+07   
+    'sky'       7.2953e+08      1.6890e+09   
+    'cloud'     7.8179e+08      1.4996e+09   
+    'ground'    1.6991e+08      1.6894e+09   
+    'other'     2.9131e+06      3.6890e+08   
+ 
+Loading training/validation-split from cache...	 Done 
+
+	Training images: 	 20622 
+	Validation images: 	 5156 
+	Testing images: 	 5422 
+
+================== Network ================== 
+Loading Network from cache...	 Done 
+Warning: Training skipped by user request 
+
+================ Evaluation =================
+Evaluating network against overall test set...	Done
+
+			 Evaluation metrics
+
+    <strong>GlobalAccuracy</strong>    <strong>MeanAccuracy</strong>     <strong>MeanIoU</strong>      <strong>WeightedIoU</strong>    <strong>MeanBFScore</strong>
+    <strong>______________</strong>    <strong>____________</strong>    <strong>__________</strong>    <strong>___________</strong>    <strong>___________</strong>
+      9.1406e-01       9.0126e-01     5.9722e-01    8.6938e-01     5.7789e-01 
+ 
+               <strong>Accuracy</strong>        <strong>IoU</strong>        <strong>MeanBFScore</strong>
+              <strong>__________</strong>    <strong>__________</strong>    <strong>___________</strong>
+    <strong>leader</strong>    9.7661e-01    1.0906e-01    4.3247e-01 
+    <strong>stroke</strong>    9.0015e-01    7.0935e-01    3.3824e-01 
+    <strong>sky   </strong>    9.0415e-01    8.6389e-01    5.7087e-01 
+    <strong>cloud </strong>    9.0950e-01    8.9764e-01    7.3771e-01 
+    <strong>ground</strong>    9.6337e-01    8.8033e-01    7.3866e-01 
+    <strong>other </strong>    7.5381e-01    1.2307e-01    2.8740e-01 
+ 
+Performance metrics added to network cache
+Evaluating each test sequence individually...
+
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_162903_015
+
+Event: 1 
+c	 Start: 1        
+c	 Duration: 322 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 82 
+c		 Stroke duration: 7 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163553_015
+
+Event: 1 
+c	 Start: 1 
+w	 Duration: 422 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 254 
+c		 Stroke duration: 14 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163553_030
+
+Event: 1 
+c	 Start: 4 
+c	 Duration: 59 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163553_050
+
+Event: 1 
+w	 Start: 7 
+w	 Duration: 38 
+w	 Type: Attempted leader 
+w	 Direction: up 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163553_070
+
+Event: 1 
+w	 Start: 5 
+w	 Duration: 23 
+w	 Type: Attempted leader 
+c	 Direction: down 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163553_200
+
+Event: 1 
+c	 Start: 4 
+c	 Duration: 25 
+w	 Type: Attempted leader 
+c	 Direction: down 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163553_250
+
+Event: 1 
+w	 Start: 1 
+w	 Duration: 203 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 9 
+c		 Stroke duration: 8 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_163907_040
+
+Event: 1 
+c	 Start: 3 
+c	 Duration: 15 
+c	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_164114_010
+
+Event: 1 
+w	 Start: 1 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 2 
+w	 Start: 5 
+c	 Duration: 616 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 288 
+w		 Stroke duration: 47 
+w	 Stoke 2: 
+c		 Stroke frame: 387 
+c		 Stroke duration: 11 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_164114_070
+
+Event: 1 
+w	 Start: 12 
+c	 Duration: 56 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 30 
+c		 Stroke duration: 8 
+ 
+Event: 2 
+w	 Start: 70 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_164441_013
+
+Event: 1 
+c	 Start: 1 
+w	 Duration: 53 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 22 
+c		 Stroke duration: 13 
+ 
+Event: 2 
+w	 Start: 113 
+w	 Duration: 3 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 3 
+w	 Start: 141 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 4 
+w	 Start: 145 
+w	 Duration: 31 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_164441_017
+
+Event: 1 
+w	 Start: 22 
+w	 Duration: 97 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+w		 Stroke frame: 23 
+w		 Stroke duration: 5 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-02-10_164441_030
+
+Event: 1 
+w	 Start: 1 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 2 
+c	 Start: 5 
+c	 Duration: 45 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 20 
+c		 Stroke duration: 7 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-14_200513_010
+
+Event: 1 
+c	 Start: 47 
+c	 Duration: 125 
+c	 Type: Attachment event 
+w	 Direction: unknown 
+c	 Stoke 1: 
+c		 Stroke frame: 146 
+c		 Stroke duration: 5 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-14_200513_020
+
+Event: 1 
+w	 Start: 1 
+c	 Duration: 15 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 6 
+w		 Stroke duration: 1 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-14_200513_030
+
+Event: 1 
+w	 Start: 1 
+w	 Duration: 17 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 5 
+c		 Stroke duration: 3 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-14_200513_050
+
+Event: 1 
+w	 Start: 1 
+w	 Duration: 15 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 5 
+c		 Stroke duration: 4 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-14_200626_023
+
+Event: 1 
+w	 Start: 12 
+w	 Duration: 8 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 2 
+w	 Start: 22 
+w	 Duration: 154 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 117 
+c		 Stroke duration: 9 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-14_200626_030
+
+Event: 1 
+c	 Start: 1 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 2 
+w	 Start: 6 
+w	 Duration: 17 
+w	 Type: Attempted leader 
+c	 Direction: down 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-22_144117_010
+
+Event: 1 
+w	 Start: 17 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 2 
+w	 Start: 21 
+c	 Duration: 111 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 77 
+c		 Stroke duration: 7 
+w	 Stoke 2: 
+w		 Stroke frame: 85 
+w		 Stroke duration: 6 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-22_144117_013
+
+Event: 1 
+w	 Start: 1 
+c	 Duration: 212 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+w		 Stroke frame: 2 
+w		 Stroke duration: 210 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-22_144117_017
+
+Event: 1 
+c	 Start: 15 
+c	 Duration: 126 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+c		 Stroke frame: 79 
+w		 Stroke duration: 4 
+ 
+Event: 2 
+w	 Start: 143 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-22_144155_010
+
+Event: 1 
+w	 Start: 8 
+w	 Duration: 140 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+w		 Stroke frame: 34 
+w		 Stroke duration: 1 
+w	 Stoke 2: 
+c		 Stroke frame: 39 
+c		 Stroke duration: 12 
+ 
+Event: 2 
+w	 Start: 150 
+w	 Duration: 6 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 3 
+w	 Start: 158 
+w	 Duration: 5 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 4 
+w	 Start: 166 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 5 
+w	 Start: 174 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-22_144155_015
+
+Event: 1 
+c	 Start: 4 
+w	 Duration: 173 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+w		 Stroke frame: 31 
+w		 Stroke duration: 1 
+w	 Stoke 2: 
+c		 Stroke frame: 39 
+c		 Stroke duration: 12 
+ 
+Event: 2 
+w	 Start: 179 
+w	 Duration: 6 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 3 
+w	 Start: 189 
+w	 Duration: 3 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-22_144155_017
+
+Event: 1 
+w	 Start: 9 
+w	 Duration: 149 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 39 
+c		 Stroke duration: 12 
+ 
+Event: 2 
+w	 Start: 160 
+w	 Duration: 6 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-24_162501_020
+Event: 1 
+w	 Start: 16 
+w	 Duration: 15 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 2 
+c	 Start: 38 
+w	 Duration: 3 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 3 
+c	 Start: 43 
+c	 Duration: 364 
+c	 Type: Attachment event 
+w	 Direction: up 
+c	 Stoke 1: 
+w		 Stroke frame: 191 
+c		 Stroke duration: 22 
+ 
+Event: 4 
+w	 Start: 413 
+w	 Duration: 2 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+----------------------------------------------------------------------------------------------------------------
+Sequence: 2017-11-24_162501_030
+
+Event: 1 
+w	 Start: 5 
+w	 Duration: 291 
+c	 Type: Attachment event 
+c	 Direction: down 
+c	 Stoke 1: 
+c		 Stroke frame: 27 
+c		 Stroke duration: 15 
+c	 Stoke 2: 
+c		 Stroke frame: 61 
+c		 Stroke duration: 10 
+ 
+Event: 2 
+w	 Start: 298 
+w	 Duration: 5 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 3 
+w	 Start: 305 
+w	 Duration: 10 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 4 
+w	 Start: 317 
+w	 Duration: 3 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Event: 5 
+w	 Start: 323 
+w	 Duration: 6 
+w	 Type: Attempted leader 
+w	 Direction: unknown 
+ 
+Individual test sequence analysis and output complete.
+Warning: Network not archived because 'archiveNet' is disabled 
