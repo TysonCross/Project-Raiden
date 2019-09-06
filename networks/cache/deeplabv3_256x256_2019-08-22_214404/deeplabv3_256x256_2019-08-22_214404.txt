@@ -1,0 +1,221 @@
+=============== Configuration ===============
+Network: 	 deeplabv3_256x256_2019-08-22_214404 
+Topology: 	 deeplabv3 
+Input size: 	 256x256 (3 channels) 
+forceConvert 	 on 
+preProcess 	 on 
+splitData 	 on 
+doTraining 	 on 
+evaluateNet 	 on 
+archiveNet 	 on 
+percentage 	 80%
+fromCheckpoint 	 off 
+useCachedNet 	 off 
+
+=================== Data ====================
+Converting images...
+Resizing images & labels, converting labels RGB -> categorical ...
+Data converted successfully
+Image metadata cached
+	 Done 
+Starting parallel pool (parpool) using the 'local' profile ...
+Connected to the parallel pool (number of workers: 16).
+Counting per-label pixel distribution...
+Datastores cached
+	 Done 
+
+      Per-label pixel label count for dataset
+
+      <strong>Name</strong>      <strong>PixelCount</strong>    <strong>ImagePixelCount</strong>
+    <strong>________</strong>    <strong>__________</strong>    <strong>_______________</strong>
+    'leader'    2.6230e+06      1.2937e+09   
+    'stroke'    5.1169e+06      5.4329e+07   
+    'sky'       7.8524e+08      1.7177e+09   
+    'cloud'     7.3224e+08      1.4415e+09   
+    'ground'    1.8952e+08      1.7188e+09   
+    'other'     4.0615e+06      4.4401e+08   
+ 
+Splitting training/validation data...
+Partitioning test and training Data...
+Data cached
+	 Done 
+
+	Training images: 	 20982 
+	Validation images: 	 5245 
+	Testing images: 	 4511 
+
+================== Network ================== 
+Setting up Network...
+Network created
+
+================= Training ==================
+		      Training Options 
+  <a href="matlab:helpPopup nnet.cnn.TrainingOptionsSGDM" style="font-weight:bold">TrainingOptionsSGDM</a> with properties:
+
+                     Momentum: 9.0000e-01
+             InitialLearnRate: 1.0000e-03
+    LearnRateScheduleSettings: [1×1 struct]
+             L2Regularization: 3.0000e-03
+      GradientThresholdMethod: 'l2norm'
+            GradientThreshold: 10
+                    MaxEpochs: 20
+                MiniBatchSize: 80
+                      Verbose: 1
+             VerboseFrequency: 50
+               ValidationData: [1×1 pixelLabelImageDatastore]
+          ValidationFrequency: 25
+           ValidationPatience: 4
+                      Shuffle: 'every-epoch'
+               CheckpointPath: '/home/tyson/Raiden/networks/checkpoints'
+         ExecutionEnvironment: 'auto'
+                   WorkerLoad: []
+                    OutputFcn: []
+                        Plots: 'training-progress'
+               SequenceLength: 'longest'
+         SequencePaddingValue: 0
+         DispatchInBackground: 0
+Beginning training...
+Training on single GPU.
+|======================================================================================================================|
+|  Epoch  |  Iteration  |  Time Elapsed  |  Mini-batch  |  Validation  |  Mini-batch  |  Validation  |  Base Learning  |
+|         |             |   (hh:mm:ss)   |   Accuracy   |   Accuracy   |     Loss     |     Loss     |      Rate       |
+|======================================================================================================================|
+|       1 |           1 |       00:07:03 |       18.40% |       27.32% |       2.5024 |       1.9953 |          0.0010 |
+|       1 |          25 |       00:14:56 |       89.11% |       88.77% |       0.3370 |       0.3385 |          0.0010 |
+|       1 |          50 |       00:22:38 |       89.96% |       89.82% |       0.2506 |       0.2330 |          0.0010 |
+|       1 |          75 |       00:30:29 |       91.57% |       90.96% |       0.2019 |       0.2034 |          0.0010 |
+|       1 |         100 |       00:38:10 |       91.37% |       91.29% |       0.1540 |       0.1866 |          0.0010 |
+|       1 |         125 |       00:45:56 |       90.79% |       91.64% |       0.1757 |       0.1722 |          0.0010 |
+|       1 |         150 |       00:53:38 |       91.73% |       92.36% |       0.1806 |       0.1719 |          0.0010 |
+|       1 |         175 |       01:01:21 |       92.14% |       91.48% |       0.1367 |       0.1609 |          0.0010 |
+|       1 |         200 |       01:09:03 |       91.74% |       92.07% |       0.1887 |       0.1523 |          0.0010 |
+|       1 |         225 |       01:16:46 |       92.04% |       92.38% |       0.1511 |       0.1488 |          0.0010 |
+|       1 |         250 |       01:24:29 |       92.35% |       92.28% |       0.1193 |       0.1391 |          0.0010 |
+|       2 |         275 |       01:32:18 |       91.90% |       92.16% |       0.1364 |       0.1363 |          0.0010 |
+|       2 |         300 |       01:40:01 |       92.00% |       92.02% |       0.1233 |       0.1321 |          0.0010 |
+|       2 |         325 |       01:47:43 |       92.70% |       92.78% |       0.1235 |       0.1334 |          0.0010 |
+|       2 |         350 |       01:55:21 |       92.94% |       92.60% |       0.1233 |       0.1293 |          0.0010 |
+|       2 |         375 |       02:02:59 |       92.71% |       92.69% |       0.1179 |       0.1242 |          0.0010 |
+|       2 |         400 |       02:10:37 |       92.49% |       92.43% |       0.1449 |       0.1222 |          0.0010 |
+|       2 |         425 |       02:18:18 |       92.61% |       92.66% |       0.1196 |       0.1227 |          0.0010 |
+|       2 |         450 |       02:25:57 |       92.90% |       92.70% |       0.1194 |       0.1177 |          0.0010 |
+|       2 |         475 |       02:33:34 |       92.89% |       92.84% |       0.0982 |       0.1153 |          0.0010 |
+|       2 |         500 |       02:41:11 |       92.89% |       93.01% |       0.1049 |       0.1155 |          0.0010 |
+|       3 |         525 |       02:48:53 |       93.29% |       93.03% |       0.1058 |       0.1118 |          0.0005 |
+|       3 |         550 |       02:56:33 |       92.60% |       93.08% |       0.1241 |       0.1098 |          0.0005 |
+|       3 |         575 |       03:04:11 |       93.85% |       93.21% |       0.0986 |       0.1076 |          0.0005 |
+|       3 |         600 |       03:11:49 |       93.61% |       93.07% |       0.0891 |       0.1081 |          0.0005 |
+|       3 |         625 |       03:19:29 |       93.37% |       93.15% |       0.1061 |       0.1066 |          0.0005 |
+|       3 |         650 |       03:27:08 |       93.08% |       93.06% |       0.0984 |       0.1049 |          0.0005 |
+|       3 |         675 |       03:34:48 |       93.27% |       93.09% |       0.1114 |       0.1046 |          0.0005 |
+|       3 |         700 |       03:42:26 |       93.92% |       93.31% |       0.1126 |       0.1033 |          0.0005 |
+|       3 |         725 |       03:50:04 |       93.46% |       93.03% |       0.1084 |       0.1015 |          0.0005 |
+|       3 |         750 |       03:57:43 |       93.45% |       93.17% |       0.1013 |       0.1039 |          0.0005 |
+|       3 |         775 |       04:05:31 |       93.73% |       93.21% |       0.0886 |       0.1018 |          0.0005 |
+|       4 |         800 |       04:13:14 |       94.13% |       93.53% |       0.0896 |       0.1010 |          0.0005 |
+|       4 |         825 |       04:20:52 |       93.29% |       93.42% |       0.1149 |       0.1002 |          0.0005 |
+|       4 |         850 |       04:28:32 |       93.47% |       93.31% |       0.1093 |       0.1002 |          0.0005 |
+|       4 |         875 |       04:36:10 |       92.36% |       93.46% |       0.1101 |       0.0992 |          0.0005 |
+|       4 |         900 |       04:43:48 |       93.96% |       93.47% |       0.0981 |       0.1008 |          0.0005 |
+|       4 |         925 |       04:51:25 |       93.60% |       93.23% |       0.1010 |       0.0965 |          0.0005 |
+|       4 |         950 |       04:59:03 |       93.53% |       93.44% |       0.1033 |       0.0986 |          0.0005 |
+|       4 |         975 |       05:06:43 |       93.59% |       93.31% |       0.0822 |       0.0986 |          0.0005 |
+|       4 |        1000 |       05:14:23 |       93.01% |       93.41% |       0.1097 |       0.0971 |          0.0005 |
+|       4 |        1025 |       05:22:02 |       93.06% |       93.06% |       0.0923 |       0.0970 |          0.0005 |
+|======================================================================================================================|
+Network trained
+
+================ Evaluation =================
+outputDir = 
+    "/home/tyson/Raiden/networks/output/deeplabv3_256x256_2019-08-22_214404"
+{Undefined function or variable 'net'.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('evaluateNetwork', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/evaluateNetwork.m', 7)" style="font-weight:bold">evaluateNetwork</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/evaluateNetwork.m',7,0)">line 7</a>)
+    pxdsResults = semanticseg(imdsTest,net, ...
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('trainSegmentNetwork', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/trainSegmentNetwork.m', 342)" style="font-weight:bold">trainSegmentNetwork</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/trainSegmentNetwork.m',342,0)">line 342</a>)
+    metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest);} 
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/trainSegmentNetwork.m',342,0)
+outputDir
+outputDir = 
+    "/home/tyson/Raiden/networks/output/deeplabv3_256x256_2019-08-22_214404"
+metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest);
+{Undefined function or variable 'net'.
+Error in <a href="matlab:matlab.internal.language.introspective.errorDocCallback('evaluateNetwork', '/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/evaluateNetwork.m', 7)" style="font-weight:bold">evaluateNetwork</a> (<a href="matlab: opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/evaluateNetwork.m',7,0)">line 7</a>)
+    pxdsResults = semanticseg(imdsTest,net, ...} 
+opentoline('/home/tyson/Dropbox/Academic/4th Year/ELEN4012/Raiden/matlab/utilities/evaluateNetwork.m',7,0)
+metrics = evaluateNetwork(outputDir, imdsTest, pxdsTest, net);
+cprintf([0.2,0.7,0],'\t\t\t Evaluation metrics\n\n');
+			 Evaluation metrics
+
+    disp(metrics.DataSetMetrics); disp(' ');
+    <strong>GlobalAccuracy</strong>    <strong>MeanAccuracy</strong>     <strong>MeanIoU</strong>      <strong>WeightedIoU</strong>    <strong>MeanBFScore</strong>
+    <strong>______________</strong>    <strong>____________</strong>    <strong>__________</strong>    <strong>___________</strong>    <strong>___________</strong>
+      9.2126e-01       8.3878e-01     5.4963e-01    8.6896e-01     6.9136e-01 
+ 
+    disp(metrics.ClassMetrics); disp(' ');
+               <strong>Accuracy</strong>        <strong>IoU</strong>        <strong>MeanBFScore</strong>
+              <strong>__________</strong>    <strong>__________</strong>    <strong>___________</strong>
+    <strong>leader</strong>    8.9631e-01    7.9683e-02    4.1192e-01 
+    <strong>stroke</strong>    8.6229e-01    5.3693e-01    2.4246e-01 
+    <strong>sky   </strong>    9.1093e-01    8.3655e-01    6.6211e-01 
+    <strong>cloud </strong>    9.2237e-01    9.0667e-01    7.9316e-01 
+    <strong>ground</strong>    9.6849e-01    8.5229e-01    7.8267e-01 
+    <strong>other </strong>    4.7228e-01    8.5640e-02    2.4694e-01 
+ 
+    
+    save(fullfile(cachePath,'network'), ...
+        'net','networkStatus','imageSize','metrics');
+    disp("Performance metrics added to network cache")
+Performance metrics added to network cache
+diary off; diary on;
+sendFileList = {''};
+if (opt.archiveNet)
+   cprintf([0,0.5,1], '\n=============== Archive Data ================\n');
+
+   fprintf('Saving data, please wait...')
+   currentFileName = strcat(mfilename('fullpath'),'.m');
+   if exist(currentFileName,'file')
+        foldername = fullfile(projectPath,"networks","cache", ...
+            networkStatus.name);
+        mkdir(foldername);
+        copyfile(currentFileName, foldername);
+        copyfile(fullfile(cachePath,'data.mat'),foldername);
+        copyfile(fullfile(cachePath,'metadata.mat'),foldername);
+        copyfile(fullfile(cachePath,'network.mat'),foldername);
+        disp('Network and data archived')
+        figHandle = findall(groot, 'Type', 'Figure');
+        if (numel(figHandle)>0)
+            fig_name = figHandle.Name;
+            fig_name(isspace(fig_name)==1)='_';
+            fig_name = regexprep(fig_name, '[ .,''!?():]', '');
+            fig_name = sprintf('%s.pdf',fig_name);
+            fn = sprintf('%s/%s',foldername,fig_name);
+            export_fig(fn,figHandle(1));
+            fprintf("%d figures exported to %s\n", ...
+                length(figHandle),foldername);
+            sendFileList = strcat(sendFileList, ...
+                {' --content-type="application/pdf" --attach="'},fn,{'"'});
+            disp('Figure archived')
+            close(figHandle(:));
+        else
+            cprintf([1,0.5,0],'Warning: No figures found \n')
+        end
+        
+        fprintf('\t Saved \n')
+        diary off;
+        copyfile(logFileFull,foldername);
+        sendFileList = strcat(sendFileList, ...
+            {' --content-type="text/plain" --attach="'},logFileFull,{'"'});
+        disp('Log archived')
+   else
+       cprintf([1,0.5,0], ['Warning: %s does not exist! ', ...
+           'Network not archived. \n'], string(currentFileName));
+   end
+else
+    cprintf([1,0.5,0], ['Warning: Network not archived ', ...
+        'because ''archiveNet'' is disabled \n']);
+end
+
+=============== Archive Data ================
+Saving data, please wait...Warning: .m does not exist! Network not archived. 
+
+diary off;
